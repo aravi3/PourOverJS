@@ -1,6 +1,6 @@
 let express = require('express');
 let app = express();
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 8080;
 let mongoose = require('mongoose');
 let passport = require('passport');
 let flash = require('connect-flash');
@@ -18,11 +18,16 @@ mongoose.connect(configDB.url);
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 
-app.use(session({ secret: 'ilovebcrypt'}));
+app.use(session({
+  secret: 'ilovebcrypt',
+  resave: true,
+  saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
