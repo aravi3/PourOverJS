@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express();
 let port = process.env.PORT || 8080;
-let MongoClient = require('mongodb').MongoClient;
+let mongoose = require('mongoose');
 let passport = require('passport');
 let flash = require('connect-flash');
 
@@ -12,7 +12,7 @@ let session = require('express-session');
 
 let configDB = require('./config/database.js');
 
-MongoClient.connect(configDB.url);
+mongoose.connect(configDB.url, { useMongoClient: true });
 
 // require('./config/passport')(passport);
 
