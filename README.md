@@ -1,65 +1,47 @@
 # PourOverJS
-	
-  PourOverJS will be a `JavaScript` profiler and stack visualizer which allows users to test a block of code. PourOverJS will analyze the individual components of the submitted code and display stack frames and metrics for each function.
-  As a result, users will be able to identify inefficiencies, chokepoints, and debug their code. Code snippets can also be saved to our database if the user has a profile.
-  
+
+  PourOverJS will be a `JavaScript` profiler and stack visualizer which allows users to test a block of code. It will analyze the individual components of the submitted code and display stack frames and metrics for each function.
+  As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will be able to save code snippets to the database and keep track of their functions.
+
 ## Minimum Viable Product
 
-	PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. Within 7 days, this app will, at a minimum, satisfy the following criteria with smooth, bug-free navigation and sufficient
-CSS styling:
+	PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. Within 7 days, this app will, at a minimum, satisfy the following criteria with smooth, bug-free navigation and sufficient CSS styling:
 
   - [ ] Heroku Hosting
   - [ ] Authentication
   - [ ] Code input
-  - [ ] JS Stackframes 
+  - [ ] JS Stackframes
   - [ ] Performance metrics
   - [ ] Code examples
   - [ ] Code CRUD
   - [ ] Production README
 
 
-## Design Docs
-  * [View Wireframes][wireframes]
-  * [React Components][components]
-  * [API endpoints][api-endpoints]
-  * [DB schema][schema]
-  * [Sample State][sample-state]
+## Wireframe
+  ![Image](./Docs/PourOverJS-main-page.jpg)
 
-  [wireframes]: ./wireframes
-  [components]: ./component-hierarchy.md
-  [sample-state]: ./sample-state.md
-  [api-endpoints]: ./api-endpoints.md
-  [schema]: ./schema.md
-
-## Technologies and Technical Challenges
-
-### Technologies
+## Technologies
 
 - FRONT END:
 	- React.js with Redux
-  
+
 - BACK END:
 	- Node.js
 	- Express.js  
-  - MongoDB
-  
+	- MongoDB
+
 - NPM PACKAGES/OTHER LIBRARIES:
   - Webpack
   - Nodemon
   - BodyParser
   - EJS
   - BCrypt/SCrypt
-  
-### Technical Challenges
-  
-### 
 
 ## Weekend Accomplishments
 
   Completion of a prototype application using the MERN stack following the CRUD principles of software development. Users have the ability to post, edit, and delete comments which render in real time using the React virtual DOM.
-  [Live link][crud_proto]
 
-	[crud_proto]: https://github.com/aravi3/MERN_CRUD_Application
+  [Live][crud_proto]
 
 ## API Endpoints
 
@@ -91,10 +73,10 @@ CSS styling:
 
 {
 	username: {
-  	session_token: "klsjdflkgewjgkalsn",
-    password_digest: "aghbskdnksdf",
+  	session_token: "klsj24dflk45gewj45gkalsn",
+    password_digest: "aghb24skdnk435sdf",
     code: {
-    	filename: "Some code"
+    	filename: "Some-code"
     }
   }
 }
@@ -107,7 +89,7 @@ CSS styling:
 {
 	username: {
     code: {
-    	filename: "Some code"
+    	filename: "Some-code"
     }
   }
 }
@@ -142,32 +124,34 @@ CSS styling:
 
 ### Sprint 2:  (3 days)
 
-	SEE ABOVE
-  
+	SEE ABOVE, TBD
+
 #### Day 5
 
-  * **Justin:** 
-  * **Xiaoyuan:** 
-  * **Arvind:** 
-  * **Atom:** 
+  * **Justin:**
+  * **Xiaoyuan:**
+  * **Arvind:**
+  * **Atom:**
 
 #### Day 6
 
-  * **Justin:** 
-  * **Xiaoyuan:** 
-  * **Arvind:** 
-  * **Atom:** 
+  * **Justin:**
+  * **Xiaoyuan:**
+  * **Arvind:**
+  * **Atom:**
 
 
 #### Day 7
 
-  * **Justin:** 
-  * **Xiaoyuan:** 
-  * **Arvind:** 
-  * **Atom:** 
+  * **Justin:**
+  * **Xiaoyuan:**
+  * **Arvind:**
+  * **Atom:**
 
 ### Bonus Features (TBD)
 - [ ] Use D3.js to display performance metrics
 - [ ] Allow sign in through GitHub account
 - [ ] Optimized Implementation for each example and efficiency comparisons
 
+
+[crud_proto]: https://github.com/aravi3/MERN_CRUD_Application
