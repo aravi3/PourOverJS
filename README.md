@@ -4,8 +4,7 @@
   As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will be able to save code snippets to the database and keep track of their functions.
 
 ## Minimum Viable Product
-
-	PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. Within 7 days, this app will, at a minimum, satisfy the following criteria with smooth, bug-free navigation and sufficient CSS styling:
+PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. Within 7 days, this app will, at a minimum, satisfy the following criteria with smooth, bug-free navigation and sufficient CSS styling:
 
   - [ ] Heroku Hosting
   - [ ] Authentication
@@ -96,8 +95,7 @@
 ```
 
 ## Implementation Timeline
-
-	We are using the `Scrum framework` of `Agile Development`. By design, we will not plan our second `Sprint` until completion of the first `Sprint`.
+We are using the `Scrum framework` of `Agile Development`. By design, we will not plan our second `Sprint` until completion of the first `Sprint`.
 
 ### Sprint 1:  (4 days)
 
@@ -123,8 +121,7 @@
   * **Atom:** Function Metrics
 
 ### Sprint 2:  (3 days)
-
-	SEE ABOVE, TBD
+SEE ABOVE, TBD
 
 #### Day 5
 
