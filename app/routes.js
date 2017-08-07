@@ -26,6 +26,12 @@ module.exports = function(app, passport) {
     req.redirect('/');
   });
 
+  app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/',
+    failureRedirect: '/signup',
+    faliureFlash: true
+  }));
+
   function isLoggedIn(req, res, next) {
 
     // if the user is authenticated in the session, carryon
@@ -35,6 +41,6 @@ module.exports = function(app, passport) {
     }
 
     // if they aren't redirect them to the homepage
-    res.redirect('/')
+    res.redirect('/');
   }
-}
+};

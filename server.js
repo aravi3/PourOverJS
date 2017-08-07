@@ -12,9 +12,9 @@ let session = require('express-session');
 
 let configDB = require('./config/database.js');
 
-mongoose.connect(configDB.url);
+mongoose.connect(configDB.url, { useMongoClient: true });
 
-// require('./config/passport')(passport);
+require('./config/passport')(passport);
 
 app.use(morgan('dev'));
 app.use(cookieParser());
