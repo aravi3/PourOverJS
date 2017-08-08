@@ -4,7 +4,7 @@ module.exports = {
   context: __dirname,
   entry: './frontend/pourover.jsx',
   output: {
-    path: path.resolve(__dirname, 'public', 'app', 'assets'),
+    path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js'
   },
   resolve: {

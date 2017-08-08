@@ -38,17 +38,27 @@ class CodeInput extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="code-input-editor">
         <AceEditor
+          className="code-box"
           mode="javascript"
           ref="ace"
-          theme="monokai"
+          theme="tomorrow"
           name="code-input"
+          fontSize={18}
           editorProps={{$blockScrolling: true}}
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+            showLineNumbers: true,
+            tabSize: 2,
+          }}
         />
-
-        <button onClick={this.nextLine}>Next Line</button>
-        <button onClick={this.runCode}>Run Code</button>
+        <div className="button-wrapper">
+          <button className="next-line-button" onClick={this.nextLine}>Next Line</button>
+          <button className="run-code-button" onClick={this.runCode}>Run Code</button>
+        </div>
       </div>
     );
   }

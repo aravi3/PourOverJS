@@ -98,7 +98,6 @@ width: 100vw;
   grid-row: 15 / 23;
 }
 
-
 .navigation-wrapper {
   background-color: white;
   height: 70px;
@@ -109,4 +108,24 @@ width: 100vw;
 
 .navigation-wrapper h1 {
   font-family: "dosis";
+}
+
+.home-wrapper {
+  width: 100%;
+  height: 100% !important;
+
+}
+
+.code-input-editor {
+  width: 100%;
+  height: 100%;
+}
+
+.code-box {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.button-wrapper {
+  position: relative;
 }
