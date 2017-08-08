@@ -7,15 +7,16 @@ const App = () => {
     <div className="app-wrapper">
       <div className="background-div"></div>
       <div className="navigation-wrapper">
+        <h1>PourOverJS</h1>
       </div>
 
       <div className="main-wrapper">
         <div className="input-wrapper">
           <Route path="/" component={HomeContainer} />
         </div>
-        <div className="stack-wrapper">
-        </div>
         <div className="controls-wrapper">
+        </div>
+        <div className="stack-wrapper">
         </div>
         <div className="metrics-wrapper">
         </div>

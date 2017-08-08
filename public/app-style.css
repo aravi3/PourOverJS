@@ -50,3 +50,57 @@ height: 100vh;
 width: 100vw;
 
 }
+
+.app-wrapper {
+  height: 95vh;
+  width: 100vw;
+}
+
+.main-wrapper {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  padding-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(22, 1fr);
+  grid-gap: 0px;
+  grid-template-rows: repeat(22, 1fr);
+
+}
+
+.input-wrapper {
+  margin-right: 15px;
+  background-color: white;
+  grid-column: 4 / 12;
+  grid-row: 1 / 19;
+}
+.controls-wrapper {
+  margin-right: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: white;
+  grid-column: 4 / 12;
+  grid-row: 19 / 23;
+}
+.stack-wrapper {
+  background-color: white;
+  grid-column: 12 / 20;
+  grid-row: 1 / 15;
+}
+.metrics-wrapper {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: white;
+  grid-column: 12 / 20;
+  grid-row: 15 / 23;
+}
+
+.navigation-wrapper h1 {
+  font-family: "dosis";
+  background-color: white;
+  height: 100px;
+  width: 100px;
+  display: block;
+  position: absolute;
+  margin: 0;
+}
