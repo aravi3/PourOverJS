@@ -2,7 +2,6 @@ module.exports = function(app, passport) {
 
   //homepage
   app.get('/', function(req, res) {
-    // res.render('index.ejs');
     res.sendFile(__dirname + '/index.html');
   });
 
