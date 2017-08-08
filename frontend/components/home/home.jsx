@@ -9,7 +9,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="home-wrapper">
         <CodeInputContainer />
       </div>
     );
