@@ -38,13 +38,16 @@ class CodeInput extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="code-input-editor">
         <AceEditor
           mode="javascript"
           ref="ace"
-          theme="monokai"
+          fontSize="20px"
+          theme="tomorrow"
           name="code-input"
-          editorProps={{$blockScrolling: true}}
+          editorProps={{
+            $blockScrolling: true,
+          }}
         />
 
         <button onClick={this.nextLine}>Next Line</button>

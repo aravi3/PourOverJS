@@ -110,3 +110,7 @@ width: 100vw;
 .navigation-wrapper h1 {
   font-family: "dosis";
 }
+
+.code-input-editor {
+  height: 20px;
+}
