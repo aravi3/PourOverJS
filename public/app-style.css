@@ -70,13 +70,13 @@ width: 100vw;
 }
 
 .input-wrapper {
-  margin-right: 15px;
+  margin-right: 7px;
   background-color: white;
   grid-column: 4 / 12;
   grid-row: 1 / 19;
 }
 .controls-wrapper {
-  margin-right: 15px;
+  margin-right: 7px;
   margin-top: 15px;
   margin-bottom: 15px;
   background-color: white;
@@ -84,11 +84,13 @@ width: 100vw;
   grid-row: 19 / 23;
 }
 .stack-wrapper {
+  margin-left: 8px;
   background-color: white;
   grid-column: 12 / 20;
   grid-row: 1 / 15;
 }
 .metrics-wrapper {
+  margin-left: 8px;
   margin-top: 15px;
   margin-bottom: 15px;
   background-color: white;
