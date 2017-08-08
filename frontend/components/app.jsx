@@ -5,6 +5,7 @@ import HomeContainer from './home/home_container';
 const App = () => {
   return (
     <div className="app-wrapper">
+      <div className="background-div"></div>
       <div className="navigation-wrapper">
       </div>
 
