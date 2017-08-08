@@ -4,8 +4,22 @@ import HomeContainer from './home/home_container';
 
 const App = () => {
   return (
-    <div>
-      <Route path="/" component={HomeContainer} />
+    <div className="app-wrapper">
+      <div className="navigation-wrapper">
+      </div>
+
+      <div className="main-wrapper">
+        <div className="input-wrapper">
+          <Route path="/" component={HomeContainer} />
+        </div>
+        <div className="stack-wrapper">
+        </div>
+        <div className="controls-wrapper">
+        </div>
+        <div className="metrics-wrapper">
+        </div>
+
+      </div>
     </div>
   );
 };
