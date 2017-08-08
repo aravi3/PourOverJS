@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   context: __dirname,
-  entry: './frontend/entry.jsx',
+  entry: './frontend/pourover.jsx',
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js'
