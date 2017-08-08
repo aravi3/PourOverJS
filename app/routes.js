@@ -2,8 +2,7 @@ module.exports = function(app, passport) {
 
   //homepage
   app.get('/', function(req, res) {
-    // res.render('index.ejs');
-    res.sendFile(__dirname + '/index.html');
+    res.render('index.ejs');
   });
 
   //login page
@@ -26,6 +25,18 @@ module.exports = function(app, passport) {
     req.logout();
     req.redirect('/');
   });
+
+  app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/',
+    failureRedirect: '/signup',
+    faliureFlash: true
+  }));
+
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    faliureFlash: true
+  }));
 
   function isLoggedIn(req, res, next) {
 
