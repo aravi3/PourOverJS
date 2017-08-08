@@ -16,6 +16,7 @@ module.exports = function(app, passport) {
   app.get('/api/session', function(req, res) {
     console.log(req.sessionID);
     req.logOut();
+    req.res.send(req);
     console.log(req.sessionID);
   });
 
