@@ -5,38 +5,23 @@ module.exports = function(app, passport) {
     res.sendFile(__dirname + '/index.html');
   });
 
-  //login page
-  app.get('/login', function(req, res) {
-    res.render('login.ejs', {message : req.flash('loginMessage')});
-  });
-
-  //signup page
-  app.get('/signup', function(req, res) {
-    res.render('signup.ejs', {message : req.flash('signupMessage')});
-  });
-
-  app.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.ejs', {
-      user: req.user
-    });
-  });
-
-  app.get('/logout', function(req, res) {
-    req.logout();
-    req.redirect('/');
-  });
-
-  app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
-    faliureFlash: true
+  app.post('/api/signup', passport.authenticate('local-signup', function(err, res, req) {
+    // console.log(err);
+    // console.log(res);
+    // console.log(req);
   }));
 
-  app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    faliureFlash: true
+  app.post('/api/session', passport.authenticate('local-login', function(err, res, req) {
+    // console.log(err);
+    // console.log(res);
+    // console.log(req);
   }));
+
+  app.get('/api/session', function(req, res) {
+    console.log(req.sessionID);
+    req.logOut();
+    console.log(req.sessionID);
+  });
 
   function isLoggedIn(req, res, next) {
 

@@ -5,10 +5,14 @@ let User = require('../app/models/user');
 module.exports = function(passport) {
 
   passport.serializeUser(function(user, done) {
+    // console.log("serializeUser");
+    // console.log(user);
        done(null, user.id);
   });
 
   passport.deserializeUser(function(id, done) {
+    // console.log("deserializeUser");
+    // console.log(id);
       User.findById(id, function(err, user) {
           done(err, user);
       });
@@ -18,16 +22,17 @@ module.exports = function(passport) {
     {
       usernameField: 'username',
       passwordField: 'password',
-      passReqToCallBack: true
+      passReqToCallback: true
     },
     function(req, username, password, done) {
+      console.log(req.sessionID);
       process.nextTick(function() {
         User.findOne({ 'local.username': username }, function(err, user) {
           if (err) {
             return done(err);
           }
           if (user) {
-            return done(null, false, req.flash('signupMessage', 'Username already taken'));
+            return done(null, false, req.flash('signupMessage', "Username already taken"));
           } else {
             let newUser = new User();
             newUser.local.username = username;
@@ -49,7 +54,7 @@ module.exports = function(passport) {
     {
       usernameField: 'username',
       passwordField: 'password',
-      passReqToCallBack: true
+      passReqToCallback: true
     },
     function(req, username, password, done) {
       User.findOne({ 'local.username': username }, function(err, user) {
