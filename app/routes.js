@@ -32,6 +32,12 @@ module.exports = function(app, passport) {
     faliureFlash: true
   }));
 
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    faliureFlash: true
+  }));
+
   function isLoggedIn(req, res, next) {
 
     // if the user is authenticated in the session, carryon
