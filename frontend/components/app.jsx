@@ -9,6 +9,7 @@ const App = () => {
 
       <div className="main-wrapper">
         <div className="input-wrapper">
+          <Route path="/" component={HomeContainer} />
         </div>
         <div className="stack-wrapper">
         </div>
