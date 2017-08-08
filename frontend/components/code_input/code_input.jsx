@@ -11,6 +11,21 @@ class CodeInput extends React.Component {
     super(props);
 
     this.nextLine = this.nextLine.bind(this);
+    this.runCode = this.runCode.bind(this);
+
+    window.addEventListener('message',
+    function (e) {
+      let frame = document.getElementById('sandboxed');
+      if (e.origin === "null" && e.source === frame.contentWindow) {
+        console.log("Result: " + e.data);
+      }
+    });
+  }
+
+  runCode() {
+    let code = this.refs.ace.editor.getValue();
+    let frame = document.getElementById('sandboxed');
+    frame.contentWindow.postMessage(code, '*');
   }
 
   nextLine() {
@@ -18,6 +33,7 @@ class CodeInput extends React.Component {
     let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
     currentLineNumber += 1;
     this.refs.ace.editor.gotoLine(currentLineNumber, 0);
+    console.log(currentLineText);
   }
 
   render() {
@@ -32,6 +48,7 @@ class CodeInput extends React.Component {
         />
 
         <button onClick={this.nextLine}>Next Line</button>
+        <button onClick={this.runCode}>Run Code</button>
       </div>
     );
   }
