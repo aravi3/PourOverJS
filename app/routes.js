@@ -6,15 +6,11 @@ module.exports = function(app, passport) {
   });
 
   app.post('/api/signup', passport.authenticate('local-signup', function(err, res, req) {
-    // console.log(err);
-    // console.log(res);
-    // console.log(req);
+    req.res.send(req.body);
   }));
 
   app.post('/api/session', passport.authenticate('local-login', function(err, res, req) {
-    // console.log(err);
-    // console.log(res);
-    // console.log(req);
+    req.res.send(req.body);
   }));
 
   app.get('/api/session', function(req, res) {

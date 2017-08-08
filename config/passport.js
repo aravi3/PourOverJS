@@ -5,14 +5,14 @@ let User = require('../app/models/user');
 module.exports = function(passport) {
 
   passport.serializeUser(function(user, done) {
-    // console.log("serializeUser");
-    // console.log(user);
+    console.log("serializeUser");
+    console.log(user);
        done(null, user.id);
   });
 
   passport.deserializeUser(function(id, done) {
-    // console.log("deserializeUser");
-    // console.log(id);
+    console.log("deserializeUser");
+    console.log(id);
       User.findById(id, function(err, user) {
           done(err, user);
       });
@@ -25,7 +25,6 @@ module.exports = function(passport) {
       passReqToCallback: true
     },
     function(req, username, password, done) {
-      console.log(req.sessionID);
       process.nextTick(function() {
         User.findOne({ 'local.username': username }, function(err, user) {
           if (err) {
@@ -37,12 +36,11 @@ module.exports = function(passport) {
             let newUser = new User();
             newUser.local.username = username;
             newUser.local.password = newUser.generateHash(password);
-
             newUser.save( function(saveErr) {
               if (saveErr) {
                 throw saveErr;
               }
-              return done(null, newUser);
+              return done(null, newUser, req);
             });
           }
         });
@@ -70,7 +68,7 @@ module.exports = function(passport) {
           return done(null, false, req.flash('loginMessage', 'Invalid credentials'));
         }
 
-        return done(null, user);
+        return done(null, user, req);
       });
     })
   );
