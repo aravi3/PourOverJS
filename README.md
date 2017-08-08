@@ -99,6 +99,13 @@ We are using the `Scrum framework` of `Agile Development`. By design, we will no
 
 ### Sprint 1:  (4 days)
 
+#### Day 1
+
+  * **Justin:** Auth
+  * **Xiaoyuan:** Auth
+  * **Arvind:** Input Field
+  * **Atom:** Input Field and Syntax Highlighting
+
 #### Day 2
 
   * **Justin:** Stack Frames and stop JS asychronicity
