@@ -18,9 +18,9 @@ module.exports = function(app, passport) {
   }));
 
   app.get('/api/session', function(req, res) {
-    // console.log(req.sessionID);
-    req.logout();
-    // console.log(req.sessionID);
+    console.log(req.sessionID);
+    req.logOut();
+    console.log(req.sessionID);
   });
 
   function isLoggedIn(req, res, next) {
