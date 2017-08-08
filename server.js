@@ -17,6 +17,7 @@ MongoClient.connect(configDB.url);
 // require('./config/passport')(passport);
 
 app.use(morgan('dev'));
+app.use(express.static('public'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
