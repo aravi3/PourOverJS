@@ -10,16 +10,17 @@ class CodeInput extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      code: ""
-    };
-
-    this.setCode = this.setCode.bind(this);
+    // this.setCode = this.setCode.bind(this);
+    this.nextLine = this.nextLine.bind(this);
   }
 
-  setCode(newVal) {
-    let code = newVal;
-    this.setState({ code });
+  nextLine() {
+    let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
+    let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
+    currentLineNumber += 1;
+    this.refs.ace.editor.gotoLine(currentLineNumber, 0);
+
+    console.log(currentLineText);
   }
 
   render() {
@@ -27,12 +28,13 @@ class CodeInput extends React.Component {
       <div>
         <AceEditor
           mode="javascript"
+          ref="ace"
           theme="monokai"
-          onChange={this.setCode}
           name="code-input"
-          value={this.state.code}
           editorProps={{$blockScrolling: true}}
         />
+
+      <button onClick={this.nextLine}>Next Line</button>
       </div>
     );
   }
