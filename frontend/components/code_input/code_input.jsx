@@ -10,7 +10,6 @@ class CodeInput extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.setCode = this.setCode.bind(this);
     this.nextLine = this.nextLine.bind(this);
   }
 
@@ -19,8 +18,6 @@ class CodeInput extends React.Component {
     let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
     currentLineNumber += 1;
     this.refs.ace.editor.gotoLine(currentLineNumber, 0);
-
-    console.log(currentLineText);
   }
 
   render() {
@@ -34,7 +31,7 @@ class CodeInput extends React.Component {
           editorProps={{$blockScrolling: true}}
         />
 
-      <button onClick={this.nextLine}>Next Line</button>
+        <button onClick={this.nextLine}>Next Line</button>
       </div>
     );
   }
