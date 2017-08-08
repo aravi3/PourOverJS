@@ -7,7 +7,7 @@ const App = () => {
     <div className="app-wrapper">
       <div className="background-div"></div>
       <div className="navigation-wrapper">
-        <h1>PourOverJS</h1>
+        PourOverJS
       </div>
 
       <div className="main-wrapper">

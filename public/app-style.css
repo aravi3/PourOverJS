@@ -57,10 +57,11 @@ width: 100vw;
 }
 
 .main-wrapper {
+  position: fixed;
   margin: 0px;
-  height: 100%;
+  height: 90%;
   width: 100%;
-  padding-top: 15px;
+  padding-top: 85px;
   display: grid;
   grid-template-columns: repeat(22, 1fr);
   grid-gap: 0px;
@@ -95,12 +96,15 @@ width: 100vw;
   grid-row: 15 / 23;
 }
 
+
+.navigation-wrapper {
+  background-color: white;
+  height: 70px;
+  width: 100%;
+  display: block;
+  position: fixed;
+}
+
 .navigation-wrapper h1 {
   font-family: "dosis";
-  background-color: white;
-  height: 100px;
-  width: 100px;
-  display: block;
-  position: absolute;
-  margin: 0;
 }
