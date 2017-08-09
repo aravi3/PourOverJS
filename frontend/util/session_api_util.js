@@ -11,8 +11,14 @@ export const login = (user) => {
   });
 };
 
-export const logout = (username) => {
+export const logout = () => {
   return fetch('/api/session', {
-    method: 'DELETE'
+    method: 'GET'
+  });
+};
+
+export const handleRefresh = () => {
+  return fetch('/refresh', {
+    method: 'GET'
   });
 };

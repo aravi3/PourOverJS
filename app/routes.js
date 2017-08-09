@@ -1,3 +1,5 @@
+let localStorage = require('local-storage');
+
 module.exports = function(app, passport) {
 
   //homepage
@@ -5,48 +7,40 @@ module.exports = function(app, passport) {
     res.sendFile(__dirname + '/index.html');
   });
 
-  //login page
-  app.get('/login', function(req, res) {
-    res.render('login.ejs', {message : req.flash('loginMessage')});
-  });
+  app.get('/refresh', function(req, res) {
 
-  //signup page
-  app.get('/signup', function(req, res) {
-    res.render('signup.ejs', {message : req.flash('signupMessage')});
-  });
+    if (localStorage.get('username')) {
+      res.send({username: localStorage.get('username')});
+    }
+  })
 
-  app.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.ejs', {
-      user: req.user
+  app.post('/api/signup', passport.authenticate('local-signup', function(err, res, req) {
+    req.res.send(req.body);
+  }));
+
+  app.post('/api/session', passport.authenticate('local-login', function(err, res, req) {
+    req.res.send(req.body);
+  }));
+
+  app.get('/api/session', function(req, res) {
+    req.session.destroy( () => {
+      req.logout();
+      localStorage.set('username', null);
+      res.send();
     });
   });
 
-  app.get('/logout', function(req, res) {
-    req.logout();
-    req.redirect('/');
-  });
-
-  app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
-    faliureFlash: true
-  }));
-
-  app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    faliureFlash: true
-  }));
-
-  function isLoggedIn(req, res, next) {
-
-    // if the user is authenticated in the session, carryon
-
-    if (req.isAuthenticated()) {
-      return next();
-    }
-
-    // if they aren't redirect them to the homepage
-    res.redirect('/');
-  }
+  //
+  // function isLoggedIn(req, res, next) {
+  //   // if the user is authenticated in the session, carryon
+  //
+  //   if (req.isAuthenticated()) {
+  //     res.redirect('/hello');
+  //     return next();
+  //   }
+  //
+  //   // if they aren't redirect them to the homepage
+  //   // res.redirect('/');
+  //   return next();
+  // }
 };
