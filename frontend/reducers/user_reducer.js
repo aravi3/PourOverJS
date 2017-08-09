@@ -16,7 +16,6 @@ const userReducer = (state = initialState, action) => {
   let newState;
   switch(action.type) {
     case RECEIVE_CURRENT_USER:
-    debugger;
       newState = {
         [action.currentUser.username]: {
           code: action.currentUser.code

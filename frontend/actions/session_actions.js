@@ -32,14 +32,10 @@ export const logout = () => dispatch => {
   return APIUtil.logout().then(
     resp => {
       if (resp.ok) {
-        return resp.json();
+        dispatch(receiveCurrentUser({ username: undefined, code: undefined }));
+        dispatch(clearErrors());
       }
     },
     err => dispatch(receiveErrors(err))
-  ).then(
-    () => {
-      dispatch(receiveCurrentUser({ username: undefined, code: undefined }));
-      dispatch(clearErrors());
-    }
   );
 };
