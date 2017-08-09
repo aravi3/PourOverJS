@@ -139,6 +139,20 @@ width: 100vw;
   width: 100% !important;
 }
 
+/*.code-box:active, .code-box:hover, .code-box:focus,*/
+
+.code-box:hover {
+ box-shadow: 2px 2px 8px rgba(125, 185, 125, 0.7) !important;
+}
+
+.ace_focus {
+  box-shadow: 3px 3px 10px rgba(125, 185, 125, 0.7) !important;
+}
+
+/*.code-box:focus, .code-box:focus {
+  box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35)
+}*/
+
 .button-wrapper {
   width: auto;
   display: flex;
