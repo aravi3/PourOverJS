@@ -141,7 +141,7 @@ width: 100vw;
 
 /*.code-box:active, .code-box:hover, .code-box:focus,*/
 
-.code-box:hover {
+.code-box:not(.ace_focus):hover {
  box-shadow: 2px 2px 8px rgba(125, 185, 125, 0.7) !important;
 }
 

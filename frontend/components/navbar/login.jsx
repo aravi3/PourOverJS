@@ -22,7 +22,7 @@ class Login extends React.Component {
   render() {
 
     return (
-      <div>
+      <div className="login-form-wrapper">
         <form id="loginForm">
           <input
             type="text"
