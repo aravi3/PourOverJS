@@ -16,3 +16,9 @@ export const logout = () => {
     method: 'GET'
   });
 };
+
+export const handleRefresh = () => {
+  return fetch('/refresh', {
+    method: 'GET'
+  });
+};

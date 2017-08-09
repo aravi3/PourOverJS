@@ -16,8 +16,6 @@ export const receiveCurrentUser = (currentUser) => {
 export const signup = (user) => dispatch => {
   return APIUtil.signup(user).then(
     resp => {
-      console.log("hereee!!");
-      console.log(resp);
       if (resp.ok) {
         return resp.json();
       }
@@ -25,7 +23,7 @@ export const signup = (user) => dispatch => {
     err => dispatch(receiveErrors(err))
   ).then(
     ({username}) => {
-      dispatch(receiveCurrentUser(username));
+      dispatch(receiveCurrentUser({username}));
       dispatch(clearErrors());
   });
 };

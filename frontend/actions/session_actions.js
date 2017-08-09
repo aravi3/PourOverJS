@@ -23,7 +23,7 @@ export const login = (user) => dispatch => {
     err => dispatch(receiveErrors(err))
   ).then(
     ({username}) => {
-      dispatch(receiveCurrentUser(username));
+      dispatch(receiveCurrentUser({username}));
       dispatch(clearErrors());
   });
 };
@@ -32,14 +32,24 @@ export const logout = () => dispatch => {
   return APIUtil.logout().then(
     resp => {
       if (resp.ok) {
-        return resp.json();
+        dispatch(receiveCurrentUser({ username: undefined, code: undefined }));
+        dispatch(clearErrors());
       }
     },
     err => dispatch(receiveErrors(err))
-  ).then(
-    () => {
-      dispatch(receiveCurrentUser({ username: undefined, code: undefined }));
-      dispatch(clearErrors());
-    }
   );
 };
+
+export const checkRefresh = () => dispatch => {
+  return APIUtil.handleRefresh().then(
+    resp => {
+      if (resp.ok) {
+        return resp.json();
+      }
+    }
+  ).then(
+    ({username}) => {
+      dispatch(receiveCurrentUser({username}));
+      dispatch(clearErrors());
+  });
+}

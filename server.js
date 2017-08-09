@@ -4,11 +4,13 @@ let port = process.env.PORT || 8080;
 let mongoose = require('mongoose');
 let passport = require('passport');
 let flash = require('connect-flash');
+let cors = require('cors');
 
 let morgan = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+let MongoStore = require('connect-mongo')(session);
 
 let configDB = require('./config/database.js');
 
@@ -18,14 +20,22 @@ require('./config/passport')(passport);
 
 app.use(morgan('dev'));
 app.use(express.static('public'));
-app.use(cookieParser());
+app.use(cookieParser('ilovebcrypt'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use(session({
   secret: 'ilovebcrypt',
   resave: true,
-  saveUninitialized: false
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 360000
+  },
+  store: new MongoStore({
+    url: configDB.url,
+    collection: 'sessions'
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());

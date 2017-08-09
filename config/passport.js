@@ -2,21 +2,19 @@ let LocalStrategy = require("passport-local").Strategy;
 
 let User = require('../app/models/user');
 
+let localStorage = require('local-storage');
+
 module.exports = function(passport) {
 
-  passport.serializeUser(function(user, done) {
-    // console.log("serializeUser");
-    // console.log(user);
-       done(null, user.id);
-  });
-
-  passport.deserializeUser(function(id, done) {
-    // console.log("deserializeUser");
-    // console.log(id);
-      User.findById(id, function(err, user) {
-          done(err, user);
-      });
-  });
+  // passport.serializeUser(function(user, done) {
+  //      done(null, user.id);
+  // });
+  //
+  // passport.deserializeUser(function(id, done) {
+  //     User.findById(id, function(err, user) {
+  //         done(err, user);
+  //     });
+  // });
 
   passport.use('local-signup', new LocalStrategy(
     {
@@ -37,11 +35,13 @@ module.exports = function(passport) {
             newUser.local.username = username;
             newUser.local.password = newUser.generateHash(password);
 
+            localStorage.set('username', newUser.local.username);
+
             newUser.save( function(saveErr) {
               if (saveErr) {
                 throw saveErr;
               }
-              return done(null, newUser);
+              return done(null, newUser, req);
             });
           }
         });
@@ -69,7 +69,9 @@ module.exports = function(passport) {
           return done(null, false, req.flash('loginMessage', 'Invalid credentials'));
         }
 
-        return done(null, user);
+        localStorage.set('username', user.local.username);
+
+        return done(null, user, req);
       });
     })
   );
