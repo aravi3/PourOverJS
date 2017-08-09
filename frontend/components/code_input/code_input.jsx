@@ -39,10 +39,11 @@ class CodeInput extends React.Component {
 
     estraverse.traverse(ast, {
       enter: function(node) {
-        if (node.type === "FunctionDeclaration") {
+        console.log(node);
+        if (node.type === "CallExpression") {
           functionCallsCount++;
-          stack.push(node.id.name);
-          console.log("Function name: " + node.id.name);
+          stack.push(node.callee.name);
+          console.log("Function name: " + node.callee.name);
         }
       }
     });
