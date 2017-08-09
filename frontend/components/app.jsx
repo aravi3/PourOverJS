@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import HomeContainer from './home/home_container';
+import NavbarContainer from './navbar/navbar_container';
 
 
 const App = () => {
@@ -17,6 +18,9 @@ const App = () => {
         </div>
 
         <div className="stack-wrapper">
+          <div>
+            <NavbarContainer />
+          </div>
         </div>
         <div className="metrics-wrapper">
         </div>
