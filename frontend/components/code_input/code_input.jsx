@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import brace from 'brace';
 import AceEditor from 'react-ace';
-
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
+let esprima = require('esprima');
+let escodegen = require('escodegen');
+let estraverse = require('estraverse');
 
 class CodeInput extends React.Component {
   constructor(props) {
@@ -12,20 +14,56 @@ class CodeInput extends React.Component {
 
     this.nextLine = this.nextLine.bind(this);
     this.runCode = this.runCode.bind(this);
+    this.getReturnValue = this.getReturnValue.bind(this);
+  }
 
-    window.addEventListener('message',
-    function (e) {
+  getReturnValue() {
+    window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
-        console.log("Result: " + e.data);
+        console.log(e.data);
       }
     });
   }
 
   runCode() {
+    this.getReturnValue();
+
+    let timerId;
+    let functionCallsCount = 0;
+    let stack = [];
+
     let code = this.refs.ace.editor.getValue();
     let frame = document.getElementById('sandboxed');
-    frame.contentWindow.postMessage(code, '*');
+    let ast = esprima.parse(code);
+
+    estraverse.traverse(ast, {
+      enter: function(node) {
+        if (node.type === "FunctionDeclaration") {
+          functionCallsCount++;
+          stack.push(node.id.name);
+          console.log("Function name: " + node.id.name);
+        }
+      }
+    });
+
+    console.log("Function calls count: " + functionCallsCount);
+
+    ast.body.unshift(esprima.parse('let t0; let t1; let metrics = {}; t0 = performance.now();'));
+    ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
+    ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
+
+    let newCode = escodegen.generate(ast);
+
+    frame.contentWindow.postMessage(newCode, '*');
+
+    timerId = setInterval(() => {
+      if (stack.length === 1) {
+        clearInterval(timerId);
+      }
+
+      console.log(stack.pop());
+    }, 1000);
   }
 
   nextLine() {
