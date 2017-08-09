@@ -5,22 +5,33 @@ module.exports = function(app, passport) {
     res.sendFile(__dirname + '/index.html');
   });
 
-  app.post('/api/signup', passport.authenticate('local-signup', function(err, res, req) {
-    // console.log(err);
-    // console.log(res);
-    // console.log(req);
-  }));
+  app.post('/api/signup', function(req, res, next) {
+    console.log(next);
+    passport.authenticate('local-signup', function(err, user, info) {
+      if (err) { return next(err); }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        return res.send(req.body);
+      });
+    })(req, res, next);
+  });
 
-  app.post('/api/session', passport.authenticate('local-login', function(err, res, req) {
-    // console.log(err);
-    // console.log(res);
-    // console.log(req);
-  }));
+  app.post('/api/session', function(req, res, next) {
+    passport.authenticate('local-login', function(err, user, info) {
+      if (err) { return next(err); }
+      if (!user) { return { message: req.flash('loginMessage')}; }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        return res.send(req.body);
+      });
+    })(req, res, next);
+  });
 
   app.get('/api/session', function(req, res) {
-    console.log(req.sessionID);
-    req.logOut();
-    console.log(req.sessionID);
+    req.session.destroy( () => {
+      req.logout();
+      res.send(req.body);
+    });
   });
 
   function isLoggedIn(req, res, next) {

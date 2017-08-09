@@ -15,20 +15,31 @@ export const receiveCurrentUser = (currentUser) => {
 
 export const login = (user) => dispatch => {
   return APIUtil.login(user).then(
-    currentUser => {
-      dispatch(receiveCurrentUser(currentUser));
-      dispatch(clearErrors());
+    resp => {
+      if (resp.ok) {
+        return resp.json();
+      }
     },
     err => dispatch(receiveErrors(err))
-  );
+  ).then(
+    ({username}) => {
+      dispatch(receiveCurrentUser(username));
+      dispatch(clearErrors());
+  });
 };
 
 export const logout = () => dispatch => {
   return APIUtil.logout().then(
-    currentUser => {
-      dispatch(receiveCurrentUser({ username: undefined, code: undefined }));
-      dispatch(clearErrors());
+    resp => {
+      if (resp.ok) {
+        return resp.json();
+      }
     },
     err => dispatch(receiveErrors(err))
+  ).then(
+    () => {
+      dispatch(receiveCurrentUser({ username: undefined, code: undefined }));
+      dispatch(clearErrors());
+    }
   );
 };
