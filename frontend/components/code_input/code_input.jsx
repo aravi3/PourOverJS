@@ -45,8 +45,11 @@ class CodeInput extends React.Component {
           ref="ace"
           theme="tomorrow"
           name="code-input"
-          fontSize={18}
-          editorProps={{$blockScrolling: true}}
+          wrapEnabled={true}
+          fontSize={14}
+          editorProps={{
+            $blockScrolling: true,
+          }}
           setOptions={{
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true,

@@ -9,6 +9,7 @@ class Navbar extends React.Component {
   render() {
     return (
       <div>
+        <h1>PourOverJS</h1>
       </div>
     );
   }
