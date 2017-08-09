@@ -2,23 +2,25 @@ let LocalStrategy = require("passport-local").Strategy;
 
 let User = require('../app/models/user');
 
+let localStorage = require('local-storage');
+
 module.exports = function(passport) {
 
-  passport.serializeUser(function(user, done) {
-       done(null, user.id);
-  });
-
-  passport.deserializeUser(function(id, done) {
-      User.findById(id, function(err, user) {
-          done(err, user);
-      });
-  });
+  // passport.serializeUser(function(user, done) {
+  //      done(null, user.id);
+  // });
+  //
+  // passport.deserializeUser(function(id, done) {
+  //     User.findById(id, function(err, user) {
+  //         done(err, user);
+  //     });
+  // });
 
   passport.use('local-signup', new LocalStrategy(
     {
       usernameField: 'username',
       passwordField: 'password',
-      passReqToCallBack: true
+      passReqToCallback: true
     },
     function(req, username, password, done) {
       process.nextTick(function() {
@@ -27,17 +29,19 @@ module.exports = function(passport) {
             return done(err);
           }
           if (user) {
-            return done(null, false, req.flash('signupMessage', 'Username already taken'));
+            return done(null, false, req.flash('signupMessage', "Username already taken"));
           } else {
             let newUser = new User();
             newUser.local.username = username;
             newUser.local.password = newUser.generateHash(password);
 
+            localStorage.set('username', newUser.local.username);
+
             newUser.save( function(saveErr) {
               if (saveErr) {
                 throw saveErr;
               }
-              return done(null, newUser);
+              return done(null, newUser, req);
             });
           }
         });
@@ -49,7 +53,7 @@ module.exports = function(passport) {
     {
       usernameField: 'username',
       passwordField: 'password',
-      passReqToCallBack: true
+      passReqToCallback: true
     },
     function(req, username, password, done) {
       User.findOne({ 'local.username': username }, function(err, user) {
@@ -65,7 +69,9 @@ module.exports = function(passport) {
           return done(null, false, req.flash('loginMessage', 'Invalid credentials'));
         }
 
-        return done(null, user);
+        localStorage.set('username', user.local.username);
+
+        return done(null, user, req);
       });
     })
   );
