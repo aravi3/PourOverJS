@@ -4,9 +4,9 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
-var esprima = require('esprima');
-var escodegen = require('escodegen');
-var estraverse = require('estraverse');
+let esprima = require('esprima');
+let escodegen = require('escodegen');
+let estraverse = require('estraverse');
 
 class CodeInput extends React.Component {
   constructor(props) {
@@ -28,20 +28,20 @@ class CodeInput extends React.Component {
 
   runCode() {
     this.getReturnValue();
+
+    let timerId;
     let functionCallsCount = 0;
+    let stack = [];
 
     let code = this.refs.ace.editor.getValue();
     let frame = document.getElementById('sandboxed');
-
     let ast = esprima.parse(code);
-    ast.body.unshift(esprima.parse('let t0; let t1; let metrics = {}; t0 = performance.now();'));
-    ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
-    ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
 
     estraverse.traverse(ast, {
       enter: function(node) {
         if (node.type === "FunctionDeclaration") {
           functionCallsCount++;
+          stack.push(node.id.name);
           console.log("Function name: " + node.id.name);
         }
       }
@@ -49,10 +49,21 @@ class CodeInput extends React.Component {
 
     console.log("Function calls count: " + functionCallsCount);
 
+    ast.body.unshift(esprima.parse('let t0; let t1; let metrics = {}; t0 = performance.now();'));
+    ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
+    ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
+
     let newCode = escodegen.generate(ast);
-    console.log(newCode);
 
     frame.contentWindow.postMessage(newCode, '*');
+
+    timerId = setInterval(() => {
+      if (stack.length === 1) {
+        clearInterval(timerId);
+      }
+
+      console.log(stack.pop());
+    }, 1000);
   }
 
   nextLine() {
