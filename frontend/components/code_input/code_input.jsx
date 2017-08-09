@@ -60,7 +60,7 @@ class CodeInput extends React.Component {
         />
         <div className="button-wrapper">
           <button className="next-line-button" onClick={this.nextLine}>Next Line</button>
-          <button className="run-code-button" onClick={this.runCode}>Run</button>
+          <button className="run-code-button" onClick={this.runCode}>Run>></button>
         </div>
       </div>
     );
