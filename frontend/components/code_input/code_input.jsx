@@ -27,36 +27,61 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
+    // Adds an event listener to capture the return value from the sandbox
     this.getReturnValue();
 
     let timerId;
+    // Initialize counter for number of function calls in code
     let functionCallsCount = 0;
+    // Initialize stack to empty array
     let stack = [];
 
+    // Get the code from the editor when "Run" is clicked
     let code = this.refs.ace.editor.getValue();
+    // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
+    // Generate abstract syntax tree from code snippet by using esprima module
     let ast = esprima.parse(code);
+    // Console log the ast
+    console.log(ast);
 
+    // The estraverse module traverses the AST in order (line by line)
     estraverse.traverse(ast, {
+      // Whenever a node is entered, a callback is invoked that takes the node as
+      // a parameter
       enter: function(node) {
-        if (node.type === "FunctionDeclaration") {
+        // Console log the given node
+        console.log(node);
+        // If a function is invoked, do stuff
+        if (node.type === "CallExpression") {
+          // Increment the function calls counter
           functionCallsCount++;
-          stack.push(node.id.name);
-          console.log("Function name: " + node.id.name);
+          // Push into the stack the name of the function
+          stack.push(node.callee.name);
         }
       }
     });
 
+    // Console log the number of function calls
     console.log("Function calls count: " + functionCallsCount);
 
+    // Add onto the beginning of the code snippet variables to capture execution time
     ast.body.unshift(esprima.parse('let t0; let t1; let metrics = {}; t0 = performance.now();'));
+    // Add onto the end of the code snippet the captured duration and return the metrics object
     ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
     ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
 
+    // Convert the AST back into readable code
     let newCode = escodegen.generate(ast);
 
+    // Console log the new readable code
+    console.log(newCode);
+
+    // Run the code snippet within sandbox
     frame.contentWindow.postMessage(newCode, '*');
 
+    // Iterate through the stack of function invocations and display them
+    // to the console every second
     timerId = setInterval(() => {
       if (stack.length === 1) {
         clearInterval(timerId);
