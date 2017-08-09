@@ -25,18 +25,21 @@ class Signup extends React.Component {
       <div className="signup-form-wrapper">
         <form id="signupForm">
           <input
+            className="nav-signup-username-input"
             type="text"
             onChange={this.update("username")}
             placeholder="username"
             value={this.state.username}/>
 
           <input
-            type="text"
+            className="nav-signup-password-input"
+            type="password"
             onChange={this.update("password")}
             placeholder="password"
             value={this.state.password}/>
 
           <button
+            className="nav-signup-button"
             onClick={this.handleSignup}>
             Sign Up
           </button>
