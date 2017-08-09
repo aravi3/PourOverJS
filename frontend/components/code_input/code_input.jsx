@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
-import 'brace/theme/solarized_light';
+import 'brace/theme/dreamweaver';
 let esprima = require('esprima');
 let escodegen = require('escodegen');
 let estraverse = require('estraverse');
@@ -106,7 +106,7 @@ class CodeInput extends React.Component {
           className="code-box"
           mode="javascript"
           ref="ace"
-          theme="solarized_light"
+          theme="dreamweaver"
           name="code-input"
           wrapEnabled={true}
           fontSize={14}

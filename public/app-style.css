@@ -200,3 +200,51 @@ textarea:focus,
 button:focus {
   outline: none;
 }
+
+
+/*---SYNTAX THEME CUSTOMIZATIONS---*/
+
+
+.ace_constant {
+  /*border: crimson solid 1px;*/
+
+}
+
+.ace_function {
+  /*border: blue dotted 4px;*/
+  color: rgb(229, 194, 2) !important;
+}
+
+.ace_support {
+  /*border: green solid 2px;*/
+  color: rgb(175, 215, 187) !important;
+}
+
+.ace_paren {
+  /*border: #e3de39 solid 3px;*/
+  color: rgb(65, 175, 137) !important;
+}
+
+.ace_keyword {
+  /*border: purple solid 2px;*/
+  color: rgb(160, 95, 166) !important;
+}
+
+.ace_operator {
+  /*border: black dashed 1px;*/
+  color: #d35db2 !important;
+}
+
+.ace_numeric {
+  /*border: orange solid 1px;*/
+  color: #1da6df !important;
+}
+
+.ace_variable {
+  /*border: black solid 1px;*/
+}
+
+.ace_type {
+  /*border: black dotted 1px;*/
+  color: rgb(155, 150, 215) !important;
+}
