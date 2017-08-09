@@ -42,6 +42,10 @@ table {
   border-spacing: 0;
 }
 
+iframe {
+  display: none;
+}
+
 .background-div {
 position: fixed;
 background: linear-gradient(180deg, rgba(239, 226, 73, 0.48) 1.66%, rgba(72, 255, 218, 0.29) 100%);
@@ -52,7 +56,8 @@ width: 100vw;
 }
 
 .app-wrapper {
-  height: 95vh;
+  height: 100vh;
+  /*height: 95vh;*/
   width: 100vw;
 }
 
@@ -61,6 +66,8 @@ width: 100vw;
   margin: 0px;
   height: 90%;
   width: 100%;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
   padding-top: 85px;
   display: grid;
   grid-template-columns: repeat(22, 1fr);
@@ -71,22 +78,22 @@ width: 100vw;
 
 .input-wrapper {
   margin-right: 7px;
-  background-color: white;
-  grid-column: 4 / 12;
-  grid-row: 1 / 19;
+  grid-column: 3 / 12;
+  grid-row: 1 / 23;
+  margin-bottom: 80px;
 }
-.controls-wrapper {
+/*.controls-wrapper {
   margin-right: 7px;
   margin-top: 15px;
   margin-bottom: 15px;
   background-color: white;
   grid-column: 4 / 12;
   grid-row: 19 / 23;
-}
+}*/
 .stack-wrapper {
   margin-left: 8px;
   background-color: white;
-  grid-column: 12 / 20;
+  grid-column: 12 / 21;
   grid-row: 1 / 15;
 }
 .metrics-wrapper {
@@ -94,19 +101,88 @@ width: 100vw;
   margin-top: 15px;
   margin-bottom: 15px;
   background-color: white;
-  grid-column: 12 / 20;
+  grid-column: 12 / 21;
   grid-row: 15 / 23;
 }
 
-
 .navigation-wrapper {
+  font-family: dosis;
   background-color: white;
-  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  display: block;
+  height: 70px;
   position: fixed;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: .08em;
 }
 
-.navigation-wrapper h1 {
-  font-family: "dosis";
+.navigation-wrapper > h1 {
+
+}
+
+.home-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.code-input-editor {
+  width: 100%;
+  height: 100%;
+}
+
+.code-box {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.button-wrapper {
+  width: auto;
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  z-index: 4;
+  background: white;
+  margin-top: 15px;
+  position: relative;
+}
+
+.next-line-button, .run-code-button {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  font-weight: 400;
+  text-decoration: none;
+  color: black;
+  margin: 8px 10px;
+  padding: 10px;
+  background: #dff8cf;
+  border: 0px solid rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  transition: all 0.25s ease;
+  min-width: 90px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  width: 90px;
+  max-width: 90px;
+  font-size: 14px;
+  letter-spacing: .03em;
+}
+
+.next-line-button:hover, .run-code-button:hover {
+
+  box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35), 2px 2px 8px rgba(125, 185, 125, 0.7);
+  cursor: pointer;
+}
+
+.input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
 }
