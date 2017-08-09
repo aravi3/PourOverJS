@@ -11,8 +11,13 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <NavbarContainer />
-        <CodeInputContainer />
+        <div>
+          <NavbarContainer />
+        </div>
+
+        <div className="home-wrapper">
+          <CodeInputContainer />
+        </div>
       </div>
     );
   }
