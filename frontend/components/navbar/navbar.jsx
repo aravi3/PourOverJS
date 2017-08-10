@@ -18,6 +18,7 @@ class Navbar extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.loggedIn);
     this.props.checkRefresh();
   }
 
@@ -41,30 +42,42 @@ class Navbar extends React.Component {
   }
 
   render() {
-    return (
-      <div className="navbar-wrapper">
-        <button onClick={this.openModal}>Log in</button>
-        <button onClick={this.openModal}>Sign up</button>
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          contentLabel="Example Modal"
-        >
-        <Login
-          login={this.props.login}/>
-        <Signup
-          signup={this.props.signup} />
+    console.log(this.props.loggedIn);
+    if (!this.props.loggedIn) {
+      return (
+        <div className="navbar-wrapper">
 
-        </Modal>
+          <button
+            className="navbar-login-button"
+            onClick={this.openModal}>Log in</button>
+          <button
+            className="navbar-signup-button"
+            onClick={this.openModal}>Sign up</button>
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            contentLabel="Example Modal"
+            >
+            <Login
+              login={this.props.login}/>
+            <Signup
+              signup={this.props.signup} />
+          </Modal>
 
-        <button
-          className="logout-button"
-          onClick={this.handleLogout}>
-          Log Out
-        </button>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div className="navbar-wrapper">
+          <button
+            className="logout-button"
+            onClick={this.handleLogout}>
+            Log Out
+          </button>
+        </div>
+      );
+    }
   }
 }
 

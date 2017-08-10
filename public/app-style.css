@@ -59,6 +59,8 @@ width: 100vw;
   height: 100vh;
   /*height: 95vh;*/
   width: 100vw;
+  display: flex;
+  justify-content: space-around;
 }
 
 .main-wrapper {
@@ -114,20 +116,49 @@ width: 100vw;
 
 .navigation-wrapper {
   font-family: dosis;
-  position: fixed;
+  display: flex;
+  position: absolute;
   font-weight: 600;
   font-size: 18px;
   letter-spacing: .08em;
   z-index: 4;
-  /*display: flex;*/
-  margin-left: 50%;
-  margin-right: 50%;
-  justify-content: center;
-  
+  width: 100%;
+  /*margin-left: 50%;
+  margin-right: 50%;*/
+  /*justify-content: space-around;*/
+
+}
+
+.spacer {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
 }
 
 .navigation-wrapper > h1 {
+  display: flex;
+  padding: 20px 10px;
   justify-content: center;
+  flex: 1;
+}
+
+.Navbox {
+  /* justify-content: space-around; */
+display: flex;
+justify-content: center;
+/* padding: 0 10px; */
+flex: 1;
+}
+
+.navbar-wrapper {
+  display: flex;
+  /*padding: 20px 10px;*/
+  justify-content: space-around;
+  flex-direction: row;
+}
+
+.navbar-signup-button, .navbar-login-button {
+  margin: 10px 10px;
 }
 
 .home-wrapper {
@@ -144,8 +175,6 @@ width: 100vw;
   height: 100% !important;
   width: 100% !important;
 }
-
-/*.code-box:active, .code-box:hover, .code-box:focus,*/
 
 .code-box:not(.ace_focus):hover {
  box-shadow: 2px 2px 8px rgba(125, 185, 125, 0.7) !important;

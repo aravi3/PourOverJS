@@ -10,7 +10,10 @@ const App = () => {
       <div className="background-div"></div>
       <div className="navigation-background"></div>
       <div className="navigation-wrapper">
+        <div className="spacer"></div>
+        <div className="spacer"></div>
         <h1>PourOverJS</h1>
+        <div className="spacer"></div>
         <div className="Navbox">
           <NavbarContainer />
         </div>

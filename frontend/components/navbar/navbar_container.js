@@ -8,6 +8,7 @@ import { signup } from '../../actions/user_actions';
 
 const mapStateToProps = (state) => {
   return {
+    loggedIn: !!state.users.user.username
   };
 };
 
