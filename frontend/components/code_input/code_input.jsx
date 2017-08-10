@@ -41,12 +41,10 @@ class CodeInput extends React.Component {
     }
     else {
       if (node.id && node.id.name) {
-        // console.log(parentArray);
         console.log('Variables declared in the function ' + node.id.name + '():', varsDisplay);
       }
       else {
         parentArray.unshift("anonymous");
-        // console.log(parentArray);
         console.log('Variables declared in anonymous function:', varsDisplay);
       }
     }
@@ -55,9 +53,6 @@ class CodeInput extends React.Component {
   runCode() {
     // Adds an event listener to capture the return value from the sandbox
     this.getReturnValue();
-    let parentList = [];
-    let parentScope;
-    let parentObj = {};
     let parentArray = [];
     // let timerId;
     // Initialize counter for number of function calls in code
@@ -65,7 +60,6 @@ class CodeInput extends React.Component {
     // Initialize stack to empty array
     // let stack = [];
     let scopeChain = [];
-    // let scopeChain = {};
 
     // Get the code from the editor when "Run" is clicked
     let code = this.refs.ace.editor.getValue();
@@ -80,7 +74,7 @@ class CodeInput extends React.Component {
     estraverse.traverse(ast, {
       // Whenever a node is entered, a callback is invoked that takes the node as
       // a parameter
-      enter: (node, parent) => {
+      enter: (node) => {
         // Console log the given node
         // If a function is invoked, do stuff
         if (node.type === "CallExpression") {
@@ -92,26 +86,6 @@ class CodeInput extends React.Component {
 
         if (this.createsNewScope(node)) {
           scopeChain.push([]);
-        }
-
-        if (parent) {
-          if (this.createsNewScope(parent)) {
-            parentList.push([]);
-          }
-
-          if (parent.type === 'VariableDeclarator' || parent.type === 'FunctionDeclaration' || parent.type === 'FunctionExpression') {
-            parentScope = parentList[parentList.length - 1];
-
-            if (parent.params) {
-              let parameters = [];
-
-              for (let i = 0; i < parent.params.length; i++) {
-                parameters.push(parent.params[i].name);
-              }
-
-              parentScope.push(...parameters);
-            }
-          }
         }
 
         if (node.type === 'VariableDeclarator' || node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
@@ -135,20 +109,13 @@ class CodeInput extends React.Component {
 
       leave: (node, parent) => {
         if (this.createsNewScope(node)) {
-          // if (parent) {
-          //   if (this.createsNewScope(parent)) {
-          //     console.log(parent.type);
-          //     console.log(node.type);
-          //   }
-          // }
 
           if (node.id && node.id.name) {
-            // parentObj[node.id.name] = parentScope;
             parentArray.push(node.id.name);
           }
 
           let currentScope = scopeChain.pop();
-          // let currentScope = scopeChain[node.id.name];
+
           this.printScope(currentScope, parentArray, node);
 
           if (parent) {
@@ -161,13 +128,12 @@ class CodeInput extends React.Component {
       }
     });
 
-    // console.log(parentArray);
-
     // Console log the number of function calls
     // console.log("Function calls count: " + functionCallsCount);
 
     // Add onto the beginning of the code snippet variables to capture execution time
-    ast.body.unshift(esprima.parse('let t0; let t1; let metrics = {}; t0 = performance.now();'));
+    ast.body.unshift(esprima.parse('t0 = performance.now();'));
+    ast.body.unshift(esprima.parse('let metrics = {}; let t0, t1;'));
     // Add onto the end of the code snippet the captured duration and return the metrics object
     ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
     ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
