@@ -11,7 +11,6 @@ let estraverse = require('estraverse');
 class CodeInput extends React.Component {
   constructor(props) {
     super(props);
-
     this.nextLine = this.nextLine.bind(this);
     this.runCode = this.runCode.bind(this);
     this.getReturnValue = this.getReturnValue.bind(this);
