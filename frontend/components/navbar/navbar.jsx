@@ -24,6 +24,7 @@ class Navbar extends React.Component {
       <div>
         <Login
           login={this.props.login}/>
+
         <Signup
           signup={this.props.signup} />
 
