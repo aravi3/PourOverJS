@@ -12,6 +12,17 @@ class CodeInput extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      functionCalls: undefined,
+      inheritanceChain: [],
+      executionTime: undefined,
+      returnValue: undefined,
+      variablesDeclared: []
+    };
+
+    this.t0 = 0;
+    this.t1 = 0;
+
     this.nextLine = this.nextLine.bind(this);
     this.runCode = this.runCode.bind(this);
     this.getReturnValue = this.getReturnValue.bind(this);
@@ -23,7 +34,10 @@ class CodeInput extends React.Component {
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
-        console.log(e.data);
+        this.t1 = performance.now();
+        let executionTime = this.t1 - this.t0;
+        this.setState({ executionTime, returnValue: e.data});
+        this.props.receiveMetrics(this.state);
       }
     });
   }
@@ -38,15 +52,18 @@ class CodeInput extends React.Component {
     let varsDisplay = scope.join(', ');
 
     if (node.type === 'Program') {
-      console.log('Variables declared in the global scope:', varsDisplay);
+      let newState = this.state.variablesDeclared;
+      newState.push(`Variables declared in the global scope: ${varsDisplay}`);
     }
     else {
       if (node.id && node.id.name) {
-        console.log('Variables declared in the function ' + node.id.name + '():', varsDisplay);
+        let newState = this.state.variablesDeclared;
+        newState.push(`Variables declared in the function ${node.id.name}(): ${varsDisplay}`);
       }
       else {
         parentArray.unshift("anonymous");
-        console.log('Variables declared in anonymous function:', varsDisplay);
+        let newState = this.state.variablesDeclared;
+        newState.push(`Variables declared in anonymous function: ${varsDisplay}`);
       }
     }
   }
@@ -122,6 +139,8 @@ class CodeInput extends React.Component {
           if (parent) {
             if (parent.type === 'Program') {
               console.log(parentArray);
+              let newState = this.state.inheritanceChain;
+              newState.push(parentArray);
               parentArray = [];
             }
           }
@@ -129,15 +148,17 @@ class CodeInput extends React.Component {
       }
     });
 
+    this.setState({ functionCalls: functionCallsCount });
+
     // Console log the number of function calls
     // console.log("Function calls count: " + functionCallsCount);
 
     // Add onto the beginning of the code snippet variables to capture execution time
-    ast.body.unshift(esprima.parse('t0 = performance.now();'));
-    ast.body.unshift(esprima.parse('let metrics = {}; let t0, t1;'));
+    // ast.body.unshift(esprima.parse('t0 = performance.now();'));
+    // ast.body.unshift(esprima.parse('let metrics = {}; let t0, t1;'));
     // Add onto the end of the code snippet the captured duration and return the metrics object
-    ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
-    ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
+    // ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
+    // ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
 
     // Convert the AST back into readable code
     let newCode = escodegen.generate(ast);
@@ -145,6 +166,7 @@ class CodeInput extends React.Component {
     // Console log the new readable code
     // console.log(newCode);
 
+    this.t0 = performance.now();
     // Run the code snippet within sandbox
     frame.contentWindow.postMessage(newCode, '*');
 

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import CodeInput from './code_input';
+import { receiveMetrics } from '../../actions/metric_actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -8,6 +9,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    receiveMetrics: (metrics) => dispatch(receiveMetrics(metrics))
   };
 };
 
