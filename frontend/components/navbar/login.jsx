@@ -29,7 +29,8 @@ class Login extends React.Component {
             type="text"
             onChange={this.update("username")}
             placeholder="username"
-            value={this.state.username}/>
+            value={this.state.username}
+            autoFocus/>
 
           <input
             className="nav-login-password-input"

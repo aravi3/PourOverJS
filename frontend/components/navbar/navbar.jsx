@@ -18,7 +18,6 @@ class Navbar extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.loggedIn);
     this.props.checkRefresh();
   }
 
@@ -41,8 +40,11 @@ class Navbar extends React.Component {
     this.setState({modalIsOpen: false});
   }
 
+  focusOnMyInputBox(){
+    document.getElementsByClassName("nav-login-user-input").focus();
+  }
+
   render() {
-    console.log(this.props.loggedIn);
     if (!this.props.loggedIn) {
       return (
         <div className="navbar-wrapper">
@@ -57,7 +59,18 @@ class Navbar extends React.Component {
             isOpen={this.state.modalIsOpen}
             onAfterOpen={this.afterOpenModal}
             onRequestClose={this.closeModal}
+            onLoad={this.focusOnMyInputBox}
             contentLabel="Example Modal"
+            className={{
+              base: 'modal',
+              afterOpen: 'myClass_after-open',
+              beforeClose: 'myClass_before-close'
+            }}
+            overlayClassName={{
+              base: 'modal-overlay',
+              afterOpen: 'myOverlayClass_after-open',
+              beforeClose: 'myOverlayClass_before-close'
+            }}
             >
             <Login
               login={this.props.login}/>
