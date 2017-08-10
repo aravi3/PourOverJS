@@ -15,7 +15,6 @@ class Navbar extends React.Component {
 
   handleLogout(e) {
     e.preventDefault();
-
     this.props.logout();
   }
 
@@ -23,10 +22,11 @@ class Navbar extends React.Component {
     return (
       <div>
         <Login
+          receiveErrors={this.props.receiveErrors}
           login={this.props.login}/>
         <Signup
-          signup={this.props.signup} />
-
+          signup={this.props.signup}
+          receiveErrors={this.props.receiveErrors} />
         <button
           onClick={this.handleLogout}>
           Log Out

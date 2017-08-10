@@ -14,6 +14,17 @@ class Login extends React.Component {
   handleLogin(e) {
     e.preventDefault();
 
+    if (this.state.username === "" && this.state.password === "") {
+      this.props.receiveErrors("Username and password cannot be blank");
+      return;
+    } else if (this.state.username === "") {
+      this.props.receiveErrors("Username cannot be blank");
+      return;
+    } else if (this.state.password === "") {
+      this.props.receiveErrors("Password cannot be blank");
+      return;
+    }
+
     let user = this.state;
 
     this.props.login(user);

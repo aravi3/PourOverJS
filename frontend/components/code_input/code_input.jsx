@@ -21,7 +21,7 @@ class CodeInput extends React.Component {
     };
 
     this.t0 = 0;
-    this.t1 = 0;
+    this.t1 = 0;'
 
     this.nextLine = this.nextLine.bind(this);
     this.runCode = this.runCode.bind(this);
