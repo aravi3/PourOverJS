@@ -20,17 +20,15 @@ class CodeInput extends React.Component {
       variablesDeclared: []
     };
 
+    this.code = "";
     this.t0 = 0;
     this.t1 = 0;
 
     this.nextLine = this.nextLine.bind(this);
     this.runCode = this.runCode.bind(this);
-    this.getReturnValue = this.getReturnValue.bind(this);
     this.createsNewScope = this.createsNewScope.bind(this);
     this.printScope = this.printScope.bind(this);
-  }
 
-  getReturnValue() {
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
@@ -38,6 +36,13 @@ class CodeInput extends React.Component {
         let executionTime = this.t1 - this.t0;
         this.setState({ executionTime, returnValue: e.data});
         this.props.receiveMetrics(this.state);
+        this.setState({
+          functionCalls: undefined,
+          inheritanceChain: [],
+          executionTime: undefined,
+          returnValue: undefined,
+          variablesDeclared: []
+        });
       }
     });
   }
@@ -69,8 +74,6 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
-    // Adds an event listener to capture the return value from the sandbox
-    this.getReturnValue();
     let parentArray = [];
     // let timerId;
     // Initialize counter for number of function calls in code
@@ -80,11 +83,12 @@ class CodeInput extends React.Component {
     let scopeChain = [];
 
     // Get the code from the editor when "Run" is clicked
-    let code = this.refs.ace.editor.getValue();
+    this.code = this.refs.ace.editor.getValue();
+    console.log(this.code);
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
-    let ast = esprima.parse(code);
+    let ast = esprima.parse(this.code);
     // Console log the ast
     // console.log(ast);
 
@@ -198,6 +202,7 @@ class CodeInput extends React.Component {
           ref="ace"
           theme="tomorrow"
           name="code-input"
+          value={this.code}
           wrapEnabled={true}
           fontSize={14}
           editorProps={{
