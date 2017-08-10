@@ -15,22 +15,11 @@ module.exports = function(app, passport) {
   });
 
   app.post('/api/signup', passport.authenticate('local-signup', function(err, user, req) {
-    console.log(err);
-    console.log(user);
-    console.log(req);
-    if (user) {
-      req.res.send(req.body);
-    } else {
-    }
+    req.res.send(req.body);
   }));
 
   app.post('/api/session', passport.authenticate('local-login', function(err, user, req) {
-    if (user) {
-      req.res.send(req.body);
-    } else {
-      console.log(req);
-      req.res.send(req.body);
-    }
+    req.res.send(req.body);
   }));
 
   app.get('/api/session', function(req, res) {

@@ -16,7 +16,6 @@ export const receiveCurrentUser = (currentUser) => {
 export const login = (user) => dispatch => {
   return APIUtil.login(user).then(
     resp => {
-      console.log(resp);
       if (resp.ok) {
         return resp.json().then(
           ({username}) => {
@@ -26,7 +25,6 @@ export const login = (user) => dispatch => {
       } else {
         return resp.json().then(
           ({customError}) => {
-            console.log(customError);
             dispatch(receiveErrors(customError));
           }
         );

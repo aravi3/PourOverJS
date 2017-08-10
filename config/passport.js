@@ -16,12 +16,12 @@ module.exports = function(passport) {
       process.nextTick(function() {
         User.findOne({ 'local.username': username }, function(err, user) {
           if (err) {
-            console.log("database error");
             return done(err);
           }
           if (user) {
-            console.log("model error");
-            return done(null, false, req.flash('signupMessage', "Username already taken"));
+            req.res.status(404);
+            req.body.customError = "Username already taken";
+            return done(null, false, req);
           } else {
             let newUser = new User();
             newUser.local.username = username;
@@ -56,12 +56,13 @@ module.exports = function(passport) {
         if (!user) {
           req.res.status(404);
           req.body.customError = 'No user found';
-          console.log(req);
           return done(null, false, req);
         }
 
         if (!user.validPassword(password)) {
-          return done({'loginMessage': 'Invalid credentials'}, false, req);
+          req.res.status(404);
+          req.body.customError = 'Invalid credentials';
+          return done(null, false, req);
         }
 
         localStorage.set('username', user.local.username);
