@@ -17,7 +17,7 @@ const userReducer = (state = initialState, action) => {
 
   switch(action.type) {
     case RECEIVE_METRICS:
-      newState = merge({}, state, action.metrics);
+      newState = merge({}, initialState, action.metrics);
       return newState;
     default:
       return state;
