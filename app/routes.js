@@ -29,18 +29,4 @@ module.exports = function(app, passport) {
       res.send();
     });
   });
-
-  //
-  // function isLoggedIn(req, res, next) {
-  //   // if the user is authenticated in the session, carryon
-  //
-  //   if (req.isAuthenticated()) {
-  //     res.redirect('/hello');
-  //     return next();
-  //   }
-  //
-  //   // if they aren't redirect them to the homepage
-  //   // res.redirect('/');
-  //   return next();
-  // }
 };
