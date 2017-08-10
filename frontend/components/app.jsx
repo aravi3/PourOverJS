@@ -8,8 +8,12 @@ const App = () => {
   return (
     <div className="app-wrapper">
       <div className="background-div"></div>
+      <div className="navigation-background"></div>
       <div className="navigation-wrapper">
-      <h1>PourOverJS</h1>
+        <h1>PourOverJS</h1>
+        <div className="Navbox">
+          <NavbarContainer />
+        </div>
       </div>
 
       <div className="main-wrapper">
@@ -18,9 +22,6 @@ const App = () => {
         </div>
 
         <div className="stack-wrapper">
-          <div>
-            <NavbarContainer />
-          </div>
         </div>
         <div className="metrics-wrapper">
         </div>
