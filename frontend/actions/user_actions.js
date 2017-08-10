@@ -17,13 +17,19 @@ export const signup = (user) => dispatch => {
   return APIUtil.signup(user).then(
     resp => {
       if (resp.ok) {
-        return resp.json();
+        return resp.json().then(
+          ({username}) => {
+            dispatch(receiveCurrentUser({username}));
+            dispatch(clearErrors());
+        });
+      } else {
+        return resp.json().then(
+          ({customError}) => {
+            dispatch(receiveErrors(customError));
+          }
+        );
       }
     },
     err => dispatch(receiveErrors(err))
-  ).then(
-    ({username}) => {
-      dispatch(receiveCurrentUser({username}));
-      dispatch(clearErrors());
-  });
+  );
 };

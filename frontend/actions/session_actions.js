@@ -17,15 +17,24 @@ export const login = (user) => dispatch => {
   return APIUtil.login(user).then(
     resp => {
       if (resp.ok) {
-        return resp.json();
+        return resp.json().then(
+          ({username}) => {
+            dispatch(receiveCurrentUser({username}));
+            dispatch(clearErrors());
+        });
+      } else {
+        return resp.json().then(
+          ({customError}) => {
+            dispatch(receiveErrors(customError));
+          }
+        );
       }
     },
-    err => dispatch(receiveErrors(err))
-  ).then(
-    ({username}) => {
-      dispatch(receiveCurrentUser({username}));
-      dispatch(clearErrors());
-  });
+    err => {
+      console.log(err);
+      dispatch(receiveErrors(err));
+    }
+  );
 };
 
 export const logout = () => dispatch => {

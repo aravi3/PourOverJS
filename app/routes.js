@@ -12,13 +12,13 @@ module.exports = function(app, passport) {
     if (localStorage.get('username')) {
       res.send({username: localStorage.get('username')});
     }
-  })
+  });
 
-  app.post('/api/signup', passport.authenticate('local-signup', function(err, res, req) {
+  app.post('/api/signup', passport.authenticate('local-signup', function(err, user, req) {
     req.res.send(req.body);
   }));
 
-  app.post('/api/session', passport.authenticate('local-login', function(err, res, req) {
+  app.post('/api/session', passport.authenticate('local-login', function(err, user, req) {
     req.res.send(req.body);
   }));
 
@@ -29,18 +29,4 @@ module.exports = function(app, passport) {
       res.send();
     });
   });
-
-  //
-  // function isLoggedIn(req, res, next) {
-  //   // if the user is authenticated in the session, carryon
-  //
-  //   if (req.isAuthenticated()) {
-  //     res.redirect('/hello');
-  //     return next();
-  //   }
-  //
-  //   // if they aren't redirect them to the homepage
-  //   // res.redirect('/');
-  //   return next();
-  // }
 };
