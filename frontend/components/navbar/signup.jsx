@@ -14,6 +14,20 @@ class Signup extends React.Component {
   handleSignup(e) {
     e.preventDefault();
 
+    if (this.state.username === "" && this.state.password === "") {
+      this.props.receiveErrors("Username and password cannot be blank");
+      return;
+    } else if (this.state.username === "") {
+      this.props.receiveErrors("Username cannot be blank");
+      return;
+    } else if (this.state.password === "") {
+      this.props.receiveErrors("Password cannot be blank");
+      return;
+    } else if (this.state.password.length < 6) {
+      this.props.receiveErrors("Password must be at least 6 characters");
+      return;
+    }
+
     let user = this.state;
 
     this.props.signup(user);

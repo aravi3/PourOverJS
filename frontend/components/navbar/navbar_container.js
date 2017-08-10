@@ -6,6 +6,8 @@ import {
   checkRefresh } from '../../actions/session_actions';
 import { signup } from '../../actions/user_actions';
 
+import {receiveErrors} from '../../actions/error_actions';
+
 const mapStateToProps = (state) => {
   return {
   };
@@ -16,7 +18,8 @@ const mapDispatchToProps = (dispatch) => {
     login:  (user) => dispatch(login(user)),
     logout: () => dispatch(logout()),
     signup: (user) => dispatch(signup(user)),
-    checkRefresh: () => dispatch(checkRefresh())
+    checkRefresh: () => dispatch(checkRefresh()),
+    receiveErrors: (error) => dispatch(receiveErrors(error))
   };
 };
 
