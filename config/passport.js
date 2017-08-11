@@ -6,16 +6,6 @@ let localStorage = require('local-storage');
 
 module.exports = function(passport) {
 
-  // passport.serializeUser(function(user, done) {
-  //      done(null, user.id);
-  // });
-  //
-  // passport.deserializeUser(function(id, done) {
-  //     User.findById(id, function(err, user) {
-  //         done(err, user);
-  //     });
-  // });
-
   passport.use('local-signup', new LocalStrategy(
     {
       usernameField: 'username',
@@ -29,7 +19,9 @@ module.exports = function(passport) {
             return done(err);
           }
           if (user) {
-            return done(null, false, req.flash('signupMessage', "Username already taken"));
+            req.res.status(404);
+            req.body.customError = "Username already taken";
+            return done(null, false, req);
           } else {
             let newUser = new User();
             newUser.local.username = username;
@@ -62,11 +54,15 @@ module.exports = function(passport) {
         }
 
         if (!user) {
-          return done(null, false, req.flash('loginMessage', 'No user found'));
+          req.res.status(404);
+          req.body.customError = 'No user found';
+          return done(null, false, req);
         }
 
         if (!user.validPassword(password)) {
-          return done(null, false, req.flash('loginMessage', 'Invalid credentials'));
+          req.res.status(404);
+          req.body.customError = 'Invalid credentials';
+          return done(null, false, req);
         }
 
         localStorage.set('username', user.local.username);
