@@ -1,4 +1,5 @@
 let localStorage = require('local-storage');
+let User = require('../app/models/user');
 
 module.exports = function(app, passport) {
 
@@ -28,5 +29,30 @@ module.exports = function(app, passport) {
       localStorage.set('username', null);
       res.send();
     });
+  });
+
+  app.post('/api/code', function(req, res) {
+    let username = localStorage.get('username');
+    let body = req.body;
+
+    User.update({ 'local.username': username },
+    { $push: { [body.filename]: body.code } },
+    function(err, user) {
+      if (err) {
+
+      }
+    });
+  });
+
+  app.patch('/api/code', function(req, res) {
+    let username = localStorage.get('username');
+
+    User.findOneAndUpdate({ 'local.username': username }, function(err, user) {
+
+    });
+  });
+
+  app.delete('/api/code', function(req, res) {
+    let username = localStorage.get('username');
   });
 };

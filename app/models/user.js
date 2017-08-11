@@ -5,7 +5,10 @@ let userSchema = mongoose.Schema({
 
   local: {
     username: String,
-    password: String
+    password: String,
+    code: {
+      filename: String
+    }
   }
 
 });
