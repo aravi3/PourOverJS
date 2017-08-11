@@ -132,25 +132,25 @@ SEE ABOVE, TBD
 
 #### Day 5
 
-  * **Justin:**
-  * **Xiaoyuan:**
-  * **Arvind:**
-  * **Atom:**
+  * **Justin:** CRUD
+  * **Xiaoyuan:** CRUD
+  * **Arvind:** Bug-fighting
+  * **Atom:** Bug-fighting
 
 #### Day 6
 
-  * **Justin:**
-  * **Xiaoyuan:**
-  * **Arvind:**
-  * **Atom:**
+  * **Justin:** Stack Frames
+  * **Xiaoyuan:** Stack Frames
+  * **Arvind:** Stack Frames
+  * **Atom:** Clean up, Style
 
 
 #### Day 7
 
-  * **Justin:**
-  * **Xiaoyuan:**
-  * **Arvind:**
-  * **Atom:**
+  * **Justin:** Stack Frames
+  * **Xiaoyuan:** Stack Frames
+  * **Arvind:** Stack Frames
+  * **Atom:** Production ReadME, Final Style
 
 ### Bonus Features (TBD)
 - [ ] Use D3.js to display performance metrics
