@@ -31,7 +31,6 @@ export const login = (user) => dispatch => {
       }
     },
     err => {
-      console.log(err);
       dispatch(receiveErrors(err));
     }
   );
