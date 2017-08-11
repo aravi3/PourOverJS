@@ -82,7 +82,7 @@ width: 100vw;
   margin-right: 7px;
   grid-column: 3 / 12;
   grid-row: 1 / 23;
-  margin-bottom: 80px;
+  margin-bottom: 130px;
 }
 /*.controls-wrapper {
   margin-right: 7px;
@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
+.merge-sort-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
   margin: 15px 10px;
   display: flex;
   flex-direction: row;
@@ -168,6 +168,7 @@ flex: 1;
   padding: 10px;
   background: #dff8cf;
   background: rgb(249, 249, 162);
+  background: rgb(205, 255, 240);
   border: 0px solid rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   transition: all 0.25s ease;
@@ -182,13 +183,17 @@ flex: 1;
   letter-spacing: .03em;
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover {
-  box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
+.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover {
+  box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35), 2px 2px 8px rgba(125, 185, 125, 0.7);
   cursor: pointer;
 }
 
 .next-line-button:hover, .run-code-button:hover {
-  box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35), 2px 2px 8px rgba(125, 185, 125, 0.7);
+  box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
+}
+
+.navbar-signup-button:hover, .navbar-login-button:hover {
+  box-shadow: inset 0 0 3em rgba(90, 176, 185, 0.375), 2px 2px 8px rgba(90, 176, 185, 0.7);
 }
 
 .home-wrapper {
@@ -222,16 +227,43 @@ flex: 1;
   width: auto;
   display: flex;
   justify-content: center;
-  height: 50px;
+  height: 100px;
   z-index: 4;
   background: white;
   margin-top: 15px;
   position: relative;
+  overflow-x: scroll;
+  flex-direction: column;
 }
 
-.next-line-button, .run-code-button {
+.top-buttons {
+  flex-direction: row;
+  display: flex;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.bottom-buttons {
+  flex-direction: row;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.next-line-button, .run-code-button, .merge-sort-button {
   margin: 8px 10px;
+  background: #dff8cf;
   background: rgb(249, 249, 162);
+}
+
+.merge-sort-button {
+  padding: 10px 10px;
+  width: 108px;
+  min-width: 108px;
+  max-width: 108px;
+  margin: 8px 8px;
+  font-size: 14px;
+  background: rgb(205, 255, 240);
   background: #dff8cf;
 }
 
@@ -253,7 +285,7 @@ button:focus {
 }
 
 .ace_support {
-  color: rgb(175, 215, 187) !important;
+  color: rgb(150, 190, 162) !important;
 }
 
 .ace_paren {
