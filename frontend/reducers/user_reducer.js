@@ -1,15 +1,17 @@
 import merge from 'lodash/merge';
+
 import {
-  RECEIVE_CURRENT_USER,
+  RECEIVE_CURRENT_USER
 } from '../actions/user_actions';
 
+import {
+  RECEIVE_CODE
+} from '../actions/code_actions';
+
 const initialState = {
-  user: {
     username: undefined,
-    code: {
-      filename: undefined
-    }
-  }
+    code: [],
+    currentCode: null
 };
 
 const userReducer = (state = initialState, action) => {
@@ -18,13 +20,13 @@ const userReducer = (state = initialState, action) => {
   switch(action.type) {
     case RECEIVE_CURRENT_USER:
       newState = {
-        user: {
-          username: action.currentUser.username,
-          code: action.currentUser.code
-        }
+        username: action.currentUser.username,
+        code: action.currentUser.code || [],
+        currentCode: undefined
       };
-
       return newState;
+    case RECEIVE_CODE:
+      return(merge({}, state, { code: action.code }));
     default:
       return state;
   }

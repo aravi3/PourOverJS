@@ -34,7 +34,6 @@ class Signup extends React.Component {
   }
 
   render() {
-
     return (
       <div className="signup-form-wrapper">
         <form id="signupForm">
