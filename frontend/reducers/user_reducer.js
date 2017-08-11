@@ -13,7 +13,9 @@ const initialState = {
     code: {
       filename: undefined
     },
-    currentCode: undefined
+    currentCode: {
+      filename: undefined,
+    }
 };
 
 const userReducer = (state = initialState, action) => {
