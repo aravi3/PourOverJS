@@ -4,11 +4,9 @@ import {
 } from '../actions/user_actions';
 
 const initialState = {
-  user: {
     username: undefined,
     code: {
       filename: undefined
-    }
   }
 };
 
@@ -18,10 +16,8 @@ const userReducer = (state = initialState, action) => {
   switch(action.type) {
     case RECEIVE_CURRENT_USER:
       newState = {
-        user: {
-          username: action.currentUser.username,
-          code: action.currentUser.code
-        }
+        username: action.currentUser.username,
+        code: action.currentUser.code
       };
 
       return newState;

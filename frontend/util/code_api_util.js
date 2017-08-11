@@ -1,15 +1,3 @@
-export const allCode = (user) => {
-  return fetch('/api/code', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      username: user.username,
-    })
-  });
-};
-
 export const newCode = (code) => {
   return fetch('/api/code', {
     method: 'POST',
@@ -17,19 +5,20 @@ export const newCode = (code) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      code: code,
+      filename: code.filename,
+      code: code.code
     })
   });
 };
 
-export const deleteCode = (name) => {
+export const deleteCode = (filename) => {
   return fetch('/api/code', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: name,
+      filename: filename,
     })
   });
 };
@@ -41,7 +30,7 @@ export const updateCode = (code) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: code.name,
+      filename: code.filename,
       code: code.code
     })
   });
