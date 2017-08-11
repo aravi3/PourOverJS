@@ -17,11 +17,20 @@ export const newCode = (code) => dispatch => {
   return APIUtil.newCode(code).then(
     resp => {
       if (resp.ok) {
-        dispatch(receiveCode());
-        dispatch(clearErrors());
+        return resp.json().then(
+          (codes) => {
+            dispatch(receiveCode(codes));
+            dispatch(clearErrors());
+          }
+        );
+      } else {
+        return resp.json().then(
+          ({ customError }) => {
+            dispatch(receiveErrors(customError));
+          }
+        );
       }
-    },
-    err => dispatch(receiveErrors(err))
+    }
   );
 };
 
@@ -29,11 +38,20 @@ export const updateCode = (code) => dispatch => {
   return APIUtil.updateCode(code).then(
     resp => {
       if (resp.ok) {
-        dispatch(receiveCode());
-        dispatch(clearErrors());
+        return resp.json().then(
+          (codes) => {
+            dispatch(receiveCode(codes));
+            dispatch(clearErrors());
+          }
+        );
+      } else {
+        return resp.json().then(
+          ({ customError }) => {
+            dispatch(receiveErrors(customError));
+          }
+        );
       }
-    },
-    err => dispatch(receiveErrors(err))
+    }
   );
 };
 
@@ -41,10 +59,19 @@ export const deleteCode = (filename) => dispatch => {
   return APIUtil.deleteCode(filename).then(
     resp => {
       if (resp.ok) {
-        dispatch(receiveCode());
-        dispatch(clearErrors());
+        return resp.json().then(
+          (codes) => {
+            dispatch(receiveCode(codes));
+            dispatch(clearErrors());
+          }
+        );
+      } else {
+        return resp.json().then(
+          ({ customError }) => {
+            dispatch(receiveErrors(customError));
+          }
+        );
       }
-    },
-    err => dispatch(receiveErrors(err))
+    }
   );
 };

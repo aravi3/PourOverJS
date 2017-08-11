@@ -29,6 +29,7 @@ class CodeInput extends React.Component {
     this.runCode = this.runCode.bind(this);
     this.createsNewScope = this.createsNewScope.bind(this);
     this.printScope = this.printScope.bind(this);
+    this.submitNewCode = this.submitNewCode.bind(this);
 
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
@@ -194,6 +195,15 @@ class CodeInput extends React.Component {
     console.log(currentLineText);
   }
 
+  submitNewCode(e) {
+    e.preventDefault();
+    let codeObj = {
+      filename: 'myFile' + Math.random() * 1000,
+      code: this.code
+    };
+    this.props.newCode(codeObj);
+  }
+
   render() {
     return (
       <div className="code-input-editor">
@@ -218,6 +228,9 @@ class CodeInput extends React.Component {
             tabSize: 2,
           }}
         />
+      <div>
+        <button onClick={this.submitNewCode}>Submit a New Code</button>
+      </div>
         <div className="button-wrapper">
           <button className="next-line-button" onClick={this.nextLine}>Next Line</button>
           <button className="run-code-button" onClick={this.runCode}>Run>></button>

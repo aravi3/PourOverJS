@@ -66,7 +66,6 @@ module.exports = function(passport) {
         }
 
         localStorage.set('username', user.local.username);
-
         return done(null, user, req);
       });
     })

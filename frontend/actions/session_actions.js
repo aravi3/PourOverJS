@@ -18,8 +18,11 @@ export const login = (user) => dispatch => {
     resp => {
       if (resp.ok) {
         return resp.json().then(
-          ({username}) => {
-            dispatch(receiveCurrentUser({username}));
+          (userInfo) => {
+            console.log(userInfo.local);
+            let { username, code } = userInfo.local;
+            console.log(code);
+            dispatch(receiveCurrentUser({username, code}));
             dispatch(clearErrors());
         });
       } else {
@@ -60,4 +63,4 @@ export const checkRefresh = () => dispatch => {
       dispatch(receiveCurrentUser({username}));
       dispatch(clearErrors());
   });
-}
+};

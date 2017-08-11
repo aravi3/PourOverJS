@@ -10,7 +10,7 @@ import {
 
 const initialState = {
     username: undefined,
-    code: {},
+    code: [],
     currentCode: null
 };
 
@@ -21,12 +21,12 @@ const userReducer = (state = initialState, action) => {
     case RECEIVE_CURRENT_USER:
       newState = {
         username: action.currentUser.username,
-        code: action.currentUser.code,
+        code: action.currentUser.code || [],
         currentCode: undefined
       };
       return newState;
     case RECEIVE_CODE:
-      return(merge({}, state, {currentCode: action.code}));
+      return(merge({}, state, { code: action.code }));
     default:
       return state;
   }

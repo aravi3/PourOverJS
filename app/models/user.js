@@ -1,6 +1,11 @@
 let bcrypt = require('bcrypt-nodejs');
 let mongoose = require('mongoose');
 
+let codeSchema = mongoose.Schema({
+  filename: String,
+  code: String
+});
+
 let userSchema = mongoose.Schema({
   local: {
     username: String,
@@ -9,10 +14,6 @@ let userSchema = mongoose.Schema({
   }
 });
 
-let codeSchema = mongoose.Schema({
-  filename: String,
-  code: String
-});
 
 // generate hash
 userSchema.methods.generateHash = function(password) {

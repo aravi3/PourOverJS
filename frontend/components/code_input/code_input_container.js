@@ -7,6 +7,7 @@ import { newCode,
 
 const mapStateToProps = (state) => {
   return {
+    code: state.users.code
   };
 };
 
