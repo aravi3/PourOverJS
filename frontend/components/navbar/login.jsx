@@ -14,6 +14,17 @@ class Login extends React.Component {
   handleLogin(e) {
     e.preventDefault();
 
+    if (this.state.username === "" && this.state.password === "") {
+      this.props.receiveErrors("Username and password cannot be blank");
+      return;
+    } else if (this.state.username === "") {
+      this.props.receiveErrors("Username cannot be blank");
+      return;
+    } else if (this.state.password === "") {
+      this.props.receiveErrors("Password cannot be blank");
+      return;
+    }
+
     let user = this.state;
 
     this.props.login(user);
@@ -22,21 +33,25 @@ class Login extends React.Component {
   render() {
 
     return (
-      <div>
+      <div className="login-form-wrapper">
         <form id="loginForm">
           <input
+            className="nav-login-user-input"
             type="text"
             onChange={this.update("username")}
             placeholder="username"
-            value={this.state.username}/>
+            value={this.state.username}
+            autoFocus/>
 
           <input
-            type="text"
+            className="nav-login-password-input"
+            type="password"
             onChange={this.update("password")}
             placeholder="password"
             value={this.state.password}/>
 
           <button
+            className="nav-login-button"
             onClick={this.handleLogin}>
             Log In
           </button>

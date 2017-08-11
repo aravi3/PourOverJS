@@ -14,6 +14,20 @@ class Signup extends React.Component {
   handleSignup(e) {
     e.preventDefault();
 
+    if (this.state.username === "" && this.state.password === "") {
+      this.props.receiveErrors("Username and password cannot be blank");
+      return;
+    } else if (this.state.username === "") {
+      this.props.receiveErrors("Username cannot be blank");
+      return;
+    } else if (this.state.password === "") {
+      this.props.receiveErrors("Password cannot be blank");
+      return;
+    } else if (this.state.password.length < 6) {
+      this.props.receiveErrors("Password must be at least 6 characters");
+      return;
+    }
+
     let user = this.state;
 
     this.props.signup(user);
@@ -21,21 +35,24 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="signup-form-wrapper">
         <form id="signupForm">
           <input
+            className="nav-signup-username-input"
             type="text"
             onChange={this.update("username")}
             placeholder="username"
             value={this.state.username}/>
 
           <input
-            type="text"
+            className="nav-signup-password-input"
+            type="password"
             onChange={this.update("password")}
             placeholder="password"
             value={this.state.password}/>
 
           <button
+            className="nav-signup-button"
             onClick={this.handleSignup}>
             Sign Up
           </button>
