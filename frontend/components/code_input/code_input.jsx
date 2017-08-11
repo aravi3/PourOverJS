@@ -25,7 +25,76 @@ class CodeInput extends React.Component {
     this.t0 = 0;
     this.t1 = 0;
 
+    this.mergeCode = `//Write an Array#merge_sort method; it should not modify the original array.
+  function mergeSort(array) {
+    if (array.length <= 1) {
+      return array;
+    } else {
+      const mid = Math.floor(array.length / 2);
+
+      const left = mergeSort(array.slice(0, mid));
+      const right = mergeSort(array.slice(mid));
+
+      return merge(left, right);
+    }
+  }
+
+  function merge(left, right) {
+
+    const sorted = [];
+    while (left.length > 0 && right.length > 0) {
+
+      if (left[0] <= right[0]) {
+        sorted.push(left.shift());
+      } else if (right[0] < left[0]){
+        sorted.push(right.shift());
+      }
+    }
+    return sorted.concat(left, right);
+  }
+
+  console.log(mergeSort([1,9,2,3,0,5,6,6,43,24]));
+  `;
+
+  this.curryCode =
+`function curriedSum(numArgs) {
+  let numbers = [];
+
+  function _curriedSum(num) {
+    numbers.push(num);
+
+    if(numbers.length === numArgs) {
+      return numbers.reduce((total,val) => {
+        return total+val;
+      })
+    } else {
+      return _curriedSum;
+    }
+  }
+
+  return _curriedSum;
+}
+
+const sum = curriedSum(4);
+console.log(sum(5)(30)(20)(1)); // => 56`;
+
+this.debounceCode = `function debounce(callback, wait, context = this) {
+  let timeout = null
+  let callbackArgs = null
+
+  const later = () => callback.apply(context, callbackArgs)
+
+  return function() {
+    callbackArgs = arguments
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
+}`;
+
     this.nextLine = this.nextLine.bind(this);
+    this.mergeSort = this.mergeSort.bind(this);
+    this.curry = this.curry.bind(this);
+    this.debounce = this.debounce.bind(this);
     this.runCode = this.runCode.bind(this);
     this.createsNewScope = this.createsNewScope.bind(this);
     this.printScope = this.printScope.bind(this);
@@ -194,6 +263,18 @@ class CodeInput extends React.Component {
     console.log(currentLineText);
   }
 
+  mergeSort() {
+    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1)
+  }
+
+  curry() {
+    this.refs.ace.editor.setValue(`${this.curryCode}`, -1)
+  }
+
+  debounce() {
+    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1)
+  }
+
   render() {
     return (
       <div className="code-input-editor">
@@ -207,7 +288,7 @@ class CodeInput extends React.Component {
           wrapEnabled={true}
           fontSize={14}
           editorProps={{
-            $blockScrolling: true,
+            $blockScrolling: "Infinity",
             $enableBasicAutocompletion: true,
             $enableLiveAutocompletion: true,
             $enableSnippets: true,
@@ -219,8 +300,28 @@ class CodeInput extends React.Component {
           }}
         />
         <div className="button-wrapper">
-          <button className="next-line-button" onClick={this.nextLine}>Next Line</button>
-          <button className="run-code-button" onClick={this.runCode}>Run>></button>
+
+          <div className="top-buttons">
+            <button className="next-line-button"
+              onClick={this.nextLine}>Next Line
+            </button>
+            <button className="run-code-button"
+              onClick={this.runCode}>Run>>
+            </button>
+          </div>
+
+          <div className="bottom-buttons">
+            <button className="merge-sort-button"
+              onClick={this.mergeSort}>Merge Sort
+            </button>
+            <button className="curry-button"
+              onClick={this.curry}>Curry Sum
+            </button>
+            <button className="debounce-button"
+              onClick={this.debounce}>Debounce
+            </button>
+          </div>
+
         </div>
       </div>
     );
