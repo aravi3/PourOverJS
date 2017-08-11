@@ -158,6 +158,8 @@ flex: 1;
 }
 
 .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
+  animation: fadein 2s;
+  /*transition: all 2.25s ease;*/
   margin: 15px 10px;
   display: flex;
   flex-direction: row;
@@ -181,6 +183,11 @@ flex: 1;
   max-width: 90px;
   font-size: 14px;
   letter-spacing: .03em;
+}
+
+
+.navbar-signup-button, .navbar-login-button, .logout-button {
+  -webkit-animation: fadein 1.5s;
 }
 
 .navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover {
@@ -355,3 +362,8 @@ input:focus::-webkit-input-placeholder {
   border-bottom: dashed 1px black;
   transition: all 0.25s ease;
 }
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+  }
