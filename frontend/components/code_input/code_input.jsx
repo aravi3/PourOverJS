@@ -271,7 +271,8 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
       code: this.code
     };
     this.props.newCode(codeObj);
-    
+  }
+
   mergeSort() {
     this.refs.ace.editor.setValue(`${this.mergeCode}`, -1)
   }
@@ -311,10 +312,6 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
       <div>
         <button onClick={this.submitNewCode}>Submit a New Code</button>
       </div>
-        <div className="button-wrapper">
-          <button>hello</button>
-        </div>
-
         <div className="button-wrapper">
 
           <div className="top-buttons">
