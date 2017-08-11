@@ -23,8 +23,8 @@ class Navbar extends React.Component {
 
   handleLogout(e) {
     e.preventDefault();
-
     this.props.logout();
+    this.closeModal();
   }
 
   openModal() {
@@ -38,10 +38,6 @@ class Navbar extends React.Component {
 
   closeModal() {
     this.setState({modalIsOpen: false});
-  }
-
-  focusOnMyInputBox(){
-    document.getElementsByClassName("nav-login-user-input").focus();
   }
 
   render() {
@@ -59,7 +55,6 @@ class Navbar extends React.Component {
             isOpen={this.state.modalIsOpen}
             onAfterOpen={this.afterOpenModal}
             onRequestClose={this.closeModal}
-            onLoad={this.focusOnMyInputBox}
             contentLabel="Example Modal"
             className={{
               base: 'modal',

@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button {
+.navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
   margin: 15px 10px;
   display: flex;
   flex-direction: row;
@@ -182,7 +182,7 @@ flex: 1;
   letter-spacing: .03em;
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover {
+.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover {
   box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
   cursor: pointer;
 }
