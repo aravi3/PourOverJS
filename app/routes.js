@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
 
   app.post('/api/code', function(req, res) {
     let username = localStorage.get('username');
-    User.findOne({ 'local.username': username}, function(err, user) {
+    User.findOne({ 'local.username': username }, function(err, user) {
       user.local.code.push(req.body);
       user.save();
       res.send(user.local.code);
@@ -44,7 +44,7 @@ module.exports = function(app, passport) {
     let username = localStorage.get('username');
     let newCode = req.body;
 
-    User.findOne({ 'local.username': username}, function(err, user) {
+    User.findOne({ 'local.username': username }, function(err, user) {
       let index = user.local.code.findIndex( (el) => el.filename === newCode.filename );
 
       if ( index > -1 ) {

@@ -19,9 +19,7 @@ export const login = (user) => dispatch => {
       if (resp.ok) {
         return resp.json().then(
           (userInfo) => {
-            console.log(userInfo.local);
             let { username, code } = userInfo.local;
-            console.log(code);
             dispatch(receiveCurrentUser({username, code}));
             dispatch(clearErrors());
         });

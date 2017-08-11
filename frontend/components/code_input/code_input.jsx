@@ -232,6 +232,10 @@ class CodeInput extends React.Component {
         <button onClick={this.submitNewCode}>Submit a New Code</button>
       </div>
         <div className="button-wrapper">
+          <button>hello</button>
+        </div>
+
+        <div className="button-wrapper">
           <button className="next-line-button" onClick={this.nextLine}>Next Line</button>
           <button className="run-code-button" onClick={this.runCode}>Run>></button>
         </div>
