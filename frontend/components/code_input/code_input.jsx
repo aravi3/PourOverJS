@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
-// import 'brace/theme/monokai';
+import 'brace/theme/dreamweaver';
+
 let esprima = require('esprima');
 let escodegen = require('escodegen');
 let estraverse = require('estraverse');
@@ -200,18 +201,19 @@ class CodeInput extends React.Component {
           className="code-box"
           mode="javascript"
           ref="ace"
-          theme="tomorrow"
+          theme="dreamweaver"
           name="code-input"
           value={this.code}
           wrapEnabled={true}
           fontSize={14}
           editorProps={{
             $blockScrolling: true,
+            $enableBasicAutocompletion: true,
+            $enableLiveAutocompletion: true,
+            $enableSnippets: true,
           }}
           setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
+
             showLineNumbers: true,
             tabSize: 2,
           }}

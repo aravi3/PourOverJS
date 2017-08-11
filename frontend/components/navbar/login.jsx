@@ -33,21 +33,25 @@ class Login extends React.Component {
   render() {
 
     return (
-      <div>
+      <div className="login-form-wrapper">
         <form id="loginForm">
           <input
+            className="nav-login-user-input"
             type="text"
             onChange={this.update("username")}
             placeholder="username"
-            value={this.state.username}/>
+            value={this.state.username}
+            autoFocus/>
 
           <input
-            type="text"
+            className="nav-login-password-input"
+            type="password"
             onChange={this.update("password")}
             placeholder="password"
             value={this.state.password}/>
 
           <button
+            className="nav-login-button"
             onClick={this.handleLogin}>
             Log In
           </button>

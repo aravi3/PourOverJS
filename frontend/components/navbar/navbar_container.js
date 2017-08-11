@@ -10,6 +10,7 @@ import {receiveErrors} from '../../actions/error_actions';
 
 const mapStateToProps = (state) => {
   return {
+    loggedIn: !!state.users.user.username
   };
 };
 
