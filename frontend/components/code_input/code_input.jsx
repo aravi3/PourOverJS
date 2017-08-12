@@ -64,7 +64,7 @@ class CodeInput extends React.Component {
 
         this.setState({ executionTime, returnValue: e.data});
         this.props.receiveMetrics(this.state);
-        
+
         this.setState({
           functionCalls: undefined,
           inheritanceChain: [],
@@ -137,7 +137,19 @@ class CodeInput extends React.Component {
               parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
             }
             else {
-              parent.body.push(esprima.parse(`stack.push(['${node.expression.callee.name}', ${node.loc.start.line}])`));
+              console.log(node);
+              debugger;
+              let level = node.expression.callee;
+              while (level) {
+                parent.body.push(esprima.parse(`stack.push(
+                  ['${level.name ? level.name : level.property}',
+                  ${node.loc.start.line}])`));
+                if (level.callee) {
+                  level = level.callee;
+                } else {
+                  level = 0;
+                }
+              }
             }
           }
         }
@@ -253,7 +265,7 @@ class CodeInput extends React.Component {
   updateCode(e) {
     this.code = this.refs.ace.editor.getValue();
   }
-  
+
   submitCode() {
     let codeObj = {
       filename: this.state.filename,

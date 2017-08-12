@@ -48,7 +48,7 @@ export const CURRYING_EXAMPLE = `function curriedSum(numArgs) {
 }
 
 const sum = curriedSum(4);
-console.log(sum(5)(30)(20)(1)); // => 56`;
+sum(5)(30)(20)(1); // => 56`;
 
 export const DEBOUNCING_EXAMPLE = `function debounce(callback, wait, context = this) {
   let timeout = null
