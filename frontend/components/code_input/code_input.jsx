@@ -59,7 +59,7 @@ class CodeInput extends React.Component {
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
 
-        let executionTime = this.t1 - this.t0;
+        let localExecutionTime = this.t1 - this.t0;
         console.log(e.data);
 
         if (this.runCounter === 1) {
@@ -81,6 +81,7 @@ class CodeInput extends React.Component {
         };
 
         stateObj.variablesDeclared.shift();
+
 
         this.props.receiveMetrics(stateObj);
 

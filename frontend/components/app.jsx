@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import HomeContainer from './home/home_container';
 import NavbarContainer from './navbar/navbar_container';
+import MetricsContainer from './metrics/metrics_container';
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
         <div className="stack-wrapper">
         </div>
         <div className="metrics-wrapper">
+          <MetricsContainer />
         </div>
 
         <div className="footer-background">
