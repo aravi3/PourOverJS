@@ -426,7 +426,17 @@ class CodeInput extends React.Component {
             isOpen={this.state.saveModal}
             onRequestClose={this.handleCloseModal('saveModal')}
             contentLabel="saveCode"
-            shouldCloseOnOverlay={true}>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'save-modal',
+              afterOpen: 'save-modal-after-open',
+              beforeClose: 'save-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'save-modal-overlay',
+              afterOpen: 'save-modal-over-after-open',
+              beforeClose: 'save-modal-over-before-close'
+            }}>
             <SaveModal
               submitCode={this.submitCode}
               filename={this.state.filename}

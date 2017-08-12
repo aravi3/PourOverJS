@@ -369,6 +369,40 @@ button:focus {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
+.save-modal, .save-modal-after-open, .save-modal-before-close {
+  position: absolute;
+  top: 40%;
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.0);
+  border: solid 0px black;
+}
+
+.save-modal-overlay {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 9;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.29) 1.66%, rgba(0, 0, 0, 0.88) 100%);
+}
+
+.save-modal-input {
+  background: rgba(0, 0, 0, 0.0);
+  border: solid 0px black;
+  border-bottom: solid 2px black;
+  width: 80%;
+  text-align: center;
+  outline: none;
+  font-size: 24px;
+  letter-spacing: .04em;
+  font-weight: 600;
+  font-family: dosis;
+}
+
+.save-modal-input::selection {
+  outline: none;
+}
+
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
  }
@@ -414,18 +448,6 @@ input:focus::-webkit-input-placeholder {
   font-size: 16pt;
   font-weight: 400;
   letter-spacing: .04em;
-}
-
-.save-modal-input {
-  background: rgba(0, 0, 0, 0.0);
-  border-bottom: solid 2px black;
-  width: 80%;
-  text-align: center;
-  outline: none;
-}
-
-.save-modal-input::selection {
-  outline: none;
 }
 
 @keyframes fadein {
