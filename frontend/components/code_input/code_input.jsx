@@ -157,8 +157,7 @@ class CodeInput extends React.Component {
               parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
             }
             else {
-              console.log(node);
-              debugger;
+              // console.log(node);
               let level = node.expression.callee;
               while (level) {
                 parent.body.push(esprima.parse(`stack.push(
