@@ -45,9 +45,6 @@ class CodeInput extends React.Component {
     this.updateCode = this.updateCode.bind(this);
     this.updateField = this.updateField.bind(this);
 
-    //test
-    this.display = this.display.bind(this);
-
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
@@ -263,10 +260,6 @@ class CodeInput extends React.Component {
     return(e) => this.setState({ [field]: e.target.value });
   }
 
-  display() {
-    console.log(this.state.saveModal);
-  }
-
   render() {
     return (
       <div className="code-input-editor">
@@ -308,10 +301,6 @@ class CodeInput extends React.Component {
               >
               Save
             </button>
-            <button
-              onClick={this.display}>
-              display
-            </button>
           </div>
 
           <Modal
@@ -336,6 +325,7 @@ class CodeInput extends React.Component {
               code={this.props.code}
               populateEditor={this.populateEditor}
               handleCloseModal={this.handleCloseModal}
+              deleteCode={this.props.deleteCode}
               />
           </Modal>
 
