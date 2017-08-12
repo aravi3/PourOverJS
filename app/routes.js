@@ -40,6 +40,7 @@ module.exports = function(app, passport) {
 
   app.post('/api/code', function(req, res) {
     let username = localStorage.get('username');
+    
     User.findOne({ 'local.username': username }, function(err, user) {
       user.local.code.push(req.body);
       user.save();
@@ -59,7 +60,7 @@ module.exports = function(app, passport) {
       } else {
         user.local.code.push(newCode);
       }
-      
+
       user.save();
       res.send(user.local.code);
     });
@@ -67,16 +68,16 @@ module.exports = function(app, passport) {
 
   app.delete('/api/code', function(req, res) {
     let username = localStorage.get('username');
-    let filenameToDelete = req.body;
+    let filenameToDelete = req.body.filename;
 
     User.findOne({ 'local.username': username }, function(err, user) {
-      let index = user.local.code.findIndex( (el) => el.filename == filenameToDelete );
+      let index = user.local.code.findIndex( (el) => el.filename === filenameToDelete );
 
       if ( index > -1 ) {
         user.local.code.splice(index, 1);
-        user.save();
-        res.send(user.local.code);
       }
+      user.save();
+      res.send(user.local.code);
     });
   });
 

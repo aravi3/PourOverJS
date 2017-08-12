@@ -46,29 +46,25 @@ class CodeInput extends React.Component {
     this.updateField = this.updateField.bind(this);
 
     window.addEventListener('message', (e) => {
+      let timerId;
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
-        let localExecutionTime = this.t1 - this.t0;
-        this.setState({ executionTime: localExecutionTime, returnValue: e.data});
 
-        let {
-          functionCalls,
-          inheritanceChain,
-          executionTime,
-          returnValue,
-          variablesDeclared
-        } = this.state;
+        let executionTime = this.t1 - this.t0;
+        console.log(e.data);
 
-        let localMetrics = {
-          functionCalls,
-          inheritanceChain,
-          executionTime,
-          returnValue,
-          variablesDeclared
-        };
+        timerId = setInterval(() => {
+          console.log(e.data.stack.pop());
 
-        this.props.receiveMetrics(localMetrics);
+          if (e.data.stack.length === 0) {
+            clearInterval(timerId);
+          }
+        }, 1000);
+
+        this.setState({ executionTime, returnValue: e.data});
+        this.props.receiveMetrics(this.state);
+        
         this.setState({
           functionCalls: undefined,
           inheritanceChain: [],
@@ -119,10 +115,14 @@ class CodeInput extends React.Component {
     // Believe that ace editor is triggering a rerender under the hood
     this.code = this.refs.ace.editor.getValue();
 
+    // console.log(this.code);
+
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
-    let ast = esprima.parse(this.code);
+    let ast = esprima.parse(this.code, {loc: true});
+    ast.body.unshift(esprima.parse('let metrics = {}; let stack = []; let stackAsync = [];'));
+    // console.log(ast);
     // Console log the ast
     // console.log(ast);
 
@@ -130,7 +130,17 @@ class CodeInput extends React.Component {
     estraverse.traverse(ast, {
       // Whenever a node is entered, a callback is invoked that takes the node as
       // a parameter
-      enter: (node) => {
+      enter: (node, parent) => {
+        if (node.type === "ExpressionStatement") {
+          if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
+            if (node.expression.callee.name === "setTimeout") {
+              parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
+            }
+            else {
+              parent.body.push(esprima.parse(`stack.push(['${node.expression.callee.name}', ${node.loc.start.line}])`));
+            }
+          }
+        }
         // Console log the given node
         // If a function is invoked, do stuff
         if (node.type === "CallExpression") {
@@ -186,6 +196,10 @@ class CodeInput extends React.Component {
       }
     });
 
+    ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; function retrieveStacks() { return metrics; } retrieveStacks();'));
+
+    console.log(ast);
+
     this.setState({ functionCalls: functionCallsCount });
 
     // Console log the number of function calls
@@ -200,7 +214,7 @@ class CodeInput extends React.Component {
 
     // Convert the AST back into readable code
     let newCode = escodegen.generate(ast);
-
+    console.log(newCode);
     // Console log the new readable code
     // console.log(newCode);
 
@@ -245,6 +259,20 @@ class CodeInput extends React.Component {
       filename: this.state.filename,
       code: this.code
     };
+    this.props.newCode(codeObj);
+  }
+
+  mergeSort() {
+    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1);
+  }
+
+  curry() {
+    this.refs.ace.editor.setValue(`${this.curryCode}`, -1);
+  }
+
+  debounce() {
+    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1);
+
     this.props.saveCode(codeObj);
   }
 
@@ -324,6 +352,7 @@ class CodeInput extends React.Component {
               code={this.props.code}
               populateEditor={this.populateEditor}
               handleCloseModal={this.handleCloseModal}
+              deleteCode={this.props.deleteCode}
               />
           </Modal>
 

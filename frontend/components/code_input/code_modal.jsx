@@ -5,6 +5,7 @@ class CodeModal extends React.Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleClick(code, filename) {
@@ -14,6 +15,13 @@ class CodeModal extends React.Component {
     };
   }
 
+  handleDelete(filename) {
+    return e => {
+      e.stopPropagation();
+      this.props.deleteCode(filename);
+    }
+  }
+
   render() {
     let allCode = this.props.code.map( (el, index) => {
       return (
@@ -21,6 +29,10 @@ class CodeModal extends React.Component {
           key={index}
           onClick={this.handleClick(el.code, el.filename)}>
           {el.filename}
+          <button
+            onClick={this.handleDelete(el.filename)}>
+            DELETE
+          </button>
         </li>
       );
     });
