@@ -1,6 +1,7 @@
 import merge from 'lodash/merge';
 import {
   RECEIVE_METRICS,
+  REMOVE_STACK_INDEX
 } from '../actions/metric_actions';
 
 const initialState = {
@@ -8,7 +9,8 @@ const initialState = {
   inheritanceChain: undefined,
   executionTime: undefined,
   returnValue: undefined,
-  variablesDeclared: undefined
+  variablesDeclared: undefined,
+  stack: undefined
 };
 
 const userReducer = (state = initialState, action) => {
@@ -18,6 +20,10 @@ const userReducer = (state = initialState, action) => {
   switch(action.type) {
     case RECEIVE_METRICS:
       newState = merge({}, initialState, action.metrics);
+      return newState;
+    case REMOVE_STACK_INDEX:
+      newState = merge({}, state);
+      newState.stack.splice(action.idx, 1);
       return newState;
     default:
       return state;
