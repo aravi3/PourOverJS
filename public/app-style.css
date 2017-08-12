@@ -257,6 +257,24 @@ flex: 1;
   flex: 1;
 }
 
+.nav-login-button, .nav-signup-button {
+  background: rgba(255, 255, 255, 1.0);
+  border: solid white 2px;
+  transition: all 0.05s ease;
+}
+
+.nav-login-button:hover, .nav-signup-button:hover {
+  transition: all 0.05s ease;
+  border: solid white 2px;
+  box-sizing: border-box;
+  /*max-height: 37px;*/
+  /*margin-top: 17px;
+  margin-bottom: 19px;*/
+  background: rgba(255, 255, 255, 0.0);
+  cursor: pointer;
+
+}
+
 .next-line-button, .run-code-button, .merge-sort-button {
   margin: 8px 10px;
   background: #dff8cf;
