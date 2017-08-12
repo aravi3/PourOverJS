@@ -40,6 +40,7 @@ module.exports = function(app, passport) {
 
   app.post('/api/code', function(req, res) {
     let username = localStorage.get('username');
+    
     User.findOne({ 'local.username': username }, function(err, user) {
       user.local.code.push(req.body);
       user.save();
