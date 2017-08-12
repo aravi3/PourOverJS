@@ -53,7 +53,7 @@ class CodeInput extends React.Component {
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
 
-        let executionTime = this.t1 - this.t0;
+        let localExecutionTime = this.t1 - this.t0;
         console.log(e.data);
 
         // timerId = setInterval(() => {
@@ -64,8 +64,23 @@ class CodeInput extends React.Component {
         //   }
         // }, 1000);
 
-        this.setState({ executionTime, stack: e.data.stack.reverse() });
-        this.props.receiveMetrics(this.state);
+        this.setState({ executionTime: localExecutionTime, stack: e.data.stack.reverse() });
+
+        let {
+          functionCalls,
+          closureChain,
+          executionTime,
+          returnValue,
+          variablesDeclared
+        } = this.state;
+
+        this.props.receiveMetrics({
+          functionCalls,
+          closureChain,
+          executionTime,
+          returnValue,
+          variablesDeclared
+        });
 
 //bug-fighting
 //master
@@ -80,7 +95,6 @@ class CodeInput extends React.Component {
           returnValue: undefined,
           variablesDeclared: []
         });
-
       }
     });
   }
