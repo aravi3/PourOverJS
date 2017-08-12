@@ -9,9 +9,16 @@ module.exports = function(app, passport) {
   });
 
   app.get('/refresh', function(req, res) {
+    let username = localStorage.get('username');
 
-    if (localStorage.get('username')) {
-      res.send({username: localStorage.get('username')});
+    if (username) {
+      User.findOne({ 'local.username': username }, function(err, user) {
+        if(err) {
+          res.send(err);
+        } else {
+          res.send(user);
+        }
+      });
     }
   });
 
@@ -49,9 +56,12 @@ module.exports = function(app, passport) {
 
       if ( index > -1 ) {
         user.local.code[index] = newCode;
-        user.save();
-        res.send(user.local.code);
+      } else {
+        user.local.code.push(newCode);
       }
+      
+      user.save();
+      res.send(user.local.code);
     });
   });
 
@@ -67,14 +77,6 @@ module.exports = function(app, passport) {
         user.save();
         res.send(user.local.code);
       }
-    });
-  });
-
-  app.patch('/api/code', function(req, res) {
-    let username = localStorage.get('username');
-
-    User.findOneAndUpdate({ 'local.username': username }, function(err, user) {
-
     });
   });
 

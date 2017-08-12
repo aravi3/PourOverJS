@@ -4,6 +4,12 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/dreamweaver';
+import Modal from 'react-modal';
+import { MERGE_SORT_EXAMPLE,
+         CURRYING_EXAMPLE,
+         DEBOUNCING_EXAMPLE } from '../../util/example_codes';
+import CodeModal from './code_modal';
+import SaveModal from './save_modal';
 
 let esprima = require('esprima');
 let escodegen = require('escodegen');
@@ -18,95 +24,54 @@ class CodeInput extends React.Component {
       inheritanceChain: [],
       executionTime: undefined,
       returnValue: undefined,
-      variablesDeclared: []
+      variablesDeclared: [],
+      showModal: false,
+      saveModal: false,
+      filename: ""
     };
 
     this.code = "";
     this.t0 = 0;
     this.t1 = 0;
 
-    this.mergeCode = `//Write an Array#merge_sort method; it should not modify the original array.
-  function mergeSort(array) {
-    if (array.length <= 1) {
-      return array;
-    } else {
-      const mid = Math.floor(array.length / 2);
-
-      const left = mergeSort(array.slice(0, mid));
-      const right = mergeSort(array.slice(mid));
-
-      return merge(left, right);
-    }
-  }
-
-  function merge(left, right) {
-
-    const sorted = [];
-    while (left.length > 0 && right.length > 0) {
-
-      if (left[0] <= right[0]) {
-        sorted.push(left.shift());
-      } else if (right[0] < left[0]){
-        sorted.push(right.shift());
-      }
-    }
-    return sorted.concat(left, right);
-  }
-
-  console.log(mergeSort([1,9,2,3,0,5,6,6,43,24]));
-  `;
-
-  this.curryCode =
-`function curriedSum(numArgs) {
-  let numbers = [];
-
-  function _curriedSum(num) {
-    numbers.push(num);
-
-    if(numbers.length === numArgs) {
-      return numbers.reduce((total,val) => {
-        return total+val;
-      })
-    } else {
-      return _curriedSum;
-    }
-  }
-
-  return _curriedSum;
-}
-
-const sum = curriedSum(4);
-console.log(sum(5)(30)(20)(1)); // => 56`;
-
-this.debounceCode = `function debounce(callback, wait, context = this) {
-  let timeout = null
-  let callbackArgs = null
-
-  const later = () => callback.apply(context, callbackArgs)
-
-  return function() {
-    callbackArgs = arguments
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-  }
-}`;
-
     this.nextLine = this.nextLine.bind(this);
-    this.mergeSort = this.mergeSort.bind(this);
-    this.curry = this.curry.bind(this);
-    this.debounce = this.debounce.bind(this);
     this.runCode = this.runCode.bind(this);
     this.createsNewScope = this.createsNewScope.bind(this);
     this.printScope = this.printScope.bind(this);
-    this.submitNewCode = this.submitNewCode.bind(this);
+    this.submitCode = this.submitCode.bind(this);
+    this.populateEditor = this.populateEditor.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.updateCode = this.updateCode.bind(this);
+    this.updateField = this.updateField.bind(this);
+
+    //test
+    this.display = this.display.bind(this);
 
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
-        let executionTime = this.t1 - this.t0;
-        this.setState({ executionTime, returnValue: e.data});
-        this.props.receiveMetrics(this.state);
+        let localExecutionTime = this.t1 - this.t0;
+        this.setState({ executionTime: localExecutionTime, returnValue: e.data});
+
+        let {
+          functionCalls,
+          inheritanceChain,
+          executionTime,
+          returnValue,
+          variablesDeclared
+        } = this.state;
+
+        let localMetrics = {
+          functionCalls,
+          inheritanceChain,
+          executionTime,
+          returnValue,
+          variablesDeclared
+        };
+
+        this.props.receiveMetrics(localMetrics);
         this.setState({
           functionCalls: undefined,
           inheritanceChain: [],
@@ -154,8 +119,9 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
     let scopeChain = [];
 
     // Get the code from the editor when "Run" is clicked
+    // Believe that ace editor is triggering a rerender under the hood
     this.code = this.refs.ace.editor.getValue();
-    console.log(this.code);
+
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
@@ -256,6 +222,20 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
     // }, 1000);
   }
 
+  handleOpenModal(field) {
+    return e => this.setState({ [field]: true });
+  }
+
+  handleCloseModal(field) {
+    return e => {
+      this.setState({ [field]: false });
+    };
+  }
+
+  updateCode(e) {
+    this.code = this.refs.ace.editor.getValue();
+  }
+
   nextLine() {
     let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
     let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
@@ -264,25 +244,27 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
     console.log(currentLineText);
   }
 
-  submitNewCode(e) {
-    e.preventDefault();
+  submitCode() {
     let codeObj = {
-      filename: 'myFile' + Math.random() * 1000,
+      filename: this.state.filename,
       code: this.code
     };
-    this.props.newCode(codeObj);
+    this.props.saveCode(codeObj);
   }
 
-  mergeSort() {
-    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1)
+  populateEditor(code, filename) {
+    return e => {
+      this.refs.ace.editor.setValue(`${code}`, -1);
+      this.setState({filename: filename});
+    };
   }
 
-  curry() {
-    this.refs.ace.editor.setValue(`${this.curryCode}`, -1)
+  updateField(field) {
+    return(e) => this.setState({ [field]: e.target.value });
   }
 
-  debounce() {
-    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1)
+  display() {
+    console.log(this.state.saveModal);
   }
 
   render() {
@@ -295,6 +277,7 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
           theme="dreamweaver"
           name="code-input"
           value={this.code}
+          onChange={ this.updateCode }
           wrapEnabled={true}
           fontSize={14}
           editorProps={{
@@ -304,16 +287,14 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
             $enableSnippets: true,
           }}
           setOptions={{
-
             showLineNumbers: true,
             tabSize: 2,
           }}
         />
       <div>
-        <button onClick={this.submitNewCode}>Submit a New Code</button>
+        <button onClick={this.submitCode}>Submit a New Code</button>
       </div>
         <div className="button-wrapper">
-
           <div className="top-buttons">
             <button className="next-line-button"
               onClick={this.nextLine}>Next Line
@@ -321,17 +302,55 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
+            <button
+              onClick={this.handleOpenModal('showModal')}>
+              Modal
+            </button>
+            <button
+              onClick={this.handleOpenModal('saveModal')}
+              >
+              Save
+            </button>
+            <button
+              onClick={this.display}>
+              display
+            </button>
           </div>
+
+          <Modal
+            isOpen={this.state.saveModal}
+            onRequestClose={this.handleCloseModal('saveModal')}
+            contentLabel="saveCode"
+            shouldCloseOnOverlay={true}>
+            <SaveModal
+              submitCode={this.submitCode}
+              filename={this.state.filename}
+              updateField={this.updateField}
+              handleCloseModal={this.handleCloseModal}
+              />
+          </Modal>
+
+          <Modal
+            isOpen={this.state.showModal}
+            onRequestClose={ this.handleCloseModal('showModal')}
+            contentLabel="userCode"
+            shouldCloseOnOverlay={true}>
+            <CodeModal
+              code={this.props.code}
+              populateEditor={this.populateEditor}
+              handleCloseModal={this.handleCloseModal}
+              />
+          </Modal>
 
           <div className="bottom-buttons">
             <button className="merge-sort-button"
-              onClick={this.mergeSort}>Merge Sort
+              onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
             </button>
             <button className="curry-button"
-              onClick={this.curry}>Curry Sum
+              onClick={this.populateEditor(CURRYING_EXAMPLE)}>Curry Sum
             </button>
             <button className="debounce-button"
-              onClick={this.debounce}>Debounce
+              onClick={this.populateEditor(DEBOUNCING_EXAMPLE)}>Debounce
             </button>
           </div>
 

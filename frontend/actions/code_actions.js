@@ -13,29 +13,8 @@ export const receiveCode = (code) => {
   };
 };
 
-export const newCode = (code) => dispatch => {
-  return APIUtil.newCode(code).then(
-    resp => {
-      if (resp.ok) {
-        return resp.json().then(
-          (codes) => {
-            dispatch(receiveCode(codes));
-            dispatch(clearErrors());
-          }
-        );
-      } else {
-        return resp.json().then(
-          ({ customError }) => {
-            dispatch(receiveErrors(customError));
-          }
-        );
-      }
-    }
-  );
-};
-
-export const updateCode = (code) => dispatch => {
-  return APIUtil.updateCode(code).then(
+export const saveCode = (code) => dispatch => {
+  return APIUtil.saveCode(code).then(
     resp => {
       if (resp.ok) {
         return resp.json().then(
