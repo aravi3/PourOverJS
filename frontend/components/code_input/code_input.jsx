@@ -26,11 +26,11 @@ class CodeInput extends React.Component {
       returnValue: undefined,
       variablesDeclared: [],
       showModal: false,
-      saveModal: false
+      saveModal: false,
+      filename: ""
     };
 
     this.code = "";
-    this.filename = "";
     this.t0 = 0;
     this.t1 = 0;
 
@@ -43,7 +43,10 @@ class CodeInput extends React.Component {
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.updateCode = this.updateCode.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    this.updateField = this.updateField.bind(this);
+
+    //test
+    this.display = this.display.bind(this);
 
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
@@ -116,6 +119,7 @@ class CodeInput extends React.Component {
     let scopeChain = [];
 
     // Get the code from the editor when "Run" is clicked
+    // Believe that ace editor is triggering a rerender under the hood
     this.code = this.refs.ace.editor.getValue();
 
     // Capture the sandbox element
@@ -223,7 +227,9 @@ class CodeInput extends React.Component {
   }
 
   handleCloseModal(field) {
-    return e => this.setState({ [field]: false });
+    return e => {
+      this.setState({ [field]: false });
+    };
   }
 
   updateCode(e) {
@@ -238,10 +244,9 @@ class CodeInput extends React.Component {
     console.log(currentLineText);
   }
 
-  submitCode(e) {
-    e.preventDefault();
+  submitCode() {
     let codeObj = {
-      filename: 'myFile' + Math.random() * 1000,
+      filename: this.state.filename,
       code: this.code
     };
     this.props.saveCode(codeObj);
@@ -250,12 +255,16 @@ class CodeInput extends React.Component {
   populateEditor(code, filename) {
     return e => {
       this.refs.ace.editor.setValue(`${code}`, -1);
-      this.filename = filename;
-    }
+      this.setState({filename: filename});
+    };
   }
 
-  handleSave() {
+  updateField(field) {
+    return(e) => this.setState({ [field]: e.target.value });
+  }
 
+  display() {
+    console.log(this.state.saveModal);
   }
 
   render() {
@@ -297,14 +306,28 @@ class CodeInput extends React.Component {
               onClick={this.handleOpenModal('showModal')}>
               Modal
             </button>
+            <button
+              onClick={this.handleOpenModal('saveModal')}
+              >
+              Save
+            </button>
+            <button
+              onClick={this.display}>
+              display
+            </button>
           </div>
 
           <Modal
             isOpen={this.state.saveModal}
-            onRequestClose={this.handleSaveCloseModal}
+            onRequestClose={this.handleCloseModal('saveModal')}
             contentLabel="saveCode"
             shouldCloseOnOverlay={true}>
-            <SaveModal />
+            <SaveModal
+              submitCode={this.submitCode}
+              filename={this.state.filename}
+              updateField={this.updateField}
+              handleCloseModal={this.handleCloseModal}
+              />
           </Modal>
 
           <Modal

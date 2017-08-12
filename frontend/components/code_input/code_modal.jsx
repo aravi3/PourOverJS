@@ -11,7 +11,7 @@ class CodeModal extends React.Component {
     return e => {
       this.props.populateEditor(code, filename)();
       this.props.handleCloseModal('showModal')();
-    }
+    };
   }
 
   render() {
@@ -22,8 +22,8 @@ class CodeModal extends React.Component {
           onClick={this.handleClick(el.code, el.filename)}>
           {el.filename}
         </li>
-      )
-    })
+      );
+    });
 
     return (
       <div>
@@ -31,7 +31,7 @@ class CodeModal extends React.Component {
           {allCode}
         </ul>
       </div>
-    )
+    );
   }
 }
 
