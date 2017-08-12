@@ -158,7 +158,6 @@ class CodeInput extends React.Component {
             }
             else {
               console.log(node);
-              debugger;
               let level = node.expression.callee;
               while (level) {
                 parent.body.push(esprima.parse(`stack.push(
