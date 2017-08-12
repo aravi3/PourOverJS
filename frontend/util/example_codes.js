@@ -26,7 +26,7 @@ while (left.length > 0 && right.length > 0) {
 return sorted.concat(left, right);
 }
 
-console.log(mergeSort([1,9,2,3,0,5,6,6,43,24]));
+mergeSort([1,9,2,3,0,5,6,6,43,24]);
 `;
 
 export const CURRYING_EXAMPLE = `function curriedSum(numArgs) {
@@ -47,18 +47,26 @@ export const CURRYING_EXAMPLE = `function curriedSum(numArgs) {
   return _curriedSum;
 }
 
-const sum = curriedSum(4);
-sum(5)(30)(20)(1); // => 56`;
+curriedSum(4)(5)(30)(20)(1); // => 56`;
 
 export const DEBOUNCING_EXAMPLE = `function debounce(callback, wait, context = this) {
-  let timeout = null
-  let callbackArgs = null
+  let timeout = null;
+  let callbackArgs = null;
 
-  const later = () => callback.apply(context, callbackArgs)
+  const later = () => callback.apply(context, callbackArgs);
 
   return function() {
-    callbackArgs = arguments
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
+    callbackArgs = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
   }
-}`;
+}
+
+let handleEvent = debounce((e) => {
+  alert('I was only executed one time!');
+});
+
+for (let i = 0; i < 10; i++) {
+  handleEvent();
+}
+`;
