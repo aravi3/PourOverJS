@@ -155,11 +155,13 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
 
     // Get the code from the editor when "Run" is clicked
     this.code = this.refs.ace.editor.getValue();
-    console.log(this.code);
+    // console.log(this.code);
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
-    let ast = esprima.parse(this.code);
+    let ast = esprima.parse(this.code, {loc: true});
+    ast.body.unshift(esprima.parse('let stack = [];'));
+    console.log(ast);
     // Console log the ast
     // console.log(ast);
 
@@ -237,7 +239,7 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
 
     // Convert the AST back into readable code
     let newCode = escodegen.generate(ast);
-
+    console.log(newCode);
     // Console log the new readable code
     // console.log(newCode);
 
@@ -274,15 +276,15 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
   }
 
   mergeSort() {
-    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1)
+    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1);
   }
 
   curry() {
-    this.refs.ace.editor.setValue(`${this.curryCode}`, -1)
+    this.refs.ace.editor.setValue(`${this.curryCode}`, -1);
   }
 
   debounce() {
-    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1)
+    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1);
   }
 
   render() {
