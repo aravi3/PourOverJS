@@ -29,6 +29,20 @@ const App = () => {
         <div className="metrics-wrapper">
         </div>
 
+        <div className="footer-background">
+          <span>
+            Arvind Ravi
+          </span>
+          <span>
+            Atom C
+          </span>
+          <span>
+            Justin White
+          </span>
+          <span>
+            Xiaoyuan Zhu
+          </span>
+        </div>
       </div>
     </div>
   );

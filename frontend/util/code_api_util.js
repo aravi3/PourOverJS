@@ -1,6 +1,6 @@
-export const newCode = (code) => {
+export const saveCode = (code) => {
   return fetch('/api/code', {
-    method: 'POST',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -19,19 +19,6 @@ export const deleteCode = (filename) => {
     },
     body: JSON.stringify({
       filename: filename,
-    })
-  });
-};
-
-export const updateCode = (code) => {
-  return fetch('/api/code', {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      filename: code.filename,
-      code: code.code
     })
   });
 };

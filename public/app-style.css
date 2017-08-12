@@ -66,7 +66,7 @@ width: 100vw;
 .main-wrapper {
   position: fixed;
   margin: 0px;
-  height: 90%;
+  height: 80%;
   width: 100%;
   margin-bottom: 15px;
   padding-bottom: 15px;
@@ -75,7 +75,7 @@ width: 100vw;
   grid-template-columns: repeat(22, 1fr);
   grid-gap: 0px;
   grid-template-rows: repeat(22, 1fr);
-
+  /*overflow-y: auto;*/
 }
 
 .input-wrapper {
@@ -117,7 +117,7 @@ width: 100vw;
 .navigation-wrapper {
   font-family: dosis;
   display: flex;
-  position: absolute;
+  position: fixed;
   font-weight: 600;
   font-size: 18px;
   letter-spacing: .08em;
@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
+.nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
   animation: fadein 2s;
   /*transition: all 2.25s ease;*/
   margin: 15px 10px;
@@ -257,6 +257,24 @@ flex: 1;
   flex: 1;
 }
 
+.nav-login-button, .nav-signup-button {
+  background: rgba(255, 255, 255, 1.0);
+  border: solid white 2px;
+  transition: all 0.05s ease;
+}
+
+.nav-login-button:hover, .nav-signup-button:hover {
+  transition: all 0.05s ease;
+  border: solid white 2px;
+  box-sizing: border-box;
+  /*max-height: 37px;*/
+  /*margin-top: 17px;
+  margin-bottom: 19px;*/
+  background: rgba(255, 255, 255, 0.0);
+  cursor: pointer;
+
+}
+
 .next-line-button, .run-code-button, .merge-sort-button {
   margin: 8px 10px;
   background: #dff8cf;
@@ -325,7 +343,8 @@ button:focus {
   right: 0px;
   bottom: 40px;
   z-index: 10;
-  width: 190px;
+  width: 18%;
+  min-width: 185px;
   height: 200px;
   background-color: rgb(218, 254, 242);
   border: solid 8px rgba(255, 255, 255, 0.5);
@@ -342,13 +361,21 @@ button:focus {
   left: 0;
   right: 0;
   position: fixed;
-  z-index: 10;
+  z-index: 9;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
  }
+
+#signupForm, #loginForm {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 30px;
+}
 
 .nav-login-user-input, .nav-login-password-input, .nav-signup-username-input, .nav-signup-password-input {
   padding: 10px 5px;
@@ -361,6 +388,28 @@ input:focus::-webkit-input-placeholder {
 .nav-login-user-input:focus, .nav-login-password-input:focus, .nav-signup-username-input:focus, .nav-signup-password-input:focus {
   border-bottom: dashed 1px black;
   transition: all 0.25s ease;
+}
+
+.footer-background {
+  position: relative;
+  width: 100%;
+  background: white;
+  z-index: 1;
+  /*bottom: 0px;*/
+  /*margin-bottom: 0;*/
+  margin-top: 15px;
+  height: 150px;
+  /*display: flex;
+  justify-content: center;
+  align-items: center;*/
+  display: none;
+}
+
+.footer-background span {
+  font-family: dosis;
+  font-size: 16pt;
+  font-weight: 400;
+  letter-spacing: .04em;
 }
 
 @keyframes fadein {

@@ -26,7 +26,9 @@ const userReducer = (state = initialState, action) => {
       };
       return newState;
     case RECEIVE_CODE:
-      return(merge({}, state, { code: action.code }));
+      newState = merge({}, state);
+      newState.code = action.code;
+      return(newState);
     default:
       return state;
   }

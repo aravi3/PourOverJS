@@ -9,9 +9,16 @@ module.exports = function(app, passport) {
   });
 
   app.get('/refresh', function(req, res) {
+    let username = localStorage.get('username');
 
-    if (localStorage.get('username')) {
-      res.send({username: localStorage.get('username')});
+    if (username) {
+      User.findOne({ 'local.username': username }, function(err, user) {
+        if(err) {
+          res.send(err);
+        } else {
+          res.send(user);
+        }
+      });
     }
   });
 
@@ -50,32 +57,27 @@ module.exports = function(app, passport) {
 
       if ( index > -1 ) {
         user.local.code[index] = newCode;
-        user.save();
-        res.send(user.local.code);
+      } else {
+        user.local.code.push(newCode);
       }
+
+      user.save();
+      res.send(user.local.code);
     });
   });
 
   app.delete('/api/code', function(req, res) {
     let username = localStorage.get('username');
-    let filenameToDelete = req.body;
+    let filenameToDelete = req.body.filename;
 
     User.findOne({ 'local.username': username }, function(err, user) {
-      let index = user.local.code.findIndex( (el) => el.filename == filenameToDelete );
+      let index = user.local.code.findIndex( (el) => el.filename === filenameToDelete );
 
       if ( index > -1 ) {
         user.local.code.splice(index, 1);
-        user.save();
-        res.send(user.local.code);
       }
-    });
-  });
-
-  app.patch('/api/code', function(req, res) {
-    let username = localStorage.get('username');
-
-    User.findOneAndUpdate({ 'local.username': username }, function(err, user) {
-
+      user.save();
+      res.send(user.local.code);
     });
   });
 
