@@ -53,12 +53,13 @@ export const checkRefresh = () => dispatch => {
   return APIUtil.handleRefresh().then(
     resp => {
       if (resp.ok) {
-        return resp.json();
+        return resp.json().then(
+          (userInfo) => {
+            let { username, code } = userInfo.local;
+            dispatch(receiveCurrentUser({username, code}));
+            dispatch(clearErrors());
+        });
       }
     }
-  ).then(
-    ({username}) => {
-      dispatch(receiveCurrentUser({username}));
-      dispatch(clearErrors());
-  });
+  );
 };
