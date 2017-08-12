@@ -45,9 +45,6 @@ class CodeInput extends React.Component {
     this.updateCode = this.updateCode.bind(this);
     this.updateField = this.updateField.bind(this);
 
-    //test
-    this.display = this.display.bind(this);
-
     window.addEventListener('message', (e) => {
       let frame = document.getElementById('sandboxed');
       if (e.origin === "null" && e.source === frame.contentWindow) {
@@ -222,19 +219,6 @@ class CodeInput extends React.Component {
     // }, 1000);
   }
 
-  handleOpenModal(field) {
-    return e => this.setState({ [field]: true });
-  }
-
-  handleCloseModal(field) {
-    return e => {
-      this.setState({ [field]: false });
-    };
-  }
-
-  updateCode(e) {
-    this.code = this.refs.ace.editor.getValue();
-  }
 
   nextLine() {
     let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
@@ -244,6 +228,18 @@ class CodeInput extends React.Component {
     console.log(currentLineText);
   }
 
+  handleOpenModal(field) {
+    return e => this.setState({ [field]: true });
+  }
+
+  handleCloseModal(field) {
+    return e => this.setState({ [field]: false });
+  }
+
+  updateCode(e) {
+    this.code = this.refs.ace.editor.getValue();
+  }
+  
   submitCode() {
     let codeObj = {
       filename: this.state.filename,
@@ -261,10 +257,6 @@ class CodeInput extends React.Component {
 
   updateField(field) {
     return(e) => this.setState({ [field]: e.target.value });
-  }
-
-  display() {
-    console.log(this.state.saveModal);
   }
 
   render() {
@@ -307,10 +299,6 @@ class CodeInput extends React.Component {
               onClick={this.handleOpenModal('saveModal')}
               >
               Save
-            </button>
-            <button
-              onClick={this.display}>
-              display
             </button>
           </div>
 

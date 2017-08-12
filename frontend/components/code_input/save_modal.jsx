@@ -7,6 +7,8 @@ class SaveModal extends React.Component {
     this.listenerCB = (e) => {
       if (e.keyCode === 13) {
         setTimeout( () => {
+          //Need to double invoke here to reuse handleCloseModal
+          //for multiple modals 
           this.props.handleCloseModal('saveModal')();
           this.props.submitCode();
         }, 0);
