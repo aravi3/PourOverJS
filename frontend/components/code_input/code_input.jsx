@@ -21,7 +21,7 @@ class CodeInput extends React.Component {
 
     this.state = {
       functionCalls: undefined,
-      inheritanceChain: [],
+      closureChain: [],
       executionTime: undefined,
       returnValue: undefined,
       variablesDeclared: [],
@@ -53,7 +53,7 @@ class CodeInput extends React.Component {
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
 
-        let executionTime = this.t1 - this.t0;
+        let localExecutionTime = this.t1 - this.t0;
         console.log(e.data);
 
         // timerId = setInterval(() => {
@@ -64,22 +64,37 @@ class CodeInput extends React.Component {
         //   }
         // }, 1000);
 
-        this.setState({ executionTime, stack: e.data.stack.reverse() });
-        this.props.receiveMetrics(this.state);
+        this.setState({ executionTime: localExecutionTime, stack: e.data.stack.reverse() });
+
+        let {
+          functionCalls,
+          closureChain,
+          executionTime,
+          returnValue,
+          variablesDeclared
+        } = this.state;
+
+        this.props.receiveMetrics({
+          functionCalls,
+          closureChain,
+          executionTime,
+          returnValue,
+          variablesDeclared
+        });
 
 //bug-fighting
-        this.setState({
-          functionCalls: undefined,
-          inheritanceChain: [],
-          executionTime: undefined,
-          returnValue: undefined,
-          variablesDeclared: []
-        });
 //master
         this.functionDeclarations = e.data.functionDeclarations;
 
         this.refs.ace.editor.gotoLine(1, 0);
 
+        this.setState({
+          functionCalls: undefined,
+          closureChain: [],
+          executionTime: undefined,
+          returnValue: undefined,
+          variablesDeclared: []
+        });
       }
     });
   }
@@ -111,15 +126,16 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
-    this.setState({
-      functionCalls: undefined,
-      inheritanceChain: [],
-      executionTime: undefined,
-      returnValue: undefined,
-      variablesDeclared: []
-    });
+    // this.setState({
+    //   functionCalls: undefined,
+    //   closureChain: [],
+    //   executionTime: undefined,
+    //   returnValue: undefined,
+    //   variablesDeclared: []
+    // });
 
     let parentArray = [];
+    let callStackHelper = [];
     // let timerId;
     // Initialize counter for number of function calls in code
     let functionCallsCount = 0;
@@ -147,8 +163,14 @@ class CodeInput extends React.Component {
       // Whenever a node is entered, a callback is invoked that takes the node as
       // a parameter
       enter: (node, parent) => {
-        if (node.type === "FunctionDeclaration") {
-          parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+        if (node.type === "FunctionDeclaration" || (node.type === "FunctionExpression" && node.id === null)) {
+          // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+          if (node.id !== null) {
+            callStackHelper.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+          }
+          else {
+            callStackHelper.push(esprima.parse(`functionDeclarations['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+          }
         }
 
         if (node.type === "ExpressionStatement") {
@@ -157,12 +179,17 @@ class CodeInput extends React.Component {
               parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
             }
             else {
-              // console.log(node);
+
+
               let level = node.expression.callee;
               while (level) {
                 parent.body.push(esprima.parse(`stack.push(
                   ['${level.name ? level.name : level.property}',
                   ${node.loc.start.line}])`));
+
+                  // callStack.push(esprima.parse(`stack.push(
+                  //   ['${level.name ? level.name : level.property}',
+                  //   ${node.loc.start.line}])`));
                 if (level.callee) {
                   level = level.callee;
                 } else {
@@ -218,7 +245,7 @@ class CodeInput extends React.Component {
           if (parent) {
             if (parent.type === 'Program') {
               console.log(parentArray);
-              let newState = this.state.inheritanceChain;
+              let newState = this.state.closureChain;
               newState.push(parentArray);
               parentArray = [];
             }
@@ -226,6 +253,10 @@ class CodeInput extends React.Component {
         }
       }
     });
+
+    for (let i = 0; i < callStackHelper.length; i++) {
+      ast.body.push(callStackHelper[i]);
+    }
 
     ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; metrics.functionDeclarations = functionDeclarations; function retrieveMetrics() { return metrics; } retrieveMetrics();'));
 
@@ -293,6 +324,7 @@ class CodeInput extends React.Component {
     let idx = 0;
 
     return () => {
+      console.log("hi");
       if (this.props.stack[idx + 1] === undefined) {
         this.props.removeStackIndex(idx);
         idx--;
