@@ -43,7 +43,7 @@ class Navbar extends React.Component {
   afterOpenModal() {
     // references are now sync'd and can be accessed.
     // this.subtitle.style.color = '#f00';
-    this.setState({modalIsOpen: true, activeModal: str});
+    this.setState({modalIsOpen: true});
   }
 
   closeModal() {

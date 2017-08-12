@@ -67,9 +67,19 @@ class CodeInput extends React.Component {
         this.setState({ executionTime, stack: e.data.stack.reverse() });
         this.props.receiveMetrics(this.state);
 
+//bug-fighting
+        this.setState({
+          functionCalls: undefined,
+          inheritanceChain: [],
+          executionTime: undefined,
+          returnValue: undefined,
+          variablesDeclared: []
+        });
+//master
         this.functionDeclarations = e.data.functionDeclarations;
 
         this.refs.ace.editor.gotoLine(1, 0);
+
       }
     });
   }
@@ -147,7 +157,19 @@ class CodeInput extends React.Component {
               parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
             }
             else {
-              parent.body.push(esprima.parse(`stack.push(['${node.expression.callee.name}', ${node.loc.start.line}])`));
+              console.log(node);
+              debugger;
+              let level = node.expression.callee;
+              while (level) {
+                parent.body.push(esprima.parse(`stack.push(
+                  ['${level.name ? level.name : level.property}',
+                  ${node.loc.start.line}])`));
+                if (level.callee) {
+                  level = level.callee;
+                } else {
+                  level = 0;
+                }
+              }
             }
           }
         }
@@ -243,14 +265,21 @@ class CodeInput extends React.Component {
     // }, 1000);
   }
 
+
+  nextLine() {
+    let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
+    let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
+    currentLineNumber += 1;
+    this.refs.ace.editor.gotoLine(currentLineNumber, 0);
+    console.log(currentLineText);
+  }
+
   handleOpenModal(field) {
     return e => this.setState({ [field]: true });
   }
 
   handleCloseModal(field) {
-    return e => {
-      this.setState({ [field]: false });
-    };
+    return e => this.setState({ [field]: false });
   }
 
   updateCode(e) {
@@ -290,6 +319,7 @@ class CodeInput extends React.Component {
       }
     };
   }
+
 
   submitCode() {
     let codeObj = {
