@@ -31,10 +31,12 @@ class CodeInput extends React.Component {
     };
 
     this.code = "";
+    this.functionDeclarations = "";
     this.t0 = 0;
     this.t1 = 0;
 
     this.nextLine = this.nextLine.bind(this);
+    this.handleNext = this.nextLine();
     this.runCode = this.runCode.bind(this);
     this.createsNewScope = this.createsNewScope.bind(this);
     this.printScope = this.printScope.bind(this);
@@ -54,24 +56,20 @@ class CodeInput extends React.Component {
         let executionTime = this.t1 - this.t0;
         console.log(e.data);
 
-        timerId = setInterval(() => {
-          console.log(e.data.stack.pop());
+        // timerId = setInterval(() => {
+        //   console.log(e.data.stack.pop());
+        //
+        //   if (e.data.stack.length === 0) {
+        //     clearInterval(timerId);
+        //   }
+        // }, 1000);
 
-          if (e.data.stack.length === 0) {
-            clearInterval(timerId);
-          }
-        }, 1000);
-
-        this.setState({ executionTime, returnValue: e.data});
+        this.setState({ executionTime, stack: e.data.stack.reverse() });
         this.props.receiveMetrics(this.state);
-        
-        this.setState({
-          functionCalls: undefined,
-          inheritanceChain: [],
-          executionTime: undefined,
-          returnValue: undefined,
-          variablesDeclared: []
-        });
+
+        this.functionDeclarations = e.data.functionDeclarations;
+
+        this.refs.ace.editor.gotoLine(1, 0);
       }
     });
   }
@@ -103,6 +101,14 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
+    this.setState({
+      functionCalls: undefined,
+      inheritanceChain: [],
+      executionTime: undefined,
+      returnValue: undefined,
+      variablesDeclared: []
+    });
+
     let parentArray = [];
     // let timerId;
     // Initialize counter for number of function calls in code
@@ -121,7 +127,7 @@ class CodeInput extends React.Component {
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
     let ast = esprima.parse(this.code, {loc: true});
-    ast.body.unshift(esprima.parse('let metrics = {}; let stack = []; let stackAsync = [];'));
+    ast.body.unshift(esprima.parse('let metrics = {}; let stack = []; let stackAsync = []; let functionDeclarations = {};'));
     // console.log(ast);
     // Console log the ast
     // console.log(ast);
@@ -131,6 +137,10 @@ class CodeInput extends React.Component {
       // Whenever a node is entered, a callback is invoked that takes the node as
       // a parameter
       enter: (node, parent) => {
+        if (node.type === "FunctionDeclaration") {
+          parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+        }
+
         if (node.type === "ExpressionStatement") {
           if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
             if (node.expression.callee.name === "setTimeout") {
@@ -196,7 +206,7 @@ class CodeInput extends React.Component {
       }
     });
 
-    ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; function retrieveStacks() { return metrics; } retrieveStacks();'));
+    ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; metrics.functionDeclarations = functionDeclarations; function retrieveMetrics() { return metrics; } retrieveMetrics();'));
 
     console.log(ast);
 
@@ -248,11 +258,37 @@ class CodeInput extends React.Component {
   }
 
   nextLine() {
-    let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
-    let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
-    currentLineNumber += 1;
-    this.refs.ace.editor.gotoLine(currentLineNumber, 0);
-    console.log(currentLineText);
+    // let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
+    // let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
+    // currentLineNumber += 1;
+    // this.refs.ace.editor.gotoLine(currentLineNumber, 0);
+    let idx = 0;
+
+    return () => {
+      if (this.props.stack[idx + 1] === undefined) {
+        this.props.removeStackIndex(idx);
+        idx--;
+        return;
+      }
+
+      this.refs.ace.editor.gotoLine(this.props.stack[idx][1], 0);
+
+      if (this.functionDeclarations[this.props.stack[idx][0]]) {
+        if ((this.props.stack[idx + 1][1] > this.functionDeclarations[this.props.stack[idx][0]][0]) && (this.props.stack[idx + 1][1] < this.functionDeclarations[this.props.stack[idx][0]][1])) {
+          console.log("Passed");
+          console.log("Before idx: " + idx);
+          idx++;
+          console.log("After idx: " + idx);
+        }
+        else {
+          console.log("Before idx: " + idx);
+          this.props.removeStackIndex(idx);
+          // idx++;
+          console.log("After idx: " + idx);
+          // dispatch something to take current idx off stack and do not increment idx
+        }
+      }
+    };
   }
 
   submitCode() {
@@ -273,8 +309,6 @@ class CodeInput extends React.Component {
 
   debounce() {
     this.refs.ace.editor.setValue(`${this.debounceCode}`, -1);
-
-    this.props.saveCode(codeObj);
   }
 
   populateEditor(code, filename) {
@@ -315,7 +349,7 @@ class CodeInput extends React.Component {
         <div className="button-wrapper">
           <div className="top-buttons">
             <button className="next-line-button"
-              onClick={this.nextLine}>Next Line
+              onClick={this.handleNext}>Next Line
             </button>
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
