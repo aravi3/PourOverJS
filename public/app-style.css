@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
+.nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button, .code-modal-button, .save-modal-button {
   animation: fadein 2s;
   /*transition: all 2.25s ease;*/
   margin: 15px 10px;
@@ -190,16 +190,16 @@ flex: 1;
   -webkit-animation: fadein 1.5s;
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover {
+.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover, .save-modal-button:hover, .code-modal-button:hover {
   box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35), 2px 2px 8px rgba(125, 185, 125, 0.7);
   cursor: pointer;
 }
 
-.next-line-button:hover, .run-code-button:hover {
+.next-line-button:hover, .run-code-button:hover, .save-modal-button:hover {
   box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover {
+.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover {
   box-shadow: inset 0 0 3em rgba(90, 176, 185, 0.375), 2px 2px 8px rgba(90, 176, 185, 0.7);
 }
 
@@ -275,13 +275,13 @@ flex: 1;
 
 }
 
-.next-line-button, .run-code-button, .merge-sort-button {
+.save-modal-button, .next-line-button, .run-code-button, .merge-sort-button {
   margin: 8px 10px;
   background: #dff8cf;
   background: rgb(249, 249, 162);
 }
 
-.merge-sort-button, .curry-button, .debounce-button {
+.merge-sort-button, .curry-button, .debounce-button, .code-modal-button {
   padding: 10px 10px;
   width: 108px;
   min-width: 108px;
@@ -290,6 +290,10 @@ flex: 1;
   font-size: 14px;
   background: rgb(205, 255, 240);
   background: #dff8cf;
+}
+
+.code-modal-button {
+  background: rgb(205, 255, 240);
 }
 
 .input:focus,
@@ -410,6 +414,18 @@ input:focus::-webkit-input-placeholder {
   font-size: 16pt;
   font-weight: 400;
   letter-spacing: .04em;
+}
+
+.save-modal-input {
+  background: rgba(0, 0, 0, 0.0);
+  border-bottom: solid 2px black;
+  width: 80%;
+  text-align: center;
+  outline: none;
+}
+
+.save-modal-input::selection {
+  outline: none;
 }
 
 @keyframes fadein {

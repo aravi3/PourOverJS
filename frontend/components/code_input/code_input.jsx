@@ -383,14 +383,10 @@ class CodeInput extends React.Component {
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
-            <button
-              onClick={this.handleOpenModal('showModal')}>
-              Modal
-            </button>
-            <button
+            <button className="save-modal-button"
               onClick={this.handleOpenModal('saveModal')}
               >
-              Save
+              Save Code
             </button>
           </div>
 
@@ -421,6 +417,10 @@ class CodeInput extends React.Component {
           </Modal>
 
           <div className="bottom-buttons">
+            <button className="code-modal-button"
+              onClick={this.handleOpenModal('showModal')}>
+              My Fn()'s
+            </button>
             <button className="merge-sort-button"
               onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
             </button>
