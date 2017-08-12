@@ -291,9 +291,6 @@ class CodeInput extends React.Component {
             tabSize: 2,
           }}
         />
-      <div>
-        <button onClick={this.submitCode}>Submit a New Code</button>
-      </div>
         <div className="button-wrapper">
           <div className="top-buttons">
             <button className="next-line-button"

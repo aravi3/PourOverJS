@@ -9,7 +9,8 @@ class Navbar extends React.Component {
     super(props);
 
     this.state = {
-      modalIsOpen: false
+      modalIsOpen: false,
+      activeModal: undefined,
     };
 
     this.openModal = this.openModal.bind(this);
@@ -35,17 +36,18 @@ class Navbar extends React.Component {
     this.closeModal();
   }
 
-  openModal() {
-    this.setState({modalIsOpen: true});
+  openModal(str) {
+    this.setState({modalIsOpen: true, activeModal: str});
   }
 
   afterOpenModal() {
     // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+    // this.subtitle.style.color = '#f00';
+    this.setState({modalIsOpen: true, activeModal: str});
   }
 
   closeModal() {
-    this.setState({modalIsOpen: false});
+    this.setState({modalIsOpen: false, activeModal: undefined});
   }
 
   outPut () {
@@ -66,12 +68,13 @@ class Navbar extends React.Component {
 
         <button
           className="navbar-login-button"
-          onClick={this.openModal}>Log in</button>
+          onClick={ () => this.openModal('login') }>Log in</button>
         <button
           className="navbar-signup-button"
-          onClick={this.openModal}>Sign up</button>
+          onClick={ () => this.openModal('signup') }>Sign up</button>
+
         <Modal
-          isOpen={this.state.modalIsOpen}
+          isOpen={this.state.activeModal === 'login'}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           contentLabel="Example Modal"
@@ -88,7 +91,26 @@ class Navbar extends React.Component {
           >
 
           <Login
-            login={this.props.login}/>
+            login={this.props.login} />
+        </Modal>
+
+          <Modal
+            isOpen={this.state.activeModal === 'signup'}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            contentLabel="Example Modal"
+            className={{
+              base: 'modal',
+              afterOpen: 'myClass_after-open',
+              beforeClose: 'myClass_before-close'
+            }}
+            overlayClassName={{
+              base: 'modal-overlay',
+              afterOpen: 'myOverlayClass_after-open',
+              beforeClose: 'myOverlayClass_before-close'
+            }}
+            >
+
           <Signup
             signup={this.props.signup} />
         </Modal>
@@ -96,6 +118,8 @@ class Navbar extends React.Component {
       </div>
     );
   }
+
+
 
   Navbae () {
     if (this.props.loggedIn) {
