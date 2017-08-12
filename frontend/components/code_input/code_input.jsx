@@ -309,9 +309,6 @@ this.debounceCode = `function debounce(callback, wait, context = this) {
             tabSize: 2,
           }}
         />
-      <div>
-        <button onClick={this.submitNewCode}>Submit a New Code</button>
-      </div>
         <div className="button-wrapper">
 
           <div className="top-buttons">

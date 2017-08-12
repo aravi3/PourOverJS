@@ -361,7 +361,7 @@ button:focus {
   left: 0;
   right: 0;
   position: fixed;
-  z-index: 10;
+  z-index: 9;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
@@ -388,6 +388,28 @@ input:focus::-webkit-input-placeholder {
 .nav-login-user-input:focus, .nav-login-password-input:focus, .nav-signup-username-input:focus, .nav-signup-password-input:focus {
   border-bottom: dashed 1px black;
   transition: all 0.25s ease;
+}
+
+.footer-background {
+  position: relative;
+  width: 100%;
+  background: white;
+  z-index: 1;
+  /*bottom: 0px;*/
+  /*margin-bottom: 0;*/
+  margin-top: 15px;
+  height: 150px;
+  /*display: flex;
+  justify-content: center;
+  align-items: center;*/
+  display: none;
+}
+
+.footer-background span {
+  font-family: dosis;
+  font-size: 16pt;
+  font-weight: 400;
+  letter-spacing: .04em;
 }
 
 @keyframes fadein {
