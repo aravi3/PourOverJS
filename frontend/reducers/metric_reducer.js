@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   functionCalls: undefined,
-  inheritanceChain: undefined,
+  closureChain: undefined,
   executionTime: undefined,
   returnValue: undefined,
   variablesDeclared: undefined,
