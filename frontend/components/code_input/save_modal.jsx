@@ -30,6 +30,7 @@ class SaveModal extends React.Component {
             onChange={this.props.updateField('filename')}
             placeholder="Enter a Filename"
             value={this.props.filename}
+            autoFocus="autofocus"
             />
         </form>
       </div>
