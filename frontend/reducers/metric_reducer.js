@@ -19,7 +19,7 @@ const userReducer = (state = initialState, action) => {
 
   switch(action.type) {
     case RECEIVE_METRICS:
-      newState = merge({}, initialState, action.metrics);
+      newState = merge({}, state, action.metrics);
       return newState;
     case REMOVE_STACK_INDEX:
       newState = merge({}, state);
