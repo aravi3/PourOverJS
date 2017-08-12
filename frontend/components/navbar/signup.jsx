@@ -34,6 +34,7 @@ class Signup extends React.Component {
   }
 
   render() {
+
     return (
       <div className="signup-form-wrapper">
         <form id="signupForm">
@@ -42,7 +43,8 @@ class Signup extends React.Component {
             type="text"
             onChange={this.update("username")}
             placeholder="username"
-            value={this.state.username}/>
+            value={this.state.username}
+            autoFocus/>
 
           <input
             className="nav-signup-password-input"

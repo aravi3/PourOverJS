@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
+.nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button {
   animation: fadein 2s;
   /*transition: all 2.25s ease;*/
   margin: 15px 10px;
@@ -325,7 +325,8 @@ button:focus {
   right: 0px;
   bottom: 40px;
   z-index: 10;
-  width: 190px;
+  width: 18%;
+  min-width: 185px;
   height: 200px;
   background-color: rgb(218, 254, 242);
   border: solid 8px rgba(255, 255, 255, 0.5);
@@ -349,6 +350,14 @@ button:focus {
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
  }
+
+#signupForm, #loginForm {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 30px;
+}
 
 .nav-login-user-input, .nav-login-password-input, .nav-signup-username-input, .nav-signup-password-input {
   padding: 10px 5px;
