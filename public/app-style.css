@@ -543,16 +543,29 @@ input:focus::-webkit-input-placeholder {
   border-bottom: dashed 1px black;
   transition: all 0.25s ease;
 }
-
-variables-declared-wrapper, .stack-frames-list-item {
+/*variables-declared-wrapper,*/
+ .stack-frames-list-item {
   margin: 10px 10px;
-  animation: fadein 2s;
+  /*animation: fadein 2s;*/
+  animation: slide-down 1s;
+  /*transition-delay: 600;*/
+  /*transform: translateY(20px);*/
   padding: 10px;
   /*background: rgba(155, 150, 215, 0.5);*/
   background: rgba(211, 238, 249, 0.59);
   border-radius: 5px;
   transition: all 0.25s ease;
-  font-family: dosis;g
+  font-family: dosis;
+  letter-spacing: .03em;
+}
+
+div[class^="stack-frames-list-item-"] {
+  margin: 10px 10px;
+  padding: 10px;
+  background: rgba(211, 238, 249, 0.59);
+  border-radius: 5px;
+  transition: all 0.25s ease;
+  font-family: dosis;
   letter-spacing: .03em;
 }
 
@@ -596,4 +609,9 @@ variables-declared-wrapper, .stack-frames-list-item {
 @keyframes fadein {
   from { opacity: 0; }
   to   { opacity: 1; }
+  }
+
+  @keyframes slide-down {
+    from { margin-top: 0px; }
+    to   { margin-top: 20px; }
   }

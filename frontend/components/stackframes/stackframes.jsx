@@ -18,7 +18,7 @@ class Stackframes extends React.Component {
     if(stackframes) {
       stackframesDisplay = stackframes.map( (el,index) => {
         return (
-          <li className="stack-frames-list-item"
+          <li className={`stack-frames-list-item-${index}`}
             key={index}>
             {el}
           </li>
