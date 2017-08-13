@@ -127,7 +127,7 @@ class CodeInput extends React.Component {
     else {
       if (node.id && node.id.name) {
         let newState = this.state.variablesDeclared;
-        newState.push(`Variables declared in the function ${node.id.name}(): ${varsDisplay}`);
+        newState.push(`Variables declared in ${node.id.name}(): ${varsDisplay}`);
       }
       else {
         parentArray.unshift("anonymous");
@@ -425,7 +425,7 @@ class CodeInput extends React.Component {
             <button className="next-line-button"
               onClick={this.handleNext}>Next Line
             </button>
-            
+
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
@@ -502,13 +502,13 @@ class CodeInput extends React.Component {
               My Fn(){"'"}s
             </button>
             <button className="merge-sort-button"
-              onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
+              onClick={this.populateEditor(MERGE_SORT_EXAMPLE, "")}>Merge Sort
             </button>
             <button className="curry-button"
-              onClick={this.populateEditor(CURRYING_EXAMPLE)}>Curry Sum
+              onClick={this.populateEditor(CURRYING_EXAMPLE, "")}>Curry Sum
             </button>
             <button className="debounce-button"
-              onClick={this.populateEditor(DEBOUNCING_EXAMPLE)}>Debounce
+              onClick={this.populateEditor(DEBOUNCING_EXAMPLE, "")}>Debounce
             </button>
           </div>
 
