@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "start": "cross-env NODE_ENV=production MONGO_URL=mongodb://xiaoyuanz:Jstuff36!@ds163681.mlab.com:63681/pourover",
     "postinstall": "webpack"
   },
   "repository": {
