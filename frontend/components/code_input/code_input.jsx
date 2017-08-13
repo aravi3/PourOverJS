@@ -173,7 +173,7 @@ class CodeInput extends React.Component {
     if (this.runCounter === 2) {
       let ast = esprima.parse(this.code, {loc: true});
 
-      ast.body.unshift(esprima.parse('let metrics = {}; let stack = []; let stackAsync = []; let functionDeclarations = {};'));
+      ast.body.unshift(esprima.parse('let metricsPourOver = {}; let stackPourOver = []; let stackAsyncPourOver = []; let functionDeclarationsPourOver = {};'));
 
       estraverse.traverse(ast, {
         // Whenever a node is entered, a callback is invoked that takes the node as
@@ -183,42 +183,41 @@ class CodeInput extends React.Component {
           if (node.type === "FunctionDeclaration" || (node.type === "FunctionExpression" && node.id === null)) {
             // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
             if (node.id !== null) {
-              callStackHelper.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+              callStackHelper.push(esprima.parse(`functionDeclarationsPourOver['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
             }
             else {
-              callStackHelper.push(esprima.parse(`functionDeclarations['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+              callStackHelper.push(esprima.parse(`functionDeclarationsPourOver['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
             }
           }
 
           if (node.type === "ExpressionStatement") {
             if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
               if (node.expression.callee.name === "setTimeout") {
-                parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
+                parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
               }
-              else {
-                let level = node.expression.callee;
-                while (level) {
-                  // parent.body.push(esprima.parse(`stack.push(
-                  //   ['${level.name ? level.name : level.property}',
-                  //   ${node.loc.start.line}])`));
+              let level = node.expression.callee;
+              while (level) {
+                // parent.body.push(esprima.parse(`stack.push(
+                //   ['${level.name ? level.name : level.property}',
+                //   ${node.loc.start.line}])`));
 
-                  console.log("Index: " + parent.body.indexOf(node));
+                parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
+                  ['${level.name ? level.name : level.property}',
+                  ${node.loc.start.line}])`));
 
-                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stack.push(
-                    ['${level.name ? level.name : level.property}',
-                    ${node.loc.start.line}])`));
-
-                  if (level.callee) {
-                    level = level.callee;
-                  } else {
-                    level = 0;
-                  }
+                if (level.callee) {
+                  level = level.callee;
+                } else {
+                  level = 0;
                 }
               }
             }
           }
           else if (node.type === "ReturnStatement") {
             if (node.argument.type === "CallExpression") {
+              if (node.argument.callee.name === "setTimeout") {
+                parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.argument.arguments[1].value}, ${node.loc.start.line}])`));
+              }
               let level = node.argument.callee;
               while (level) {
                 // parent.body.push(esprima.parse(`stack.push(
@@ -227,7 +226,32 @@ class CodeInput extends React.Component {
 
                 console.log("Index: " + parent.body.indexOf(node));
 
-                parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stack.push(
+                parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
+                  ['${level.name ? level.name : level.property}',
+                  ${node.loc.start.line}])`));
+
+                if (level.callee) {
+                  level = level.callee;
+                } else {
+                  level = 0;
+                }
+              }
+            }
+          }
+          else if (node.type === "VariableDeclaration") {
+            if (node.declarations[0].init.type === "CallExpression") {
+              if (node.declarations[0].init.callee.name === "setTimeout") {
+                parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.declarations[0].init.arguments[1].value}, ${node.loc.start.line}])`));
+              }
+              let level = node.declarations[0].init.callee;
+              while (level) {
+                // parent.body.push(esprima.parse(`stack.push(
+                //   ['${level.name ? level.name : level.property}',
+                //   ${node.loc.start.line}])`));
+
+                console.log("Index: " + parent.body.indexOf(node));
+
+                parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
                   ['${level.name ? level.name : level.property}',
                   ${node.loc.start.line}])`));
 
@@ -294,7 +318,7 @@ class CodeInput extends React.Component {
         ast.body.push(callStackHelper[i]);
       }
 
-      ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; metrics.functionDeclarations = functionDeclarations; function retrieveMetrics() { return metrics; } retrieveMetrics();'));
+      ast.body.push(esprima.parse('metricsPourOver.stack = stackPourOver; metricsPourOver.stackAsync = stackAsyncPourOver; metricsPourOver.functionDeclarations = functionDeclarationsPourOver; function retrieveMetricsPourOver() { return metricsPourOver; } retrieveMetricsPourOver();'));
 
       console.log(ast);
 
@@ -349,7 +373,7 @@ class CodeInput extends React.Component {
       if((field === "saveModal" || field === "showModal") && !this.props.loggedIn) {
         this.setState({ loginModal: true });
       } else {
-        this.setState({ [field]: true })
+        this.setState({ [field]: true });
       }
     };
   }
@@ -358,7 +382,7 @@ class CodeInput extends React.Component {
     return e => {
       this.props.clearErrors();
       this.setState({ [field]: false });
-    }
+    };
   }
 
   updateCode(e) {
