@@ -1,4 +1,5 @@
-export const MERGE_SORT_EXAMPLE = `//Write an Array#merge_sort method; it should not modify the original array.
+export const MERGE_SORT_EXAMPLE = `// Demonstration of the merge sort algorithm
+
 function mergeSort(array) {
 if (array.length <= 1) {
   return array;
@@ -29,44 +30,145 @@ return sorted.concat(left, right);
 mergeSort([1,9,2,3,0,5,6,6,43,24]);
 `;
 
-export const CURRYING_EXAMPLE = `function curriedSum(numArgs) {
-  let numbers = [];
+export const BFS_EXAMPLE = `// Breadth-First Search to find target "e"
+// Feel free to change target position in the tree!
 
-  function _curriedSum(num) {
-    numbers.push(num);
+const tree = [
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"],
+  ["x", "x", "x", "x", "e", "x", "x"],
+  ["x", "x", "x", "x", "x", "x", "x"]
+];
 
-    if(numbers.length === numArgs) {
-      return numbers.reduce((total,val) => {
-        return total+val;
-      })
-    } else {
-      return _curriedSum;
+class TreeNode {
+  constructor(pos, parent) {
+    this.pos = pos;
+    this.parent = parent;
+  }
+}
+
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
     }
   }
 
-  return _curriedSum;
+  return true;
 }
 
-curriedSum(4)(5)(30)(20)(1); // => 56`;
+function includedIn(childArr, parentArr) {
+  for (let i = 0; i < parentArr.length; i++) {
+    if (arraysEqual(childArr, parentArr[i])) {
+      return true;
+    }
+  }
 
-export const DEBOUNCING_EXAMPLE = `function debounce(callback, wait, context = this) {
-  let timeout = null;
-  let callbackArgs = null;
+  return false;
+}
 
-  const later = () => callback.apply(context, callbackArgs);
+function upPos(pos) {
+  return [pos[0] - 1, pos[1]];
+}
 
-  return function() {
-    callbackArgs = arguments;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+function rightPos(pos) {
+  return [pos[0], pos[1] + 1];
+}
+
+function downPos(pos) {
+  return [pos[0] + 1, pos[1]];
+}
+
+function leftPos(pos) {
+  return [pos[0], pos[1] - 1];
+}
+
+function occupiable(pos) {
+  if (tree[pos[0]][pos[1]] === "x" || tree[pos[0]][pos[1]] === "e") {
+    return true;
+  }
+
+  return false;
+}
+
+function bfs(startPos) {
+  let targetFound = false;
+  let neighborRow, neighborCol;
+  let topNode, neighbors;
+  let up, right, down, left;
+  let visitedNodes = [];
+  let nodeQueue = [];
+  let trail = [];
+
+  trail.push(new TreeNode(startPos, undefined));
+  nodeQueue.push(new TreeNode(startPos, undefined));
+  visitedNodes.push(startPos);
+
+  while (!targetFound && nodeQueue.length > 0) {
+    topNode = nodeQueue.shift();
+    neighbors = [];
+    up = upPos(topNode.pos);
+    right = rightPos(topNode.pos);
+    down = downPos(topNode.pos);
+    left = leftPos(topNode.pos);
+    neighbors.push(up, right, down, left);
+
+    for (let i = 0; i < neighbors.length; i++) {
+      neighborRow = neighbors[i][0];
+      neighborCol = neighbors[i][1];
+
+      if (neighborRow < 0 || neighborCol < 0 ||
+          neighborRow >= tree.length ||
+          neighborCol >= tree[0].length) {
+            continue;
+          }
+
+      if (occupiable(neighbors[i]) && !includedIn(neighbors[i], visitedNodes)) {
+        visitedNodes.push(neighbors[i]);
+        nodeQueue.push(new TreeNode(neighbors[i], topNode));
+        trail.push(new TreeNode(neighbors[i], topNode));
+
+        if (tree[neighborRow][neighborCol] === "e") {
+          targetFound = true;
+          return [neighborRow, neighborCol];
+        }
+      }
+    }
   }
 }
 
-let handleEvent = debounce((e) => {
-  alert('I was only executed one time!');
-});
+bfs([0, 0]);`;
 
-for (let i = 0; i < 10; i++) {
-  handleEvent();
+export const QUICK_SORT_EXAMPLE = `// Demonstration of the quick sort algorithm
+
+function quickSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  let pivot = [arr[0]];
+
+  let arrToSort = arr.splice(1);
+
+  let left = arrToSort.filter(el => {
+    return el <= pivot;
+  });
+
+  let right = arrToSort.filter(el => {
+    return el > pivot;
+  });
+
+  let leftCall = quickSort(left);
+  let rightCall = quickSort(right);
+
+  return leftCall.concat(pivot).concat(rightCall);
 }
-`;
+
+quickSort([9, 2, 5, 6, 4, 3, 7, 10, 1, 8])`;
