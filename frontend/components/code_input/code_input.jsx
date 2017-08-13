@@ -560,7 +560,17 @@ class CodeInput extends React.Component {
             isOpen={this.state.loginModal}
             onRequestClose={ this.handleCloseModal('loginModal')}
             contentLabel="login"
-            shouldCloseOnOverlay={true}>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'login-failsafe-modal',
+              afterOpen: 'login-failsafe-modal-after-open',
+              beforeClose: 'login-failsafe-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'login-failsafe-modal-overlay',
+              afterOpen: 'login-failsafe-modal-over-after-open',
+              beforeClose: 'login-failsafe-modal-over-before-close'
+            }}>
             <Login
               login={this.props.login}
               errors={this.props.errors}
@@ -588,8 +598,5 @@ class CodeInput extends React.Component {
     );
   }
 }
-
-
-
 
 export default CodeInput;
