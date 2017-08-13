@@ -21,11 +21,13 @@ class Metrics extends React.Component {
       return (
         <li
           key={index}>
-          {declaration}
+          {declaration}:
           {allVariables.map( (el2, index2) => {
             return (
-              <div key={index2} className="variable-style">
-                {el}
+              <div
+                key={index2}
+                className="variable-style">
+                {el2}
               </div>
             );
           })}
@@ -52,7 +54,7 @@ class Metrics extends React.Component {
         <div className="title-wrapper">
           Return Value:
           <div className="inside-list">
-            { returnValue }
+            { returnValue ? returnValue.toString() : returnValue }
           </div>
         </div>
         <div className="title-wrapper">

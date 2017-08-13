@@ -66,7 +66,7 @@ class CodeInput extends React.Component {
 
         if (this.runCounter === 1) {
           console.log("Result: " + e.data);
-          this.setState({ returnValue: e.data});
+          this.setState({ returnValue: e.data });
         }
 
         if (this.runCounter === 2) {
