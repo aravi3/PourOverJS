@@ -135,52 +135,6 @@ class Navbar extends React.Component {
 
   render() {
       return this.Navbae();
-  //   if (!this.props.loggedIn) {
-  //     return (
-  //       <div className="navbar-wrapper">
-  //
-  //         <button
-  //           className="navbar-login-button"
-  //           onClick={this.openModal}>Log in</button>
-  //         <button
-  //           className="navbar-signup-button"
-  //           onClick={this.openModal}>Sign up</button>
-  //         <Modal
-  //           isOpen={this.state.modalIsOpen}
-  //           onAfterOpen={this.afterOpenModal}
-  //           onRequestClose={this.closeModal}
-  //           contentLabel="Example Modal"
-  //           className={{
-  //             base: 'modal',
-  //             afterOpen: 'myClass_after-open',
-  //             beforeClose: 'myClass_before-close'
-  //           }}
-  //           overlayClassName={{
-  //             base: 'modal-overlay',
-  //             afterOpen: 'myOverlayClass_after-open',
-  //             beforeClose: 'myOverlayClass_before-close'
-  //           }}
-  //           >
-  //
-  //           <Login
-  //             login={this.props.login}/>
-  //           <Signup
-  //             signup={this.props.signup} />
-  //         </Modal>
-  //
-  //       </div>
-  //     );
-  //   } else {
-  //     return (
-  //       <div className="navbar-wrapper">
-  //         <button
-  //           className="logout-button"
-  //           onClick={this.handleLogout}>
-  //           Log Out
-  //         </button>
-  //       </div>
-  //     );
-  //   }
   }
 }
 

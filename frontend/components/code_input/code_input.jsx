@@ -427,12 +427,17 @@ class CodeInput extends React.Component {
           }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
+            
             <button className="next-line-button"
               onClick={this.handleNext}>Next Line
             </button>
-
+        
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
+            </button>
+
+            <button className="next-line-button"
+              onClick={this.handleNext}>Next Line
             </button>
 
             <button
@@ -440,6 +445,7 @@ class CodeInput extends React.Component {
               onClick={this.handleOpenModal('saveModal')}>
               Save Code
             </button>
+            
             <button
               className="delete-code-button"
               onClick={this.handleOpenModal('deleteModal')}>
@@ -491,12 +497,12 @@ class CodeInput extends React.Component {
             <div>
               <button
                 onClick={this.handleCloseModal('deleteModal')}>
-                CANCEL
+                Cancel
               </button>
 
               <button
                 onClick={this.handleDelete}>
-                ENTER
+                Delete
               </button>
             </div>
           </Modal>
@@ -504,7 +510,7 @@ class CodeInput extends React.Component {
           <div className="bottom-buttons">
             <button className="code-modal-button"
               onClick={this.handleOpenModal('showModal')}>
-              My Fn(){"'"}s
+              My Scripts
             </button>
             <button className="merge-sort-button"
               onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
