@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button, .code-modal-button, .save-modal-button {
+.delete-code-button, .nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button, .code-modal-button, .save-modal-button {
   animation: fadein 2s;
   /*transition: all 2.25s ease;*/
   margin: 15px 10px;
@@ -190,12 +190,12 @@ flex: 1;
   -webkit-animation: fadein 1.5s;
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover, .save-modal-button:hover, .code-modal-button:hover {
+.delete-code-button:hover, .navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover, .save-modal-button:hover, .code-modal-button:hover {
   box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35), 2px 2px 8px rgba(125, 185, 125, 0.7);
   cursor: pointer;
 }
 
-.next-line-button:hover, .run-code-button:hover, .save-modal-button:hover {
+.delete-code-button:hover, .next-line-button:hover, .run-code-button:hover, .save-modal-button:hover {
   box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
 }
 
@@ -253,7 +253,7 @@ flex: 1;
 .bottom-buttons {
   flex-direction: row;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex: 1;
 }
 
@@ -275,7 +275,7 @@ flex: 1;
 
 }
 
-.save-modal-button, .next-line-button, .run-code-button, .merge-sort-button {
+.delete-code-button, .save-modal-button, .next-line-button, .run-code-button, .merge-sort-button {
   margin: 8px 10px;
   background: #dff8cf;
   background: rgb(249, 249, 162);
@@ -290,6 +290,16 @@ flex: 1;
   font-size: 14px;
   background: rgb(205, 255, 240);
   background: #dff8cf;
+}
+
+.save-modal-button {
+  width: 108px;
+  min-width: 108px;
+  max-width: 108px;
+}
+
+.code-modal-button {
+  background: rgb(205, 255, 240);
 }
 
 .delete-code-button {
@@ -373,29 +383,24 @@ button:focus {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
-/*.save-modal {
-  position: fixed;
+.save-modal {
+  position: absolute;
   top: 40%;
+  left: 20%;
   width: 80%;
   background-color: rgba(255, 255, 255, 0.0);
   border: solid 0px black;
   z-index: 11;
-}*/
-
-.save-modal {
-  position: fixed;
-  z-index: 11;
-  display: block;
-  top: 40%;
 }
 
 .save-modal-overlay {
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   position: fixed;
   z-index: 9;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.49) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
 .save-modal-input {
@@ -411,9 +416,9 @@ button:focus {
   font-family: dosis;
 }
 
-/*.save-modal-input::selection {
+.save-modal-input::selection {
   outline: none;
-}*/
+}
 
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
@@ -461,6 +466,7 @@ input:focus::-webkit-input-placeholder {
   font-weight: 400;
   letter-spacing: .04em;
 }
+
 
 @keyframes fadein {
   from { opacity: 0; }
