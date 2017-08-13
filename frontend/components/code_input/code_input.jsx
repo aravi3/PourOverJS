@@ -62,7 +62,6 @@ class CodeInput extends React.Component {
 
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
-        console.log(e.data);
 
         if (this.runCounter === 1) {
           console.log("Result: " + e.data);
@@ -70,10 +69,46 @@ class CodeInput extends React.Component {
         }
 
         if (this.runCounter === 2) {
+          let returnedStack = e.data.stack;
+          console.log(e.data.stack);
+          let hashCounter = {
+            lineNumber: null,
+            counter: 0
+          };
+          let linesToProcess = [];
           let localExecutionTime = `${(this.t1 - this.t0).toFixed(2)} ms`;
+
           this.setState({ executionTime: localExecutionTime });
-          this.setState({ functionCalls: e.data.stack.length });
-          this.setState({ stack: e.data.stack });
+          this.setState({ functionCalls: returnedStack.length });
+
+          console.log(returnedStack);
+
+          returnedStack.forEach( el => {
+            if(el[1] === hashCounter.lineNumber) {
+              hashCounter.counter ++;
+            } else {
+              if(hashCounter.counter > 1) {
+                linesToProcess.push([hashCounter.lineNumber, hashCounter.counter]);
+              }
+              hashCounter.lineNumber = el[1];
+              hashCounter.counter = 1;
+            }
+          });
+
+          linesToProcess.forEach(el => {
+            let idx = returnedStack.findIndex(el2 => {
+              return el2[1] === el[0];
+            });
+
+            if (idx > -1) {
+              let reversedNodes = returnedStack.splice(idx, el.counter).reverse();
+              returnedStack.splice(idx, 0, reversedNodes);
+            }
+          });
+
+          console.log(returnedStack);
+
+          this.setState({ stack: returnedStack });
           this.functionDeclarations = e.data.functionDeclarations;
         }
 
@@ -228,7 +263,6 @@ class CodeInput extends React.Component {
                 console.log("Index: " + parent.body.indexOf(node));
 
                 parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
-
                   ['${level.name ? level.name : level.property}',
                   ${node.loc.start.line}])`));
 
@@ -403,8 +437,6 @@ class CodeInput extends React.Component {
     let endFlag = false;
 
     return () => {
-      console.log(this.props.stack);
-
       if (stackFlag) {
         this.props.removeFromCurrentStack();
         stackFlag = false;
@@ -428,6 +460,7 @@ class CodeInput extends React.Component {
         }
 
         endFlag = true;
+        stackFlag = true;
         this.props.removeStackIndex(idx);
         idx--;
         return;
