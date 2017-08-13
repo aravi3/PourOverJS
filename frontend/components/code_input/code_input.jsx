@@ -10,6 +10,7 @@ import { MERGE_SORT_EXAMPLE,
          DEBOUNCING_EXAMPLE } from '../../util/example_codes';
 import CodeModal from './code_modal';
 import SaveModal from './save_modal';
+import Login from '../navbar/login';
 
 let esprima = require('esprima');
 let escodegen = require('escodegen');
@@ -29,6 +30,7 @@ class CodeInput extends React.Component {
       showModal: false,
       saveModal: false,
       deleteModal: false,
+      loginModal: false,
       filename: ""
     };
 
@@ -51,7 +53,6 @@ class CodeInput extends React.Component {
     this.updateCode = this.updateCode.bind(this);
     this.updateField = this.updateField.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-
   }
 
   getReturnValue() {
@@ -319,12 +320,19 @@ class CodeInput extends React.Component {
 
   handleOpenModal(field) {
     return e => {
-      console.log(field);
-      return this.setState({ [field]: true });};
+      if((field === "saveModal" || field === "showModal") && !this.props.loggedIn) {
+        this.setState({ loginModal: true });
+      } else {
+        this.setState({ [field]: true })
+      }
+    };
   }
 
   handleCloseModal(field) {
-    return e => this.setState({ [field]: false });
+    return e => {
+      this.props.clearErrors();
+      this.setState({ [field]: false });
+    }
   }
 
   updateCode(e) {
@@ -394,7 +402,6 @@ class CodeInput extends React.Component {
   }
 
   handleDelete() {
-    console.log("hello");
     this.props.deleteCode(this.state.filename);
     this.populateEditor("", "")();
     let deleteButton = document.getElementsByClassName("delete-code-button");
@@ -403,6 +410,10 @@ class CodeInput extends React.Component {
   }
 
   render() {
+    if(this.state.loginModal && this.props.loggedIn) {
+      this.state.loginModal = false;
+    }
+
     return (
       <div className="code-input-editor">
         <AceEditor
@@ -427,15 +438,11 @@ class CodeInput extends React.Component {
           }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
-            
+
             <button className="next-line-button"
               onClick={this.handleNext}>Next Line
             </button>
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> master
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
@@ -449,7 +456,7 @@ class CodeInput extends React.Component {
               onClick={this.handleOpenModal('saveModal')}>
               Save Code
             </button>
-            
+
             <button
               className="delete-code-button"
               onClick={this.handleOpenModal('deleteModal')}>
@@ -509,6 +516,17 @@ class CodeInput extends React.Component {
                 Delete
               </button>
             </div>
+          </Modal>
+
+          <Modal
+            isOpen={this.state.loginModal}
+            onRequestClose={ this.handleCloseModal('loginModal')}
+            contentLabel="login"
+            shouldCloseOnOverlay={true}>
+            <Login
+              login={this.props.login}
+              errors={this.props.errors}
+              receiveErrors={this.props.receiveErrors}/>
           </Modal>
 
           <div className="bottom-buttons">

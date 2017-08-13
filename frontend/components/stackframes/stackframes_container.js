@@ -3,6 +3,7 @@ import Stackframes from './stackframes';
 
 const mapStateToProps = (state) => {
   return {
+    stackframes: state.metrics.stack
   };
 };
 

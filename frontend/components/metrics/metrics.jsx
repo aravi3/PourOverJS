@@ -6,7 +6,6 @@ class Metrics extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log("hello");
     console.log(props.allMetrics);
   }
 

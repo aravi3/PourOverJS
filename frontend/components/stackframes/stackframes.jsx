@@ -6,11 +6,27 @@ class Stackframes extends React.Component {
   }
 
   render() {
+    const stackframes = this.props.stackframes;
+    let stackframesDisplay = "";
+
+    if(stackframes) {
+      stackframesDisplay = stackframes.map( (el,index) => {
+        return (
+          <li
+            key={index}>
+            {el[0]}
+          </li>
+        );
+      })
+    }
+
     return (
       <div>
-        hello
+        <ul>
+          {stackframesDisplay}
+        </ul>
       </div>
-    )
+    );
   }
 }
 
