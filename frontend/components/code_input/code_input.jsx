@@ -559,14 +559,26 @@ class CodeInput extends React.Component {
             isOpen={this.state.deleteModal}
             onRequestClose={ this.handleCloseModal('deleteModal')}
             contentLabel="deleteCode"
-            shouldCloseOnOverlay={true}>
-            <div>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'save-modal',
+              afterOpen: 'save-modal-after-open',
+              beforeClose: 'save-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'save-modal-overlay',
+              afterOpen: 'save-modal-over-after-open',
+              beforeClose: 'save-modal-over-before-close'
+            }}>
+            <div className="cancel-delete-wrapper">
               <button
+                className="code-modal-delete-button"
                 onClick={this.handleCloseModal('deleteModal')}>
                 Cancel
               </button>
 
               <button
+                className="code-modal-delete-button"
                 onClick={this.handleDelete}>
                 Delete
               </button>

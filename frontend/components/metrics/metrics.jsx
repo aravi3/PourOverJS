@@ -31,34 +31,40 @@ class Metrics extends React.Component {
       return (
         <li
           key={index}>
-          {el}
+          {`--->`}{el}
         </li>
       );
     }) : null;
 
     return (
       <div>
-        <div>
+        <div className="title-wrapper">
           Execution Time:
-          { executionTime }
+          <div className="inside-list">
+            { executionTime }
+          </div>
         </div>
-        <div>
+        <div className="title-wrapper">
           Function Calls:
-          { functionCalls }
+          <div className="inside-list">
+            { functionCalls }
+          </div>
         </div>
-        <div>
+        <div className="title-wrapper">
           Return Value:
-          { returnValue }
+          <div className="inside-list">
+            { returnValue }
+          </div>
         </div>
-        <div>
+        <div className="title-wrapper">
           Function Chain:
-          <ul>
+          <ul className="inside-list">
             {closureDisplay}
           </ul>
         </div>
-        <div>
+        <div className="title-wrapper">
           Varibles Declared:
-          <ul>
+          <ul className="inside-list">
             {variablesDisplay}
           </ul>
         </div>
