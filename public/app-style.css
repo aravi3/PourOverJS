@@ -538,7 +538,8 @@ variables-declared-wrapper, .stack-frames-list-item {
   margin: 10px 10px;
   animation: fadein 2s;
   padding: 10px;
-  background: rgba(155, 150, 215, 0.5);
+  /*background: rgba(155, 150, 215, 0.5);*/
+  background: rgba(211, 238, 249, 0.59);
   border-radius: 5px;
   transition: all 0.25s ease;
   font-family: dosis;g
