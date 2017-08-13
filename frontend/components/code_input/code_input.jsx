@@ -310,7 +310,9 @@ class CodeInput extends React.Component {
   }
 
   handleOpenModal(field) {
-    return e => this.setState({ [field]: true });
+    return e => {
+      console.log(field);
+      return this.setState({ [field]: true });}
   }
 
   handleCloseModal(field) {
@@ -365,7 +367,7 @@ class CodeInput extends React.Component {
       filename: this.state.filename,
       code: this.code
     };
-    this.props.newCode(codeObj);
+    this.props.saveCode(codeObj);
   }
 
   mergeSort() {

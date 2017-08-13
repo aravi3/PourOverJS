@@ -369,12 +369,20 @@ button:focus {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
-.save-modal, .save-modal-after-open, .save-modal-before-close {
-  position: absolute;
+/*.save-modal {
+  position: fixed;
   top: 40%;
   width: 80%;
   background-color: rgba(255, 255, 255, 0.0);
   border: solid 0px black;
+  z-index: 11;
+}*/
+
+.save-modal {
+  position: fixed;
+  z-index: 11;
+  display: block;
+  top: 40%;
 }
 
 .save-modal-overlay {
@@ -383,7 +391,7 @@ button:focus {
   right: 0;
   position: fixed;
   z-index: 9;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.29) 1.66%, rgba(0, 0, 0, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
 
 .save-modal-input {
@@ -399,9 +407,9 @@ button:focus {
   font-family: dosis;
 }
 
-.save-modal-input::selection {
+/*.save-modal-input::selection {
   outline: none;
-}
+}*/
 
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
