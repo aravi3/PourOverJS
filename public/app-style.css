@@ -556,6 +556,10 @@ variables-declared-wrapper, .stack-frames-list-item {
   color: black;
 }
 
+.variable-style {
+  color: #d35db2;
+}
+
 .footer-background {
   position: relative;
   width: 100%;
