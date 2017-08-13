@@ -134,7 +134,11 @@ class Navbar extends React.Component {
   }
 
   render() {
+<<<<<<< HEAD
     return this.Navbae();
+=======
+      return this.Navbae();
+>>>>>>> master
   }
 }
 
