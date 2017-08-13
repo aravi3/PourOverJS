@@ -58,15 +58,15 @@ class CodeInput extends React.Component {
 
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
-
-        let localExecutionTime = this.t1 - this.t0;
         console.log(e.data);
 
         if (this.runCounter === 1) {
-          this.setState({ executionTime, returnValue: e.data});
+          let localExecutionTime = this.t1 - this.t0;
+          this.setState({ executionTime: localExecutionTime, returnValue: e.data});
         }
 
         if (this.runCounter === 2) {
+          this.setState({ functionCalls: e.data.stack.length });
           this.setState({ stack: e.data.stack.reverse() });
           this.functionDeclarations = e.data.functionDeclarations;
         }
@@ -82,19 +82,9 @@ class CodeInput extends React.Component {
 
         stateObj.variablesDeclared.shift();
 
-
         this.props.receiveMetrics(stateObj);
 
         this.refs.ace.editor.gotoLine(1, 0);
-
-        this.setState({
-          functionCalls: undefined,
-          closureChain: [],
-          executionTime: undefined,
-          returnValue: undefined,
-          variablesDeclared: [],
-          stack: []
-        });
 
         window.removeEventListener('message', callback);
 
@@ -105,6 +95,15 @@ class CodeInput extends React.Component {
     };
 
     window.addEventListener('message', callback);
+
+    this.setState({
+      functionCalls: undefined,
+      closureChain: [],
+      executionTime: undefined,
+      returnValue: undefined,
+      variablesDeclared: [],
+      stack: []
+    });
   }
 
   createsNewScope(node) {
@@ -134,14 +133,6 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
-    // this.setState({
-    //   functionCalls: undefined,
-    //   closureChain: [],
-    //   executionTime: undefined,
-    //   returnValue: undefined,
-    //   variablesDeclared: []
-    // });
-
     if (this.runCounter === 2) {
       this.runCounter = 0;
     }
@@ -271,8 +262,6 @@ class CodeInput extends React.Component {
       ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; metrics.functionDeclarations = functionDeclarations; function retrieveMetrics() { return metrics; } retrieveMetrics();'));
 
       console.log(ast);
-
-      this.setState({ functionCalls: functionCallsCount });
 
       // Console log the number of function calls
       // console.log("Function calls count: " + functionCallsCount);
