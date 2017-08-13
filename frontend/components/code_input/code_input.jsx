@@ -188,31 +188,19 @@ class CodeInput extends React.Component {
               callStackHelper.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
             }
             else {
-              callStackHelper.push(esprima.parse(`functionDeclarations['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
-            }
-          }
+              let level = node.expression.callee;
+              while (level) {
+                parent.body.push(esprima.parse(`stack.push(
+                  ['${level.name ? level.name : level.property}',
+                  ${node.loc.start.line}])`));
 
-          if (node.type === "ExpressionStatement") {
-            if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
-              if (node.expression.callee.name === "setTimeout") {
-                parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
-              }
-              else {
-                console.log(node);
-                let level = node.expression.callee;
-                while (level) {
-                  parent.body.push(esprima.parse(`stack.push(
-                    ['${level.name ? level.name : level.property}',
-                    ${node.loc.start.line}])`));
-
-                    // callStack.push(esprima.parse(`stack.push(
-                    //   ['${level.name ? level.name : level.property}',
-                    //   ${node.loc.start.line}])`));
-                  if (level.callee) {
-                    level = level.callee;
-                  } else {
-                    level = 0;
-                  }
+                  // callStack.push(esprima.parse(`stack.push(
+                  //   ['${level.name ? level.name : level.property}',
+                  //   ${node.loc.start.line}])`));
+                if (level.callee) {
+                  level = level.callee;
+                } else {
+                  level = 0;
                 }
               }
             }
@@ -446,14 +434,10 @@ class CodeInput extends React.Component {
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
-            <button
-              onClick={this.handleOpenModal('showModal')}>
-              Modal
-            </button>
-            <button
+            <button className="save-modal-button"
               onClick={this.handleOpenModal('saveModal')}
               >
-              Save
+              Save Code
             </button>
           </div>
 
@@ -461,7 +445,17 @@ class CodeInput extends React.Component {
             isOpen={this.state.saveModal}
             onRequestClose={this.handleCloseModal('saveModal')}
             contentLabel="saveCode"
-            shouldCloseOnOverlay={true}>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'save-modal',
+              afterOpen: 'save-modal-after-open',
+              beforeClose: 'save-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'save-modal-overlay',
+              afterOpen: 'save-modal-over-after-open',
+              beforeClose: 'save-modal-over-before-close'
+            }}>
             <SaveModal
               submitCode={this.submitCode}
               filename={this.state.filename}
@@ -484,6 +478,10 @@ class CodeInput extends React.Component {
           </Modal>
 
           <div className="bottom-buttons">
+            <button className="code-modal-button"
+              onClick={this.handleOpenModal('showModal')}>
+              My Fn()'s
+            </button>
             <button className="merge-sort-button"
               onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
             </button>

@@ -25,11 +25,11 @@ class CodeModal extends React.Component {
   render() {
     let allCode = this.props.code.map( (el, index) => {
       return (
-        <li
+        <li className="code-modal-list-item"
           key={index}
           onClick={this.handleClick(el.code, el.filename)}>
           {el.filename}
-          <button
+          <button className="code-modal-delete-button"
             onClick={this.handleDelete(el.filename)}>
             DELETE
           </button>
@@ -38,8 +38,8 @@ class CodeModal extends React.Component {
     });
 
     return (
-      <div>
-        <ul>
+      <div className="code-modal-list-wrapper">
+        <ul className="code-modal-list">
           {allCode}
         </ul>
       </div>
