@@ -371,30 +371,49 @@ class CodeInput extends React.Component {
     // currentLineNumber += 1;
     // this.refs.ace.editor.gotoLine(currentLineNumber, 0);
     let idx = 0;
+    let stackFlag;
+    let endFlag = false;
 
     return () => {
+      console.log(this.props.stack);
+      if (!endFlag) {
+        this.refs.ace.editor.gotoLine(this.props.stack[idx][1], 0);
+      }
+
       if (this.props.stack.length === 0) {
         idx = 0;
         return;
       }
 
+      if (stackFlag) {
+        this.props.removeFromCurrentStack();
+        stackFlag = false;
+      }
+
       if (this.props.stack[idx + 1] === undefined) {
+        if (!endFlag) {
+          this.props.addToCurrentStack(this.props.stack[idx][0]);
+          stackFlag = true;
+        }
+
+        endFlag = true;
         this.props.removeStackIndex(idx);
         idx--;
         return;
       }
 
-      this.refs.ace.editor.gotoLine(this.props.stack[idx][1], 0);
-
       if (this.functionDeclarations[this.props.stack[idx][0]]) {
         if ((this.props.stack[idx + 1][1] >= this.functionDeclarations[this.props.stack[idx][0]][0]) && (this.props.stack[idx + 1][1] <= this.functionDeclarations[this.props.stack[idx][0]][1])) {
           console.log("Passed");
           console.log("Before idx: " + idx);
+          this.props.addToCurrentStack(this.props.stack[idx][0]);
           idx++;
           console.log("After idx: " + idx);
         }
         else {
           console.log("Before idx: " + idx);
+          stackFlag = true;
+          this.props.addToCurrentStack(this.props.stack[idx][0]);
           this.props.removeStackIndex(idx);
           // idx++;
           console.log("After idx: " + idx);
@@ -402,6 +421,8 @@ class CodeInput extends React.Component {
         }
       }
       else {
+        this.props.addToCurrentStack(this.props.stack[idx][0]);
+        stackFlag = true;
         console.log("Before idx: " + idx);
         this.props.removeStackIndex(idx);
         console.log("After idx: " + idx);
@@ -466,10 +487,6 @@ class CodeInput extends React.Component {
           }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
-
-            <button className="next-line-button"
-              onClick={this.handleNext}>Next Line
-            </button>
 
             <button className="run-code-button"
               onClick={this.runCode}>Run>>

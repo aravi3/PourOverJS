@@ -3,7 +3,9 @@ import CodeInput from './code_input';
 import { reverseStack } from '../../reducers/selectors';
 import {
   receiveMetrics,
-  removeStackIndex } from '../../actions/metric_actions';
+  removeStackIndex,
+  addToCurrentStack,
+  removeFromCurrentStack } from '../../actions/metric_actions';
 import { saveCode,
          deleteCode } from '../../actions/code_actions';
 import { login } from '../../actions/session_actions';
@@ -23,6 +25,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    addToCurrentStack: (stack) => dispatch(addToCurrentStack(stack)),
+    removeFromCurrentStack: () => dispatch(removeFromCurrentStack()),
     removeStackIndex: (idx) => dispatch(removeStackIndex(idx)),
     receiveMetrics: (metrics) => dispatch(receiveMetrics(metrics)),
     saveCode:  (code) => dispatch(saveCode(code)),
