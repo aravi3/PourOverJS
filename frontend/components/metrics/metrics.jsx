@@ -5,10 +5,6 @@ class Metrics extends React.Component {
     super(props);
   }
 
-  componentWillReceiveProps(props) {
-    console.log(props.allMetrics);
-  }
-
   render() {
     let {
         functionCalls,

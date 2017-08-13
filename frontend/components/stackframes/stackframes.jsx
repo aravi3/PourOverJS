@@ -6,7 +6,13 @@ class Stackframes extends React.Component {
   }
 
   render() {
-    const stackframes = this.props.stackframes;
+    let stackframes = [];
+    let stackframesLength = this.props.stackframes ? this.props.stackframes.length : -1;
+
+    for(let i = stackframesLength - 1 ; i >= 0 ; i--) {
+      stackframes.push(this.props.stackframes[i]);
+    }
+
     let stackframesDisplay = "";
 
     if(stackframes) {
@@ -14,7 +20,7 @@ class Stackframes extends React.Component {
         return (
           <li className="stack-frames-list-item"
             key={index}>
-            {el[0]}
+            {el}
           </li>
         );
       })
