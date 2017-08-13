@@ -534,15 +534,25 @@ input:focus::-webkit-input-placeholder {
   transition: all 0.25s ease;
 }
 
-.stack-frames-list-item {
+variables-declared-wrapper, .stack-frames-list-item {
   margin: 10px 10px;
   animation: fadein 2s;
   padding: 10px;
   background: rgba(155, 150, 215, 0.5);
   border-radius: 5px;
   transition: all 0.25s ease;
-  font-family: dosis;
+  font-family: dosis;g
   letter-spacing: .03em;
+}
+
+.title-wrapper {
+  background: black;
+  color: white;
+}
+
+.inside-list {
+  background: white;
+  color: black;
 }
 
 .footer-background {
