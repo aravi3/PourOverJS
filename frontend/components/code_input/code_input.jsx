@@ -467,13 +467,10 @@ class CodeInput extends React.Component {
         <div className="button-wrapper">
           <div className="top-buttons">
 
-<<<<<<< HEAD
-=======
             <button className="next-line-button"
               onClick={this.handleNext}>Next Line
             </button>
 
->>>>>>> dce3a2d5926e663bc985622519e8cc557e7669c6
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
