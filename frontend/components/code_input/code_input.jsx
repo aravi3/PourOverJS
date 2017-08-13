@@ -64,12 +64,13 @@ class CodeInput extends React.Component {
         console.log(e.data);
 
         if (this.runCounter === 1) {
-          let localExecutionTime = this.t1 - this.t0;
           console.log("Result: " + e.data);
-          this.setState({ executionTime: localExecutionTime, returnValue: e.data});
+          this.setState({ returnValue: e.data});
         }
 
         if (this.runCounter === 2) {
+          let localExecutionTime = `${(this.t1 - this.t0).toFixed(2)} ms`;
+          this.setState({ executionTime: localExecutionTime });
           this.setState({ functionCalls: e.data.stack.length });
           this.setState({ stack: e.data.stack.reverse() });
           this.functionDeclarations = e.data.functionDeclarations;
@@ -88,8 +89,6 @@ class CodeInput extends React.Component {
         stateObj.variablesDeclared.shift();
 
         this.props.receiveMetrics(stateObj);
-
-        this.refs.ace.editor.gotoLine(1, 0);
 
         window.removeEventListener('message', callback);
 
@@ -138,6 +137,8 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
+    this.refs.ace.editor.gotoLine(1, 0);
+
     if (this.runCounter === 2) {
       this.runCounter = 0;
     }
@@ -308,18 +309,18 @@ class CodeInput extends React.Component {
   }
 
 
-  nextLine() {
-    let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
-    let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
-    currentLineNumber += 1;
-    this.refs.ace.editor.gotoLine(currentLineNumber, 0);
-    console.log(currentLineText);
-  }
+  // nextLine() {
+  //   let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
+  //   let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
+  //   currentLineNumber += 1;
+  //   this.refs.ace.editor.gotoLine(currentLineNumber, 0);
+  //   console.log(currentLineText);
+  // }
 
   handleOpenModal(field) {
     return e => {
       console.log(field);
-      return this.setState({ [field]: true });}
+      return this.setState({ [field]: true });};
   }
 
   handleCloseModal(field) {
@@ -338,7 +339,11 @@ class CodeInput extends React.Component {
     let idx = 0;
 
     return () => {
-      console.log("hi");
+      if (this.props.stack.length === 0) {
+        idx = 0;
+        return;
+      }
+
       if (this.props.stack[idx + 1] === undefined) {
         this.props.removeStackIndex(idx);
         idx--;
@@ -422,6 +427,11 @@ class CodeInput extends React.Component {
           }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
+            
+            <button className="next-line-button"
+              onClick={this.handleNext}>Next Line
+            </button>
+        
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
