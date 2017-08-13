@@ -5,7 +5,8 @@ import {
   receiveMetrics,
   removeStackIndex,
   addToCurrentStack,
-  removeFromCurrentStack } from '../../actions/metric_actions';
+  removeFromCurrentStack,
+  clearCurrentStack } from '../../actions/metric_actions';
 import { saveCode,
          deleteCode } from '../../actions/code_actions';
 import { login } from '../../actions/session_actions';
@@ -27,6 +28,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToCurrentStack: (stack) => dispatch(addToCurrentStack(stack)),
     removeFromCurrentStack: () => dispatch(removeFromCurrentStack()),
+    clearCurrentStack: () => dispatch(clearCurrentStack()),
     removeStackIndex: (idx) => dispatch(removeStackIndex(idx)),
     receiveMetrics: (metrics) => dispatch(receiveMetrics(metrics)),
     saveCode:  (code) => dispatch(saveCode(code)),

@@ -3,7 +3,8 @@ import {
   RECEIVE_METRICS,
   REMOVE_STACK_INDEX,
   ADD_TO_CURRENT_STACK,
-  REMOVE_FROM_CURRENT_STACK
+  REMOVE_FROM_CURRENT_STACK,
+  CLEAR_CURRENT_STACK
 } from '../actions/metric_actions';
 
 const initialState = {
@@ -41,6 +42,10 @@ const userReducer = (state = initialState, action) => {
     case REMOVE_FROM_CURRENT_STACK:
       newState = merge({}, state);
       newState.currentStack.pop();
+      return newState;
+    case CLEAR_CURRENT_STACK:
+      newState = merge({}, state);
+      newState.currentStack = [];
       return newState;
     default:
       return state;
