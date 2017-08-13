@@ -134,7 +134,7 @@ class Navbar extends React.Component {
   }
 
   render() {
-      return this.Navbae();
+    return this.Navbae();
   }
 }
 
