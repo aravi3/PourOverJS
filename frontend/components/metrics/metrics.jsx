@@ -31,7 +31,7 @@ class Metrics extends React.Component {
       return (
         <li
           key={index}>
-          {el}
+          {`--->`}{el}
         </li>
       );
     }) : null;
