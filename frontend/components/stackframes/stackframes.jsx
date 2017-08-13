@@ -12,7 +12,7 @@ class Stackframes extends React.Component {
     if(stackframes) {
       stackframesDisplay = stackframes.map( (el,index) => {
         return (
-          <li
+          <li className="stack-frames-list-item"
             key={index}>
             {el[0]}
           </li>
@@ -21,8 +21,8 @@ class Stackframes extends React.Component {
     }
 
     return (
-      <div>
-        <ul>
+      <div className="stack-frames-wrapper">
+        <ul className="stack-frames-list">
           {stackframesDisplay}
         </ul>
       </div>
