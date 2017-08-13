@@ -97,6 +97,7 @@ width: 100vw;
   background-color: white;
   grid-column: 12 / 21;
   grid-row: 1 / 15;
+  overflow: auto;
 }
 .metrics-wrapper {
   margin-left: 8px;
@@ -105,6 +106,7 @@ width: 100vw;
   background-color: white;
   grid-column: 12 / 21;
   grid-row: 15 / 23;
+  overflow: auto;
 }
 
 .navigation-background {
@@ -199,7 +201,7 @@ flex: 1;
   box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover, .filename:hover {
+.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover, .logout-button:hover, .filename:hover {
   box-shadow: inset 0 0 3em rgba(90, 176, 185, 0.375), 2px 2px 8px rgba(90, 176, 185, 0.7);
 }
 
@@ -355,7 +357,7 @@ button:focus {
   color: rgb(155, 150, 215) !important;
 }
 
-.modal {
+.login-failsafe-modal, .modal {
   position: absolute;
   top: 18px;
   right: 0px;
@@ -369,11 +371,11 @@ button:focus {
   padding: 10px;
 }
 
-.modal::selection, .myClass_after-open::selection, .modal:focus {
+.login-failsafe-modal::selection, .login-failsafe-modal:focus, .modal::selection, .myClass_after-open::selection, .modal:focus {
   outline: none;
 }
 
-.modal-overlay {
+.login-failsafe-modal-overlay, .modal-overlay {
   top: 52px;
   bottom: 0;
   left: 0;
@@ -382,6 +384,18 @@ button:focus {
   z-index: 9;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
 }
+
+.login-failsafe-modal {
+  z-index: 11;
+  position: absolute;
+}
+
+.login-failsafe-modal-overlay {
+  z-index: 9;
+
+}
+
+
 
 .save-modal {
   position: absolute;
@@ -452,6 +466,7 @@ button:focus {
   justify-content: flex-start;
   flex-direction: column;
   flex: 1;
+  margin-bottom: 40%;
 }
 
 .code-modal-list-item {
