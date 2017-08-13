@@ -228,6 +228,7 @@ class CodeInput extends React.Component {
                 console.log("Index: " + parent.body.indexOf(node));
 
                 parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
+
                   ['${level.name ? level.name : level.property}',
                   ${node.loc.start.line}])`));
 
