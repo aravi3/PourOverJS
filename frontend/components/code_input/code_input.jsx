@@ -6,8 +6,8 @@ import 'brace/mode/javascript';
 import 'brace/theme/dreamweaver';
 import Modal from 'react-modal';
 import { MERGE_SORT_EXAMPLE,
-         CURRYING_EXAMPLE,
-         DEBOUNCING_EXAMPLE } from '../../util/example_codes';
+         BFS_EXAMPLE,
+         QUICK_SORT_EXAMPLE } from '../../util/example_codes';
 import CodeModal from './code_modal';
 import SaveModal from './save_modal';
 import Login from '../navbar/login';
@@ -15,6 +15,7 @@ import Login from '../navbar/login';
 let esprima = require('esprima');
 let escodegen = require('escodegen');
 let estraverse = require('estraverse');
+// let regenerator = require('regenerator');
 
 class CodeInput extends React.Component {
   constructor(props) {
@@ -64,13 +65,11 @@ class CodeInput extends React.Component {
         this.t1 = performance.now();
 
         if (this.runCounter === 1) {
-          console.log("Result: " + e.data);
           this.setState({ returnValue: e.data});
         }
 
         if (this.runCounter === 2) {
           let returnedStack = e.data.stack;
-          console.log(e.data.stack);
           let hashCounter = {
             lineNumber: null,
             counter: 0
@@ -80,8 +79,6 @@ class CodeInput extends React.Component {
 
           this.setState({ executionTime: localExecutionTime });
           this.setState({ functionCalls: returnedStack.length });
-
-          console.log(returnedStack);
 
           returnedStack.forEach( el => {
             if(el[1] === hashCounter.lineNumber) {
@@ -96,17 +93,25 @@ class CodeInput extends React.Component {
           });
 
           linesToProcess.forEach(el => {
-            let idx = returnedStack.findIndex(el2 => {
+            let idx, nodesToReverse, reversedNodes;
+
+            idx = returnedStack.findIndex(el2 => {
               return el2[1] === el[0];
             });
 
             if (idx > -1) {
-              let reversedNodes = returnedStack.splice(idx, el.counter).reverse();
-              returnedStack.splice(idx, 0, reversedNodes);
+              nodesToReverse = returnedStack.splice(idx, el[1]);
+              reversedNodes = nodesToReverse.reverse();
+
+              reversedNodes.forEach((el3, idx3) => {
+                if (el3[0] === "undefined") {
+                  reversedNodes[idx3][0] = "innerExpression";
+                }
+              });
+
+              returnedStack.splice(idx, 0, ...reversedNodes);
             }
           });
-
-          console.log(returnedStack);
 
           this.setState({ stack: returnedStack });
           this.functionDeclarations = e.data.functionDeclarations;
@@ -165,7 +170,7 @@ class CodeInput extends React.Component {
         newState.push(`Variables declared in ${node.id.name}(): ${varsDisplay}`);
       }
       else {
-        parentArray.unshift("anonymous");
+        // parentArray.unshift("anonymous");
         let newState = this.state.variablesDeclared;
         newState.push(`Variables declared in anonymous function: ${varsDisplay}`);
       }
@@ -195,7 +200,8 @@ class CodeInput extends React.Component {
     // Get the code from the editor when "Run" is clicked
     // Believe that ace editor is triggering a rerender under the hood
     this.code = this.refs.ace.editor.getValue();
-
+    // let tempCode = regenerator.compile(this.code).code;
+    // console.log(tempCode);
     // console.log(this.code);
 
     // Capture the sandbox element
@@ -233,18 +239,33 @@ class CodeInput extends React.Component {
               }
               let level = node.expression.callee;
               while (level) {
-                // parent.body.push(esprima.parse(`stack.push(
-                //   ['${level.name ? level.name : level.property}',
-                //   ${node.loc.start.line}])`));
-
                 parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
-                  ['${level.name ? level.name : level.property}',
+                  ['${level.name ? level.name : (level.property ? level.property.name : level.property)}',
                   ${node.loc.start.line}])`));
 
                 if (level.callee) {
                   level = level.callee;
                 } else {
                   level = 0;
+                }
+              }
+            }
+            else if (node.expression.type === "AssignmentExpression") {
+              if (node.expression.right.callee) {
+                if (node.expression.right.callee.name === "setTimeout") {
+                  parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.expression.right.arguments[1].value}, ${node.loc.start.line}])`));
+                }
+                let level = node.expression.right.callee;
+                while (level) {
+                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
+                    ['${level.name ? level.name : (level.property ? level.property.name : level.property)}',
+                    ${node.loc.start.line}])`));
+
+                  if (level.callee) {
+                    level = level.callee;
+                  } else {
+                    level = 0;
+                  }
                 }
               }
             }
@@ -256,14 +277,8 @@ class CodeInput extends React.Component {
               }
               let level = node.argument.callee;
               while (level) {
-                // parent.body.push(esprima.parse(`stack.push(
-                //   ['${level.name ? level.name : level.property}',
-                //   ${node.loc.start.line}])`));
-
-                console.log("Index: " + parent.body.indexOf(node));
-
                 parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
-                  ['${level.name ? level.name : level.property}',
+                  ['${level.name ? level.name : (level.property ? level.property.name : level.property)}',
                   ${node.loc.start.line}])`));
 
                 if (level.callee) {
@@ -282,14 +297,8 @@ class CodeInput extends React.Component {
                 }
                 let level = node.declarations[0].init.callee;
                 while (level) {
-                  // parent.body.push(esprima.parse(`stack.push(
-                  //   ['${level.name ? level.name : level.property}',
-                  //   ${node.loc.start.line}])`));
-
-                  console.log("Index: " + parent.body.indexOf(node));
-
                   parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
-                    ['${level.name ? level.name : level.property}',
+                    ['${level.name ? level.name : (level.property ? level.property.name : level.property)}',
                     ${node.loc.start.line}])`));
 
                   if (level.callee) {
@@ -320,7 +329,9 @@ class CodeInput extends React.Component {
             }
 
             if (node.type === 'VariableDeclarator' || parent.type === 'VariableDeclarator') {
-              currentScope.push(node.id.name);
+              if (node.id) {
+                currentScope.push(node.id.name);
+              }
             }
           }
         },
@@ -338,7 +349,6 @@ class CodeInput extends React.Component {
 
             if (parent) {
               if (parent.type === 'Program') {
-                console.log(parentArray);
                 let newState = this.state.closureChain;
 
                 if (parentArray.length !== 0) {
@@ -358,8 +368,6 @@ class CodeInput extends React.Component {
 
       ast.body.push(esprima.parse('metricsPourOver.stack = stackPourOver; metricsPourOver.stackAsync = stackAsyncPourOver; metricsPourOver.functionDeclarations = functionDeclarationsPourOver; function retrieveMetricsPourOver() { return metricsPourOver; } retrieveMetricsPourOver();'));
 
-      console.log(ast);
-
       // Console log the number of function calls
       // console.log("Function calls count: " + functionCallsCount);
 
@@ -372,7 +380,6 @@ class CodeInput extends React.Component {
 
       // Convert the AST back into readable code
       let newCode = escodegen.generate(ast);
-      console.log(newCode);
 
       this.t0 = performance.now();
       frame.contentWindow.postMessage(newCode, '*');
@@ -468,28 +475,19 @@ class CodeInput extends React.Component {
 
       if (this.functionDeclarations[this.props.stack[idx][0]]) {
         if ((this.props.stack[idx + 1][1] >= this.functionDeclarations[this.props.stack[idx][0]][0]) && (this.props.stack[idx + 1][1] <= this.functionDeclarations[this.props.stack[idx][0]][1])) {
-          console.log("Passed");
-          console.log("Before idx: " + idx);
           this.props.addToCurrentStack(this.props.stack[idx][0]);
           idx++;
-          console.log("After idx: " + idx);
         }
         else {
-          console.log("Before idx: " + idx);
           stackFlag = true;
           this.props.addToCurrentStack(this.props.stack[idx][0]);
           this.props.removeStackIndex(idx);
-          // idx++;
-          console.log("After idx: " + idx);
-          // dispatch something to take current idx off stack and do not increment idx
         }
       }
       else {
         this.props.addToCurrentStack(this.props.stack[idx][0]);
         stackFlag = true;
-        console.log("Before idx: " + idx);
         this.props.removeStackIndex(idx);
-        console.log("After idx: " + idx);
       }
     };
   }
@@ -679,10 +677,10 @@ class CodeInput extends React.Component {
               onClick={this.populateEditor(MERGE_SORT_EXAMPLE, "")}>Merge Sort
             </button>
             <button className="curry-button"
-              onClick={this.populateEditor(CURRYING_EXAMPLE, "")}>Curry Sum
+              onClick={this.populateEditor(BFS_EXAMPLE, "")}>BFS
             </button>
             <button className="debounce-button"
-              onClick={this.populateEditor(DEBOUNCING_EXAMPLE, "")}>Debounce
+              onClick={this.populateEditor(QUICK_SORT_EXAMPLE, "")}>Quick Sort
             </button>
           </div>
 
