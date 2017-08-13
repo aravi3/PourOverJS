@@ -405,6 +405,12 @@ class CodeInput extends React.Component {
     return () => {
       console.log(this.props.stack);
 
+      if (stackFlag) {
+        this.props.removeFromCurrentStack();
+        stackFlag = false;
+        return;
+      }
+
       if (!endFlag) {
         this.refs.ace.editor.gotoLine(this.props.stack[idx][1], 0);
       }
@@ -413,11 +419,6 @@ class CodeInput extends React.Component {
         idx = 0;
         this.props.clearCurrentStack();
         return;
-      }
-
-      if (stackFlag) {
-        this.props.removeFromCurrentStack();
-        stackFlag = false;
       }
 
       if (this.props.stack[idx + 1] === undefined) {
