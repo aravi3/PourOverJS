@@ -97,6 +97,7 @@ width: 100vw;
   background-color: white;
   grid-column: 12 / 21;
   grid-row: 1 / 15;
+  overflow: auto;
 }
 .metrics-wrapper {
   margin-left: 8px;
@@ -105,6 +106,7 @@ width: 100vw;
   background-color: white;
   grid-column: 12 / 21;
   grid-row: 15 / 23;
+  overflow: auto;
 }
 
 .navigation-background {
@@ -199,7 +201,7 @@ flex: 1;
   box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover, .filename:hover {
+.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover, .logout-button:hover, .filename:hover {
   box-shadow: inset 0 0 3em rgba(90, 176, 185, 0.375), 2px 2px 8px rgba(90, 176, 185, 0.7);
 }
 
@@ -355,7 +357,7 @@ button:focus {
   color: rgb(155, 150, 215) !important;
 }
 
-.modal {
+.login-failsafe-modal, .modal {
   position: absolute;
   top: 18px;
   right: 0px;
@@ -369,11 +371,11 @@ button:focus {
   padding: 10px;
 }
 
-.modal::selection, .myClass_after-open::selection, .modal:focus {
+.login-failsafe-modal::selection, .login-failsafe-modal:focus, .modal::selection, .myClass_after-open::selection, .modal:focus {
   outline: none;
 }
 
-.modal-overlay {
+.login-failsafe-modal-overlay, .modal-overlay {
   top: 52px;
   bottom: 0;
   left: 0;
@@ -381,6 +383,16 @@ button:focus {
   position: fixed;
   z-index: 9;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.29) 1.66%, rgba(255, 255, 255, 0.88) 100%);
+}
+
+.login-failsafe-modal {
+  z-index: 11;
+  position: absolute;
+}
+
+.login-failsafe-modal-overlay {
+  z-index: 9;
+
 }
 
 .save-modal {
@@ -452,6 +464,7 @@ button:focus {
   justify-content: flex-start;
   flex-direction: column;
   flex: 1;
+  margin-bottom: 40%;
 }
 
 .code-modal-list-item {
@@ -485,6 +498,16 @@ button:focus {
   outline: none;
 }
 
+.cancel-delete-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: -25%;
+}
+
+.cancel-delete-wrapper::selection, .cancel-delete-wrapper:focus, .save-modal::selection, .save-modal:focus {
+  outline: none;
+}
 
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
@@ -509,6 +532,27 @@ input:focus::-webkit-input-placeholder {
 .nav-login-user-input:focus, .nav-login-password-input:focus, .nav-signup-username-input:focus, .nav-signup-password-input:focus {
   border-bottom: dashed 1px black;
   transition: all 0.25s ease;
+}
+
+variables-declared-wrapper, .stack-frames-list-item {
+  margin: 10px 10px;
+  animation: fadein 2s;
+  padding: 10px;
+  background: rgba(155, 150, 215, 0.5);
+  border-radius: 5px;
+  transition: all 0.25s ease;
+  font-family: dosis;g
+  letter-spacing: .03em;
+}
+
+.title-wrapper {
+  background: black;
+  color: white;
+}
+
+.inside-list {
+  background: white;
+  color: black;
 }
 
 .footer-background {

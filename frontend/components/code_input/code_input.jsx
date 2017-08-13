@@ -559,14 +559,26 @@ class CodeInput extends React.Component {
             isOpen={this.state.deleteModal}
             onRequestClose={ this.handleCloseModal('deleteModal')}
             contentLabel="deleteCode"
-            shouldCloseOnOverlay={true}>
-            <div>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'save-modal',
+              afterOpen: 'save-modal-after-open',
+              beforeClose: 'save-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'save-modal-overlay',
+              afterOpen: 'save-modal-over-after-open',
+              beforeClose: 'save-modal-over-before-close'
+            }}>
+            <div className="cancel-delete-wrapper">
               <button
+                className="code-modal-delete-button"
                 onClick={this.handleCloseModal('deleteModal')}>
                 Cancel
               </button>
 
               <button
+                className="code-modal-delete-button"
                 onClick={this.handleDelete}>
                 Delete
               </button>
@@ -577,7 +589,17 @@ class CodeInput extends React.Component {
             isOpen={this.state.loginModal}
             onRequestClose={ this.handleCloseModal('loginModal')}
             contentLabel="login"
-            shouldCloseOnOverlay={true}>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'login-failsafe-modal',
+              afterOpen: 'login-failsafe-modal-after-open',
+              beforeClose: 'login-failsafe-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'login-failsafe-modal-overlay',
+              afterOpen: 'login-failsafe-modal-over-after-open',
+              beforeClose: 'login-failsafe-modal-over-before-close'
+            }}>
             <Login
               login={this.props.login}
               errors={this.props.errors}
@@ -605,8 +627,5 @@ class CodeInput extends React.Component {
     );
   }
 }
-
-
-
 
 export default CodeInput;
