@@ -14,7 +14,7 @@ class Stackframes extends React.Component {
         return (
           <li className="stack-frames-list-item"
             key={index}>
-            {el[0]}
+            {el}
           </li>
         );
       })
