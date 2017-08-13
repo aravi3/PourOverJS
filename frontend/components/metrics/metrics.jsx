@@ -26,9 +26,10 @@ class Metrics extends React.Component {
         <li
           key={index}>
           {declaration}
-          {allVariables.map( (el, index) => {
+          {allVariables.map( (el2, index2) => {
             return (
               <div
+                key={index2}
                 style={{ color: "red" }}>
                 {el}
               </div>

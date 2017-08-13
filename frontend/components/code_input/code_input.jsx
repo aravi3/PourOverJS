@@ -139,6 +139,7 @@ class CodeInput extends React.Component {
 
   runCode() {
     this.refs.ace.editor.gotoLine(1, 0);
+    this.handleNext = this.nextLine();
 
     if (this.runCounter === 2) {
       this.runCounter = 0;
@@ -239,26 +240,28 @@ class CodeInput extends React.Component {
             }
           }
           else if (node.type === "VariableDeclaration") {
-            if (node.declarations[0].init.type === "CallExpression") {
-              if (node.declarations[0].init.callee.name === "setTimeout") {
-                parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.declarations[0].init.arguments[1].value}, ${node.loc.start.line}])`));
-              }
-              let level = node.declarations[0].init.callee;
-              while (level) {
-                // parent.body.push(esprima.parse(`stack.push(
-                //   ['${level.name ? level.name : level.property}',
-                //   ${node.loc.start.line}])`));
+            if (node.declarations[0].init) {
+              if (node.declarations[0].init.type === "CallExpression") {
+                if (node.declarations[0].init.callee.name === "setTimeout") {
+                  parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.declarations[0].init.arguments[1].value}, ${node.loc.start.line}])`));
+                }
+                let level = node.declarations[0].init.callee;
+                while (level) {
+                  // parent.body.push(esprima.parse(`stack.push(
+                  //   ['${level.name ? level.name : level.property}',
+                  //   ${node.loc.start.line}])`));
 
-                console.log("Index: " + parent.body.indexOf(node));
+                  console.log("Index: " + parent.body.indexOf(node));
 
-                parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
-                  ['${level.name ? level.name : level.property}',
-                  ${node.loc.start.line}])`));
+                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
+                    ['${level.name ? level.name : level.property}',
+                    ${node.loc.start.line}])`));
 
-                if (level.callee) {
-                  level = level.callee;
-                } else {
-                  level = 0;
+                  if (level.callee) {
+                    level = level.callee;
+                  } else {
+                    level = 0;
+                  }
                 }
               }
             }
@@ -395,17 +398,19 @@ class CodeInput extends React.Component {
     // currentLineNumber += 1;
     // this.refs.ace.editor.gotoLine(currentLineNumber, 0);
     let idx = 0;
-    let stackFlag;
+    let stackFlag = false;
     let endFlag = false;
 
     return () => {
       console.log(this.props.stack);
+
       if (!endFlag) {
         this.refs.ace.editor.gotoLine(this.props.stack[idx][1], 0);
       }
 
       if (this.props.stack.length === 0) {
         idx = 0;
+        this.props.clearCurrentStack();
         return;
       }
 
