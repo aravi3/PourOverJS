@@ -27,6 +27,7 @@ class CodeInput extends React.Component {
       variablesDeclared: [],
       showModal: false,
       saveModal: false,
+      deleteModal: false,
       filename: ""
     };
 
@@ -46,6 +47,7 @@ class CodeInput extends React.Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.updateCode = this.updateCode.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
 
     window.addEventListener('message', (e) => {
       let timerId;
@@ -356,19 +358,7 @@ class CodeInput extends React.Component {
       filename: this.state.filename,
       code: this.code
     };
-    this.props.newCode(codeObj);
-  }
-
-  mergeSort() {
-    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1);
-  }
-
-  curry() {
-    this.refs.ace.editor.setValue(`${this.curryCode}`, -1);
-  }
-
-  debounce() {
-    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1);
+    this.props.saveCode(codeObj);
   }
 
   populateEditor(code, filename) {
@@ -380,6 +370,15 @@ class CodeInput extends React.Component {
 
   updateField(field) {
     return(e) => this.setState({ [field]: e.target.value });
+  }
+
+  handleDelete() {
+    console.log("hello");
+    this.props.deleteCode(this.state.filename);
+    this.populateEditor("", "")();
+    let deleteButton = document.getElementsByClassName("delete-code-button");
+    deleteButton[0].classList.remove("show-delete-button");
+    this.handleCloseModal('deleteModal')();
   }
 
   render() {
@@ -404,8 +403,7 @@ class CodeInput extends React.Component {
           setOptions={{
             showLineNumbers: true,
             tabSize: 2,
-          }}
-        />
+          }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
             <button className="next-line-button"
@@ -419,9 +417,13 @@ class CodeInput extends React.Component {
               Modal
             </button>
             <button
-              onClick={this.handleOpenModal('saveModal')}
-              >
+              onClick={this.handleOpenModal('saveModal')}>
               Save
+            </button>
+            <button
+              className="delete-code-button"
+              onClick={this.handleOpenModal('deleteModal')}>
+              Delete
             </button>
           </div>
 
@@ -449,6 +451,24 @@ class CodeInput extends React.Component {
               handleCloseModal={this.handleCloseModal}
               deleteCode={this.props.deleteCode}
               />
+          </Modal>
+
+          <Modal
+            isOpen={this.state.deleteModal}
+            onRequestClose={ this.handleCloseModal('deleteModal')}
+            contentLabel="deleteCode"
+            shouldCloseOnOverlay={true}>
+            <div>
+              <button
+                onClick={this.handleCloseModal('deleteModal')}>
+                CANCEL
+              </button>
+
+              <button
+                onClick={this.handleDelete}>
+                ENTER
+              </button>
+            </div>
           </Modal>
 
           <div className="bottom-buttons">

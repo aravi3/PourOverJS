@@ -31,6 +31,7 @@ class Login extends React.Component {
   }
 
   render() {
+    let error = this.props.errors;
 
     return (
       <div className="login-form-wrapper">
@@ -56,6 +57,10 @@ class Login extends React.Component {
             Log In
           </button>
         </form>
+
+        <div>
+          {error}
+        </div>
       </div>
     )
   }

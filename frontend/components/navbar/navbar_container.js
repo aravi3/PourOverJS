@@ -5,12 +5,15 @@ import {
   logout,
   checkRefresh } from '../../actions/session_actions';
 import { signup } from '../../actions/user_actions';
-
-import {receiveErrors} from '../../actions/error_actions';
+import {
+  receiveErrors,
+  clearErrors
+} from '../../actions/error_actions';
 
 const mapStateToProps = (state) => {
   return {
-    loggedIn: !!state.users.username
+    loggedIn: !!state.users.username,
+    errors: state.errors
   };
 };
 
@@ -20,7 +23,8 @@ const mapDispatchToProps = (dispatch) => {
     logout: () => dispatch(logout()),
     signup: (user) => dispatch(signup(user)),
     checkRefresh: () => dispatch(checkRefresh()),
-    receiveErrors: (error) => dispatch(receiveErrors(error))
+    receiveErrors: (error) => dispatch(receiveErrors(error)),
+    clearErrors: () => dispatch(clearErrors())
   };
 };
 

@@ -292,6 +292,14 @@ flex: 1;
   background: #dff8cf;
 }
 
+.delete-code-button {
+  display: none;
+}
+
+.show-delete-button {
+  display: block;
+}
+
 .input:focus,
 select:focus,
 textarea:focus,

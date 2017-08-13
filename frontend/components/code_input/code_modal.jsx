@@ -12,6 +12,8 @@ class CodeModal extends React.Component {
     return e => {
       this.props.populateEditor(code, filename)();
       this.props.handleCloseModal('showModal')();
+      let deleteButton = document.getElementsByClassName("delete-code-button");
+      deleteButton[0].classList.add("show-delete-button");
     };
   }
 
