@@ -427,11 +427,7 @@ class CodeInput extends React.Component {
           }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
-            
-            <button className="next-line-button"
-              onClick={this.handleNext}>Next Line
-            </button>
-        
+
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
@@ -445,7 +441,7 @@ class CodeInput extends React.Component {
               onClick={this.handleOpenModal('saveModal')}>
               Save Code
             </button>
-            
+
             <button
               className="delete-code-button"
               onClick={this.handleOpenModal('deleteModal')}>
@@ -480,7 +476,17 @@ class CodeInput extends React.Component {
             isOpen={this.state.showModal}
             onRequestClose={ this.handleCloseModal('showModal')}
             contentLabel="userCode"
-            shouldCloseOnOverlay={true}>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'code-modal',
+              afterOpen: 'code-modal-after-open',
+              beforeClose: 'code-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'code-modal-overlay',
+              afterOpen: 'code-modal-over-after-open',
+              beforeClose: 'code-modal-over-before-close'
+            }}>
             <CodeModal
               code={this.props.code}
               populateEditor={this.populateEditor}

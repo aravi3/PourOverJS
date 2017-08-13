@@ -157,7 +157,7 @@ flex: 1;
   flex-direction: row;
 }
 
-.delete-code-button, .nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button, .code-modal-button, .save-modal-button {
+.code-modal-delete-button, .delete-code-button, .nav-signup-button, .nav-login-button, .merge-sort-button, .curry-button, .debounce-button, .navbar-signup-button, .navbar-login-button, .next-line-button, .run-code-button, .logout-button, .code-modal-button, .save-modal-button {
   animation: fadein 2s;
   /*transition: all 2.25s ease;*/
   margin: 15px 10px;
@@ -190,16 +190,16 @@ flex: 1;
   -webkit-animation: fadein 1.5s;
 }
 
-.delete-code-button:hover, .navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover, .save-modal-button:hover, .code-modal-button:hover {
+.code-modal-delete-button:hover, .delete-code-button:hover, .navbar-signup-button:hover, .navbar-login-button:hover, .next-line-button:hover, .run-code-button:hover, .logout-button:hover, .merge-sort-button:hover, .curry-button:hover, .debounce-button:hover, .save-modal-button:hover, .code-modal-button:hover, .filename:hover {
   box-shadow: inset 0 0 3em rgba(125, 185, 125, 0.35), 2px 2px 8px rgba(125, 185, 125, 0.7);
   cursor: pointer;
 }
 
-.delete-code-button:hover, .next-line-button:hover, .run-code-button:hover, .save-modal-button:hover {
+.code-modal-delete-button:hover, .delete-code-button:hover, .next-line-button:hover, .run-code-button:hover, .save-modal-button:hover {
   box-shadow: inset 0 0 3em rgba(189, 189, 102, 0.175), 2px 2px 8px rgba(189, 189, 102, 0.7);
 }
 
-.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover {
+.navbar-signup-button:hover, .navbar-login-button:hover, .code-modal-button:hover, .filename:hover {
   box-shadow: inset 0 0 3em rgba(90, 176, 185, 0.375), 2px 2px 8px rgba(90, 176, 185, 0.7);
 }
 
@@ -275,7 +275,7 @@ flex: 1;
 
 }
 
-.delete-code-button, .save-modal-button, .next-line-button, .run-code-button, .merge-sort-button {
+.code-modal-delete-button, .delete-code-button, .save-modal-button, .next-line-button, .run-code-button, .merge-sort-button {
   margin: 8px 10px;
   background: #dff8cf;
   background: rgb(249, 249, 162);
@@ -416,9 +416,75 @@ button:focus {
   font-family: dosis;
 }
 
-.save-modal-input::selection {
+.save-modal-input::selection, .code-modal::selection, .ReactModal__Body--open::selection, CodeModal::selection, .code-modal-list-wrapper::selection {
   outline: none;
 }
+
+*::selection {
+  background-color: rgba(225, 225, 225, 0.65);
+}
+
+.code-modal {
+  position: absolute;
+  top: 10%;
+  margin-left: 30%;
+  /*margin-right: 30%;*/
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.0);
+  border: solid 0px black;
+  z-index: 11;
+  outline: none;
+  text-align: left;
+  font-size: 24px;
+  letter-spacing: .04em;
+  font-weight: 600;
+  font-family: dosis;
+  overflow: scroll;
+  height: 100%;
+}
+
+.code-modal-list-wrapper {
+  margin-right: 50%;
+}
+
+.code-modal-list {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  flex: 1;
+}
+
+.code-modal-list-item {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.filename {
+  /*background-color: rgba(255, 255, 255, 1);*/
+  /*box-shadow: inset 0px 0px 20px 20px rgba(255, 255, 255, 0.85), 0px 0px 4px rgba(255, 255, 255, 0.5);*/
+  /*padding: 2px;*/
+  margin: 10px 10px;
+  animation: fadein 2s;
+  padding: 10px;
+  background: rgb(205, 255, 240);
+  border-radius: 5px;
+  transition: all 0.25s ease;
+}
+
+.code-modal-overlay {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 9;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.79) 1.66%, rgba(255, 255, 255, 0.88) 100%);
+  outline: none;
+}
+
 
 input:focus::-webkit-input-placeholder {
    color: rgba(0, 0, 0, 0.25);
