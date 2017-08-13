@@ -14,7 +14,8 @@ const App = () => {
       <div className="navigation-wrapper">
         <div className="spacer"></div>
         <div className="spacer"></div>
-        <h1>PourOverJS</h1>
+        <h1>PourOverJS <img src="http://res.cloudinary.com/dsopsl7zd/image/upload/v1502611989/PourOverJS-Logo-Narrow.jpg_hla0xj.jpg"></img></h1>
+
         <div className="spacer"></div>
         <div className="Navbox">
           <NavbarContainer />
