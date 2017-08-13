@@ -62,6 +62,7 @@ class CodeInput extends React.Component {
 
         if (this.runCounter === 1) {
           let localExecutionTime = this.t1 - this.t0;
+          console.log("Result: " + e.data);
           this.setState({ executionTime: localExecutionTime, returnValue: e.data});
         }
 
@@ -77,7 +78,8 @@ class CodeInput extends React.Component {
           executionTime: this.state.executionTime,
           returnValue: this.state.returnValue,
           variablesDeclared: this.state.variablesDeclared,
-          stack: this.state.stack
+          stack: this.state.stack,
+          runCounter: this.runCounter
         };
 
         stateObj.variablesDeclared.shift();
@@ -88,7 +90,7 @@ class CodeInput extends React.Component {
 
         window.removeEventListener('message', callback);
 
-        if (this.runCounter !== 2) {
+        if (this.runCounter < 2) {
           this.runCode();
         }
       }
@@ -145,7 +147,6 @@ class CodeInput extends React.Component {
     let callStackHelper = [];
     // let timerId;
     // Initialize counter for number of function calls in code
-    let functionCallsCount = 0;
     // Initialize stack to empty array
     // let stack = [];
     let scopeChain = [];
@@ -179,30 +180,33 @@ class CodeInput extends React.Component {
               callStackHelper.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
             }
             else {
-              let level = node.expression.callee;
-              while (level) {
-                parent.body.push(esprima.parse(`stack.push(
-                  ['${level.name ? level.name : level.property}',
-                  ${node.loc.start.line}])`));
+              callStackHelper.push(esprima.parse(`functionDeclarations['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+            }
+          }
 
-                  // callStack.push(esprima.parse(`stack.push(
-                  //   ['${level.name ? level.name : level.property}',
-                  //   ${node.loc.start.line}])`));
-                if (level.callee) {
-                  level = level.callee;
-                } else {
-                  level = 0;
+          if (node.type === "ExpressionStatement") {
+            if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
+              if (node.expression.callee.name === "setTimeout") {
+                parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
+              }
+              else {
+                let level = node.expression.callee;
+                while (level) {
+                  parent.body.push(esprima.parse(`stack.push(
+                    ['${level.name ? level.name : level.property}',
+                    ${node.loc.start.line}])`));
+
+                    // callStack.push(esprima.parse(`stack.push(
+                    //   ['${level.name ? level.name : level.property}',
+                    //   ${node.loc.start.line}])`));
+                  if (level.callee) {
+                    level = level.callee;
+                  } else {
+                    level = 0;
+                  }
                 }
               }
             }
-          }
-          // Console log the given node
-          // If a function is invoked, do stuff
-          if (node.type === "CallExpression") {
-            // Increment the function calls counter
-            functionCallsCount++;
-            // Push into the stack the name of the function
-            // stack.push(node.callee.name);
           }
 
           if (this.createsNewScope(node)) {
