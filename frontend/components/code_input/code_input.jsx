@@ -22,6 +22,7 @@ class CodeInput extends React.Component {
     this.state = {
       functionCalls: undefined,
       closureChain: [],
+      stack: [],
       executionTime: undefined,
       returnValue: undefined,
       variablesDeclared: [],
@@ -33,11 +34,13 @@ class CodeInput extends React.Component {
 
     this.code = "";
     this.functionDeclarations = "";
+    this.runCounter = 0;
     this.t0 = 0;
     this.t1 = 0;
 
     this.nextLine = this.nextLine.bind(this);
     this.handleNext = this.nextLine();
+    this.getReturnValue = this.getReturnValue.bind(this);
     this.runCode = this.runCode.bind(this);
     this.createsNewScope = this.createsNewScope.bind(this);
     this.printScope = this.printScope.bind(this);
@@ -49,55 +52,62 @@ class CodeInput extends React.Component {
     this.updateField = this.updateField.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
 
-    window.addEventListener('message', (e) => {
-      let timerId;
+  }
+
+  getReturnValue() {
+
+    let callback = (e) => {
       let frame = document.getElementById('sandboxed');
+
       if (e.origin === "null" && e.source === frame.contentWindow) {
         this.t1 = performance.now();
-
-        let localExecutionTime = this.t1 - this.t0;
         console.log(e.data);
 
-        // timerId = setInterval(() => {
-        //   console.log(e.data.stack.pop());
-        //
-        //   if (e.data.stack.length === 0) {
-        //     clearInterval(timerId);
-        //   }
-        // }, 1000);
+        if (this.runCounter === 1) {
+          let localExecutionTime = this.t1 - this.t0;
+          console.log("Result: " + e.data);
+          this.setState({ executionTime: localExecutionTime, returnValue: e.data});
+        }
 
-        this.setState({ executionTime: localExecutionTime, stack: e.data.stack.reverse() });
+        if (this.runCounter === 2) {
+          this.setState({ functionCalls: e.data.stack.length });
+          this.setState({ stack: e.data.stack.reverse() });
+          this.functionDeclarations = e.data.functionDeclarations;
+        }
 
-        let {
-          functionCalls,
-          closureChain,
-          executionTime,
-          returnValue,
-          variablesDeclared
-        } = this.state;
+        let stateObj = {
+          functionCalls: this.state.functionCalls,
+          closureChain: this.state.closureChain,
+          executionTime: this.state.executionTime,
+          returnValue: this.state.returnValue,
+          variablesDeclared: this.state.variablesDeclared,
+          stack: this.state.stack,
+          runCounter: this.runCounter
+        };
 
-        this.props.receiveMetrics({
-          functionCalls,
-          closureChain,
-          executionTime,
-          returnValue,
-          variablesDeclared
-        });
+        stateObj.variablesDeclared.shift();
 
-//bug-fighting
-//master
-        this.functionDeclarations = e.data.functionDeclarations;
+        this.props.receiveMetrics(stateObj);
 
         this.refs.ace.editor.gotoLine(1, 0);
 
-        this.setState({
-          functionCalls: undefined,
-          closureChain: [],
-          executionTime: undefined,
-          returnValue: undefined,
-          variablesDeclared: []
-        });
+        window.removeEventListener('message', callback);
+
+        if (this.runCounter < 2) {
+          this.runCode();
+        }
       }
+    };
+
+    window.addEventListener('message', callback);
+
+    this.setState({
+      functionCalls: undefined,
+      closureChain: [],
+      executionTime: undefined,
+      returnValue: undefined,
+      variablesDeclared: [],
+      stack: []
     });
   }
 
@@ -128,19 +138,18 @@ class CodeInput extends React.Component {
   }
 
   runCode() {
-    // this.setState({
-    //   functionCalls: undefined,
-    //   closureChain: [],
-    //   executionTime: undefined,
-    //   returnValue: undefined,
-    //   variablesDeclared: []
-    // });
+    if (this.runCounter === 2) {
+      this.runCounter = 0;
+    }
+
+    this.runCounter++;
+
+    this.getReturnValue();
 
     let parentArray = [];
     let callStackHelper = [];
     // let timerId;
     // Initialize counter for number of function calls in code
-    let functionCallsCount = 0;
     // Initialize stack to empty array
     // let stack = [];
     let scopeChain = [];
@@ -154,136 +163,138 @@ class CodeInput extends React.Component {
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
-    let ast = esprima.parse(this.code, {loc: true});
-    ast.body.unshift(esprima.parse('let metrics = {}; let stack = []; let stackAsync = []; let functionDeclarations = {};'));
     // console.log(ast);
     // Console log the ast
     // console.log(ast);
 
     // The estraverse module traverses the AST in order (line by line)
-    estraverse.traverse(ast, {
-      // Whenever a node is entered, a callback is invoked that takes the node as
-      // a parameter
-      enter: (node, parent) => {
-        if (node.type === "FunctionDeclaration" || (node.type === "FunctionExpression" && node.id === null)) {
-          // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
-          if (node.id !== null) {
-            callStackHelper.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
-          }
-          else {
-            callStackHelper.push(esprima.parse(`functionDeclarations['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
-          }
-        }
+    if (this.runCounter === 2) {
+      let ast = esprima.parse(this.code, {loc: true});
 
-        if (node.type === "ExpressionStatement") {
-          if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
-            if (node.expression.callee.name === "setTimeout") {
-              parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
+      ast.body.unshift(esprima.parse('let metrics = {}; let stack = []; let stackAsync = []; let functionDeclarations = {};'));
+
+      estraverse.traverse(ast, {
+        // Whenever a node is entered, a callback is invoked that takes the node as
+        // a parameter
+        enter: (node, parent) => {
+          if (node.type === "FunctionDeclaration" || (node.type === "FunctionExpression" && node.id === null)) {
+            // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+            if (node.id !== null) {
+              callStackHelper.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
             }
             else {
-              console.log(node);
-              let level = node.expression.callee;
-              while (level) {
-                parent.body.push(esprima.parse(`stack.push(
-                  ['${level.name ? level.name : level.property}',
-                  ${node.loc.start.line}])`));
+              callStackHelper.push(esprima.parse(`functionDeclarations['anonymous'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+            }
+          }
 
-                  // callStack.push(esprima.parse(`stack.push(
-                  //   ['${level.name ? level.name : level.property}',
-                  //   ${node.loc.start.line}])`));
-                if (level.callee) {
-                  level = level.callee;
-                } else {
-                  level = 0;
+          if (node.type === "ExpressionStatement") {
+            if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
+              if (node.expression.callee.name === "setTimeout") {
+                parent.body.push(esprima.parse(`stackAsync.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
+              }
+              else {
+                let level = node.expression.callee;
+                while (level) {
+                  parent.body.push(esprima.parse(`stack.push(
+                    ['${level.name ? level.name : level.property}',
+                    ${node.loc.start.line}])`));
+
+                    // callStack.push(esprima.parse(`stack.push(
+                    //   ['${level.name ? level.name : level.property}',
+                    //   ${node.loc.start.line}])`));
+                  if (level.callee) {
+                    level = level.callee;
+                  } else {
+                    level = 0;
+                  }
                 }
               }
             }
           }
-        }
-        // Console log the given node
-        // If a function is invoked, do stuff
-        if (node.type === "CallExpression") {
-          // Increment the function calls counter
-          functionCallsCount++;
-          // Push into the stack the name of the function
-          // stack.push(node.callee.name);
-        }
 
-        if (this.createsNewScope(node)) {
-          scopeChain.push([]);
-        }
+          if (this.createsNewScope(node)) {
+            scopeChain.push([]);
+          }
 
-        if (node.type === 'VariableDeclarator' || node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
-          let currentScope = scopeChain[scopeChain.length - 1];
+          if (node.type === 'VariableDeclarator' || node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression') {
+            let currentScope = scopeChain[scopeChain.length - 1];
 
-          if (node.params) {
-            let parameters = [];
+            if (node.params) {
+              let parameters = [];
 
-            for (let i = 0; i < node.params.length; i++) {
-              parameters.push(node.params[i].name);
+              for (let i = 0; i < node.params.length; i++) {
+                parameters.push(node.params[i].name);
+              }
+
+              currentScope.push(...parameters);
             }
 
-            currentScope.push(...parameters);
+            if (node.type === 'VariableDeclarator' || parent.type === 'VariableDeclarator') {
+              currentScope.push(node.id.name);
+            }
           }
+        },
 
-          if (node.type === 'VariableDeclarator' || parent.type === 'VariableDeclarator') {
-            currentScope.push(node.id.name);
-          }
-        }
-      },
+        leave: (node, parent) => {
+          if (this.createsNewScope(node)) {
 
-      leave: (node, parent) => {
-        if (this.createsNewScope(node)) {
+            if (node.id && node.id.name) {
+              parentArray.push(node.id.name);
+            }
 
-          if (node.id && node.id.name) {
-            parentArray.push(node.id.name);
-          }
+            let currentScope = scopeChain.pop();
 
-          let currentScope = scopeChain.pop();
+            this.printScope(currentScope, parentArray, node);
 
-          this.printScope(currentScope, parentArray, node);
+            if (parent) {
+              if (parent.type === 'Program') {
+                console.log(parentArray);
+                let newState = this.state.closureChain;
 
-          if (parent) {
-            if (parent.type === 'Program') {
-              console.log(parentArray);
-              let newState = this.state.closureChain;
-              newState.push(parentArray);
-              parentArray = [];
+                if (parentArray.length !== 0) {
+                  newState.push(parentArray);
+                }
+
+                parentArray = [];
+              }
             }
           }
         }
+      });
+
+      for (let i = 0; i < callStackHelper.length; i++) {
+        ast.body.push(callStackHelper[i]);
       }
-    });
 
-    for (let i = 0; i < callStackHelper.length; i++) {
-      ast.body.push(callStackHelper[i]);
+      ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; metrics.functionDeclarations = functionDeclarations; function retrieveMetrics() { return metrics; } retrieveMetrics();'));
+
+      console.log(ast);
+
+      // Console log the number of function calls
+      // console.log("Function calls count: " + functionCallsCount);
+
+      // Add onto the beginning of the code snippet variables to capture execution time
+      // ast.body.unshift(esprima.parse('t0 = performance.now();'));
+      // ast.body.unshift(esprima.parse('let metrics = {}; let t0, t1;'));
+      // Add onto the end of the code snippet the captured duration and return the metrics object
+      // ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
+      // ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
+
+      // Convert the AST back into readable code
+      let newCode = escodegen.generate(ast);
+      console.log(newCode);
+
+      this.t0 = performance.now();
+      frame.contentWindow.postMessage(newCode, '*');
     }
-
-    ast.body.push(esprima.parse('metrics.stack = stack; metrics.stackAsync = stackAsync; metrics.functionDeclarations = functionDeclarations; function retrieveMetrics() { return metrics; } retrieveMetrics();'));
-
-    console.log(ast);
-
-    this.setState({ functionCalls: functionCallsCount });
-
-    // Console log the number of function calls
-    // console.log("Function calls count: " + functionCallsCount);
-
-    // Add onto the beginning of the code snippet variables to capture execution time
-    // ast.body.unshift(esprima.parse('t0 = performance.now();'));
-    // ast.body.unshift(esprima.parse('let metrics = {}; let t0, t1;'));
-    // Add onto the end of the code snippet the captured duration and return the metrics object
-    // ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
-    // ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
-
-    // Convert the AST back into readable code
-    let newCode = escodegen.generate(ast);
-    console.log(newCode);
+    else {
+      this.t0 = performance.now();
+      frame.contentWindow.postMessage(this.code, '*');
+    }
     // Console log the new readable code
     // console.log(newCode);
 
-    this.t0 = performance.now();
     // Run the code snippet within sandbox
-    frame.contentWindow.postMessage(newCode, '*');
 
     // Iterate through the stack of function invocations and display them
     // to the console every second
@@ -306,7 +317,9 @@ class CodeInput extends React.Component {
   }
 
   handleOpenModal(field) {
-    return e => this.setState({ [field]: true });
+    return e => {
+      console.log(field);
+      return this.setState({ [field]: true });}
   }
 
   handleCloseModal(field) {
@@ -348,6 +361,9 @@ class CodeInput extends React.Component {
           console.log("After idx: " + idx);
           // dispatch something to take current idx off stack and do not increment idx
         }
+      }
+      else {
+        this.props.removeStackIndex(idx);
       }
     };
   }
@@ -409,16 +425,15 @@ class CodeInput extends React.Component {
             <button className="next-line-button"
               onClick={this.handleNext}>Next Line
             </button>
+            
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
+
             <button
-              onClick={this.handleOpenModal('showModal')}>
-              Modal
-            </button>
-            <button
+              className="save-modal-button"
               onClick={this.handleOpenModal('saveModal')}>
-              Save
+              Save Code
             </button>
             <button
               className="delete-code-button"
@@ -431,7 +446,17 @@ class CodeInput extends React.Component {
             isOpen={this.state.saveModal}
             onRequestClose={this.handleCloseModal('saveModal')}
             contentLabel="saveCode"
-            shouldCloseOnOverlay={true}>
+            shouldCloseOnOverlay={true}
+            className={{
+              base: 'save-modal',
+              afterOpen: 'save-modal-after-open',
+              beforeClose: 'save-modal-before-close'
+            }}
+            overlayClassName={{
+              base: 'save-modal-overlay',
+              afterOpen: 'save-modal-over-after-open',
+              beforeClose: 'save-modal-over-before-close'
+            }}>
             <SaveModal
               submitCode={this.submitCode}
               filename={this.state.filename}
@@ -472,6 +497,10 @@ class CodeInput extends React.Component {
           </Modal>
 
           <div className="bottom-buttons">
+            <button className="code-modal-button"
+              onClick={this.handleOpenModal('showModal')}>
+              My Fn(){"'"}s
+            </button>
             <button className="merge-sort-button"
               onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
             </button>

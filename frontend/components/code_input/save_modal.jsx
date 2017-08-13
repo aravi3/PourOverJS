@@ -8,7 +8,7 @@ class SaveModal extends React.Component {
       if (e.keyCode === 13) {
         setTimeout( () => {
           //Need to double invoke here to reuse handleCloseModal
-          //for multiple modals 
+          //for multiple modals
           this.props.handleCloseModal('saveModal')();
           this.props.submitCode();
         }, 0);
@@ -26,9 +26,10 @@ class SaveModal extends React.Component {
 
   render() {
     return (
-      <div>
-        <form>
+      <div className="save-modal-wrapper">
+        <form className="save-modal-form">
           <input
+            className="save-modal-input"
             onChange={this.props.updateField('filename')}
             placeholder="Enter a Filename"
             value={this.props.filename}
