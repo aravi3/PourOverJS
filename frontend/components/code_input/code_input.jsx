@@ -73,7 +73,7 @@ class CodeInput extends React.Component {
           let localExecutionTime = `${(this.t1 - this.t0).toFixed(2)} ms`;
           this.setState({ executionTime: localExecutionTime });
           this.setState({ functionCalls: e.data.stack.length });
-          this.setState({ stack: e.data.stack.reverse() });
+          this.setState({ stack: e.data.stack });
           this.functionDeclarations = e.data.functionDeclarations;
         }
 
@@ -178,6 +178,7 @@ class CodeInput extends React.Component {
       estraverse.traverse(ast, {
         // Whenever a node is entered, a callback is invoked that takes the node as
         // a parameter
+
         enter: (node, parent) => {
           if (node.type === "FunctionDeclaration" || (node.type === "FunctionExpression" && node.id === null)) {
             // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
@@ -197,18 +198,43 @@ class CodeInput extends React.Component {
               else {
                 let level = node.expression.callee;
                 while (level) {
-                  parent.body.push(esprima.parse(`stack.push(
+                  // parent.body.push(esprima.parse(`stack.push(
+                  //   ['${level.name ? level.name : level.property}',
+                  //   ${node.loc.start.line}])`));
+
+                  console.log("Index: " + parent.body.indexOf(node));
+
+                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stack.push(
                     ['${level.name ? level.name : level.property}',
                     ${node.loc.start.line}])`));
 
-                    // callStack.push(esprima.parse(`stack.push(
-                    //   ['${level.name ? level.name : level.property}',
-                    //   ${node.loc.start.line}])`));
                   if (level.callee) {
                     level = level.callee;
                   } else {
                     level = 0;
                   }
+                }
+              }
+            }
+          }
+          else if (node.type === "ReturnStatement") {
+            if (node.argument.type === "CallExpression") {
+              let level = node.argument.callee;
+              while (level) {
+                // parent.body.push(esprima.parse(`stack.push(
+                //   ['${level.name ? level.name : level.property}',
+                //   ${node.loc.start.line}])`));
+
+                console.log("Index: " + parent.body.indexOf(node));
+
+                parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stack.push(
+                  ['${level.name ? level.name : level.property}',
+                  ${node.loc.start.line}])`));
+
+                if (level.callee) {
+                  level = level.callee;
+                } else {
+                  level = 0;
                 }
               }
             }
@@ -361,7 +387,7 @@ class CodeInput extends React.Component {
       this.refs.ace.editor.gotoLine(this.props.stack[idx][1], 0);
 
       if (this.functionDeclarations[this.props.stack[idx][0]]) {
-        if ((this.props.stack[idx + 1][1] > this.functionDeclarations[this.props.stack[idx][0]][0]) && (this.props.stack[idx + 1][1] < this.functionDeclarations[this.props.stack[idx][0]][1])) {
+        if ((this.props.stack[idx + 1][1] >= this.functionDeclarations[this.props.stack[idx][0]][0]) && (this.props.stack[idx + 1][1] <= this.functionDeclarations[this.props.stack[idx][0]][1])) {
           console.log("Passed");
           console.log("Before idx: " + idx);
           idx++;
@@ -376,7 +402,9 @@ class CodeInput extends React.Component {
         }
       }
       else {
+        console.log("Before idx: " + idx);
         this.props.removeStackIndex(idx);
+        console.log("After idx: " + idx);
       }
     };
   }
