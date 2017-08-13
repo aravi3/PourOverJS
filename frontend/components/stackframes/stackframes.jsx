@@ -23,7 +23,7 @@ class Stackframes extends React.Component {
             {el}
           </li>
         );
-      })
+      });
     }
 
     return (

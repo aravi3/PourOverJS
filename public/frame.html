@@ -10,7 +10,7 @@
         try {
           result = eval(e.data);
         } catch (e) {
-          result = 'eval() threw an exception.';
+          result = e.toString();
         }
         mainWindow.postMessage(result, event.origin);
       });
