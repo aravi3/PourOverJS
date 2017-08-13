@@ -38,14 +38,7 @@ class Metrics extends React.Component {
       );
     }) : null;
 
-    const closureDisplay = closureChain ? closureChain.map( (el, index) => {
-      return (
-        <li
-          key={index}>
-          {el}
-        </li>
-      );
-    }) : null;
+    const closureDisplay = closureChain ? closureChain.join('-->') : null;
 
     return (
       <div>
