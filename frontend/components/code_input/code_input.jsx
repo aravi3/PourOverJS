@@ -10,6 +10,7 @@ import { MERGE_SORT_EXAMPLE,
          DEBOUNCING_EXAMPLE } from '../../util/example_codes';
 import CodeModal from './code_modal';
 import SaveModal from './save_modal';
+import Login from '../navbar/login';
 
 let esprima = require('esprima');
 let escodegen = require('escodegen');
@@ -29,6 +30,7 @@ class CodeInput extends React.Component {
       showModal: false,
       saveModal: false,
       deleteModal: false,
+      loginModal: false,
       filename: ""
     };
 
@@ -51,7 +53,6 @@ class CodeInput extends React.Component {
     this.updateCode = this.updateCode.bind(this);
     this.updateField = this.updateField.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-
   }
 
   getReturnValue() {
@@ -126,7 +127,7 @@ class CodeInput extends React.Component {
     else {
       if (node.id && node.id.name) {
         let newState = this.state.variablesDeclared;
-        newState.push(`Variables declared in the function ${node.id.name}(): ${varsDisplay}`);
+        newState.push(`Variables declared in ${node.id.name}(): ${varsDisplay}`);
       }
       else {
         parentArray.unshift("anonymous");
@@ -345,12 +346,19 @@ class CodeInput extends React.Component {
 
   handleOpenModal(field) {
     return e => {
-      console.log(field);
-      return this.setState({ [field]: true });};
+      if((field === "saveModal" || field === "showModal") && !this.props.loggedIn) {
+        this.setState({ loginModal: true });
+      } else {
+        this.setState({ [field]: true })
+      }
+    };
   }
 
   handleCloseModal(field) {
-    return e => this.setState({ [field]: false });
+    return e => {
+      this.props.clearErrors();
+      this.setState({ [field]: false });
+    }
   }
 
   updateCode(e) {
@@ -422,7 +430,6 @@ class CodeInput extends React.Component {
   }
 
   handleDelete() {
-    console.log("hello");
     this.props.deleteCode(this.state.filename);
     this.populateEditor("", "")();
     let deleteButton = document.getElementsByClassName("delete-code-button");
@@ -431,6 +438,10 @@ class CodeInput extends React.Component {
   }
 
   render() {
+    if(this.state.loginModal && this.props.loggedIn) {
+      this.state.loginModal = false;
+    }
+
     return (
       <div className="code-input-editor">
         <AceEditor
@@ -548,19 +559,30 @@ class CodeInput extends React.Component {
             </div>
           </Modal>
 
+          <Modal
+            isOpen={this.state.loginModal}
+            onRequestClose={ this.handleCloseModal('loginModal')}
+            contentLabel="login"
+            shouldCloseOnOverlay={true}>
+            <Login
+              login={this.props.login}
+              errors={this.props.errors}
+              receiveErrors={this.props.receiveErrors}/>
+          </Modal>
+
           <div className="bottom-buttons">
             <button className="code-modal-button"
               onClick={this.handleOpenModal('showModal')}>
               My Scripts
             </button>
             <button className="merge-sort-button"
-              onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort
+              onClick={this.populateEditor(MERGE_SORT_EXAMPLE, "")}>Merge Sort
             </button>
             <button className="curry-button"
-              onClick={this.populateEditor(CURRYING_EXAMPLE)}>Curry Sum
+              onClick={this.populateEditor(CURRYING_EXAMPLE, "")}>Curry Sum
             </button>
             <button className="debounce-button"
-              onClick={this.populateEditor(DEBOUNCING_EXAMPLE)}>Debounce
+              onClick={this.populateEditor(DEBOUNCING_EXAMPLE, "")}>Debounce
             </button>
           </div>
 

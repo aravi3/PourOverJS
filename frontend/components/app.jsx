@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import HomeContainer from './home/home_container';
 import NavbarContainer from './navbar/navbar_container';
 import MetricsContainer from './metrics/metrics_container';
+import StackframesContainer from './stackframes/stackframes_container';
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
         </div>
 
         <div className="stack-wrapper">
+          <StackframesContainer />
         </div>
         <div className="metrics-wrapper">
           <MetricsContainer />

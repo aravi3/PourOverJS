@@ -11,6 +11,8 @@ class SaveModal extends React.Component {
           //for multiple modals
           this.props.handleCloseModal('saveModal')();
           this.props.submitCode();
+          let deleteButton = document.getElementsByClassName("delete-code-button");
+          deleteButton[0].classList.add("show-delete-button");
         }, 0);
       }
     };
