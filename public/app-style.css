@@ -292,8 +292,12 @@ flex: 1;
   background: #dff8cf;
 }
 
-.code-modal-button {
-  background: rgb(205, 255, 240);
+.delete-code-button {
+  display: none;
+}
+
+.show-delete-button {
+  display: block;
 }
 
 .input:focus,

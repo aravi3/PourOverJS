@@ -28,6 +28,7 @@ class CodeInput extends React.Component {
       variablesDeclared: [],
       showModal: false,
       saveModal: false,
+      deleteModal: false,
       filename: ""
     };
 
@@ -49,6 +50,8 @@ class CodeInput extends React.Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.updateCode = this.updateCode.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+
   }
 
   getReturnValue() {
@@ -374,18 +377,6 @@ class CodeInput extends React.Component {
     this.props.saveCode(codeObj);
   }
 
-  mergeSort() {
-    this.refs.ace.editor.setValue(`${this.mergeCode}`, -1);
-  }
-
-  curry() {
-    this.refs.ace.editor.setValue(`${this.curryCode}`, -1);
-  }
-
-  debounce() {
-    this.refs.ace.editor.setValue(`${this.debounceCode}`, -1);
-  }
-
   populateEditor(code, filename) {
     return e => {
       this.refs.ace.editor.setValue(`${code}`, -1);
@@ -395,6 +386,15 @@ class CodeInput extends React.Component {
 
   updateField(field) {
     return(e) => this.setState({ [field]: e.target.value });
+  }
+
+  handleDelete() {
+    console.log("hello");
+    this.props.deleteCode(this.state.filename);
+    this.populateEditor("", "")();
+    let deleteButton = document.getElementsByClassName("delete-code-button");
+    deleteButton[0].classList.remove("show-delete-button");
+    this.handleCloseModal('deleteModal')();
   }
 
   render() {
@@ -419,20 +419,26 @@ class CodeInput extends React.Component {
           setOptions={{
             showLineNumbers: true,
             tabSize: 2,
-          }}
-        />
+          }}/>
         <div className="button-wrapper">
           <div className="top-buttons">
             <button className="next-line-button"
               onClick={this.handleNext}>Next Line
             </button>
+            
             <button className="run-code-button"
               onClick={this.runCode}>Run>>
             </button>
-            <button className="save-modal-button"
-              onClick={this.handleOpenModal('saveModal')}
-              >
+
+            <button
+              className="save-modal-button"
+              onClick={this.handleOpenModal('saveModal')}>
               Save Code
+            </button>
+            <button
+              className="delete-code-button"
+              onClick={this.handleOpenModal('deleteModal')}>
+              Delete
             </button>
           </div>
 
@@ -472,10 +478,28 @@ class CodeInput extends React.Component {
               />
           </Modal>
 
+          <Modal
+            isOpen={this.state.deleteModal}
+            onRequestClose={ this.handleCloseModal('deleteModal')}
+            contentLabel="deleteCode"
+            shouldCloseOnOverlay={true}>
+            <div>
+              <button
+                onClick={this.handleCloseModal('deleteModal')}>
+                CANCEL
+              </button>
+
+              <button
+                onClick={this.handleDelete}>
+                ENTER
+              </button>
+            </div>
+          </Modal>
+
           <div className="bottom-buttons">
             <button className="code-modal-button"
               onClick={this.handleOpenModal('showModal')}>
-              My Fn()'s
+              My Fn(){"'"}s
             </button>
             <button className="merge-sort-button"
               onClick={this.populateEditor(MERGE_SORT_EXAMPLE)}>Merge Sort

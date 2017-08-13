@@ -38,6 +38,7 @@ class Navbar extends React.Component {
 
   openModal(str) {
     this.setState({modalIsOpen: true, activeModal: str});
+    this.props.clearErrors();
   }
 
   afterOpenModal() {
@@ -48,6 +49,7 @@ class Navbar extends React.Component {
 
   closeModal() {
     this.setState({modalIsOpen: false, activeModal: undefined});
+    this.props.clearErrors();
   }
 
   outPut () {
@@ -87,39 +89,39 @@ class Navbar extends React.Component {
             base: 'modal-overlay',
             afterOpen: 'myOverlayClass_after-open',
             beforeClose: 'myOverlayClass_before-close'
-          }}
-          >
+          }}>
 
           <Login
-            login={this.props.login} />
+            login={this.props.login}
+            errors={this.props.errors}
+            receiveErrors={this.props.receiveErrors}/>
         </Modal>
 
-          <Modal
-            isOpen={this.state.activeModal === 'signup'}
-            onAfterOpen={this.afterOpenModal}
-            onRequestClose={this.closeModal}
-            contentLabel="Example Modal"
-            className={{
-              base: 'modal',
-              afterOpen: 'myClass_after-open',
-              beforeClose: 'myClass_before-close'
-            }}
-            overlayClassName={{
-              base: 'modal-overlay',
-              afterOpen: 'myOverlayClass_after-open',
-              beforeClose: 'myOverlayClass_before-close'
-            }}
-            >
+        <Modal
+          isOpen={this.state.activeModal === 'signup'}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          contentLabel="Example Modal"
+          className={{
+            base: 'modal',
+            afterOpen: 'myClass_after-open',
+            beforeClose: 'myClass_before-close'
+          }}
+          overlayClassName={{
+            base: 'modal-overlay',
+            afterOpen: 'myOverlayClass_after-open',
+            beforeClose: 'myOverlayClass_before-close'
+          }}>
 
           <Signup
-            signup={this.props.signup} />
+            signup={this.props.signup}
+            errors={this.props.errors}
+            receiveErrors={this.props.receiveErrors}/>
         </Modal>
 
       </div>
     );
   }
-
-
 
   Navbae () {
     if (this.props.loggedIn) {
