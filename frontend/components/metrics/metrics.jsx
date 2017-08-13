@@ -19,22 +19,26 @@ class Metrics extends React.Component {
     } = this.props.allMetrics;
 
     const variablesDisplay = variablesDeclared ? variablesDeclared.map( (el, index) => {
+      let allVariables = /\:(.*)/.exec(el)[1].split(",");
+      let declaration = /(.*)\:/.exec(el)[1];
+
       return (
         <li
           key={index}>
-          {el}
+          {declaration}
+          {allVariables.map( (el, index) => {
+            return (
+              <div
+                style={{ color: "red" }}>
+                {el}
+              </div>
+            );
+          })}
         </li>
       );
     }) : null;
 
-    const closureDisplay = closureChain ? closureChain.map( (el, index) => {
-      return (
-        <li
-          key={index}>
-          {`--->`}{el}
-        </li>
-      );
-    }) : null;
+    const closureDisplay = closureChain ? closureChain.join(' --> ') : null;
 
     return (
       <div>
