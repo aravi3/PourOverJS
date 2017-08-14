@@ -20,7 +20,7 @@ class Stackframes extends React.Component {
         return (
           <li className={`stack-frames-list-item-${stackframes.length - index === 1 ? `-bottom`: `` }${index}`}
             key={index}>
-            <div className="stack-frame-index">{ index === 0 ? `Top Stack Frame: ${stackframes.length - index}` : `Stack Frame: ${stackframes.length - index}` }</div>
+            <div className="stack-frame-index">{ index === 0 ? `Active Function Call` : `Stack Frame: ${stackframes.length - index}` }</div>
             <div className={`function-call-item${stackframes.length - index === 1 ? `-bottom`: ``}`}>{el}</div>
           </li>
         );

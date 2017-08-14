@@ -108,6 +108,7 @@ width: 100vw;
   grid-row: 15 / 23;
   overflow: auto;
   padding: 10px;
+  font-family: dosis;
 }
 
 .navigation-background {
@@ -577,7 +578,7 @@ li[class^="stack-frames-list-item-"] {
   font-family: dosis;
   letter-spacing: .03em;
   transition-property: background !important;
-  transition-duration: 2s !important;
+  transition-duration: 1s !important;
 }
 
 .stack-frames-list-item-0 {
@@ -661,12 +662,18 @@ li[class^="stack-frames-list-item--bottom"] {
   background: #cffdeb;
   /* color: white; */
   padding: 5px;
+  margin-bottom: 10px;
 }
 
 .inside-list {
   background: white;
   color: black;
   padding: 5px 9px;
+}
+
+.vars-display {
+  font-family: courier;
+  font-size: 85%;
 }
 
 .variable-style {
@@ -677,6 +684,8 @@ li[class^="stack-frames-list-item--bottom"] {
   border-radius: 5%;
   padding: 0 5px;
   margin: 7px;
+  font-family: courier;
+  font-size: 85%;
 }
 
 .footer-background {
@@ -705,9 +714,9 @@ li[class^="stack-frames-list-item--bottom"] {
 @keyframes fadein {
   from { opacity: 0; }
   to   { opacity: 1; }
-  }
+}
 
-  @keyframes slide-down {
-    from { margin-top: 0px; }
-    to   { margin-top: 20px; }
-  }
+@keyframes slide-down {
+  from { margin-top: 0px; }
+  to   { margin-top: 20px; }
+}
