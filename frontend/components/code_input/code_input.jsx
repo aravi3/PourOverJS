@@ -218,7 +218,7 @@ class CodeInput extends React.Component {
     let convertedCode = regenerator.transform(conversionAST);
     let regenCode = recast.print(convertedCode);
     console.log(regenCode);
-    
+
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module
@@ -448,6 +448,11 @@ class CodeInput extends React.Component {
         if (!endFlag) {
           this.props.addToCurrentStack(this.props.stack[idx][0]);
           stackFlag = true;
+        }
+        else {
+          this.props.removeFromCurrentStack();
+          stackFlag = false;
+          return;
         }
 
         endFlag = true;
