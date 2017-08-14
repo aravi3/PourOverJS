@@ -51298,13 +51298,13 @@ var CodeInput = function (_React$Component) {
               'button',
               { className: 'run-code-button',
                 onClick: this.runCode },
-              'Run>>'
+              'Compile'
             ),
             _react2.default.createElement(
               'button',
               { className: 'next-line-button',
                 onClick: this.handleNext },
-              'Next Line'
+              'Next Step>>'
             ),
             _react2.default.createElement(
               'button',

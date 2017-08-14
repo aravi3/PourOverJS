@@ -311,6 +311,12 @@ flex: 1;
   max-width: 108px;
 }
 
+.next-line-button {
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+}
+
 .code-modal-button {
   background: rgb(205, 255, 240);
 }
