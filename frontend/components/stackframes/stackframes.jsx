@@ -18,9 +18,10 @@ class Stackframes extends React.Component {
     if(stackframes) {
       stackframesDisplay = stackframes.map( (el,index) => {
         return (
-          <li className={`stack-frames-list-item-${index}`}
+          <li className={`stack-frames-list-item-${stackframes.length - index === 1 ? `-bottom`: `` }${index}`}
             key={index}>
-            {el}
+            <div className={`function-call-item${stackframes.length - index === 1 ? `-bottom`: ``}`}>{el}</div>
+            <div>{ index === 0 ? `Top Stack Frame: ${stackframes.length - index}` : `Stack Frame: ${stackframes.length - index}` }</div>
           </li>
         );
       });

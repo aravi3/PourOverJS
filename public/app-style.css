@@ -575,16 +575,36 @@ li[class^="stack-frames-list-item-"] {
 .stack-frames-list-item-0 {
   background: rgba(155, 150, 215, 0.5) !important;
   /*animation: fadein 2s !important;*/
-  transition-property: background !important;
-  transition-duration: 2s !important;
   /*animation: slide-down 1s !important;*/
   /*transition: all 0.25s ease !important;*/
 }
 
 .stack-frames-list-item-1 {
   background: rgba(211, 238, 249, 0.59) !important;
-  transition-property: background !important;
-  transition-duration: 2s !important;
+}
+
+.stack-frames-list-item-2 {
+  background: rgb(243, 242, 174) !important;
+}
+
+.stack-frames-list-item-3 {
+  background: rgb(234, 246, 191) !important;
+}
+
+.stack-frames-list-item-4 {
+  background: rgb(224, 248, 206) !important;
+}
+
+.stack-frames-list-item-5 {
+  background: rgb(216, 250, 220) !important;
+}
+
+.stack-frames-list-item-6 {
+  background: rgb(216, 250, 220) !important;
+}
+
+.stack-frames-list-item-7 {
+  background: rgb(216, 250, 220) !important;
 }
 
 .title-wrapper {
