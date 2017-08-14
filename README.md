@@ -100,11 +100,11 @@ will stay at the bottom and not pop off until it is exited.
 In addition to the features that have been implemented, we plan to add
 more features in the future. The following are next steps for PourOverJS:
 
-### Add more types of expression statements to call stack
-### Performance metrics visualization with D3.js
-### O'auth sign in with Github and Google
-### Asynchronous event loop visualization
-### Scope display as users step through the code
-### Demonstration of variable closure as users step through the code
+- Add more types of expression statements to call stack
+- Performance metrics visualization with D3.js
+- O'auth sign in with Github and Google
+- Asynchronous event loop visualization
+- Scope display as users step through the code
+- Demonstration of variable closure as users step through the code
 
 [crud_proto]: https://github.com/aravi3/MERN_CRUD_Application
