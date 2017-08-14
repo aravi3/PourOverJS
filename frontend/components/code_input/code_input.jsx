@@ -15,7 +15,8 @@ import Login from '../navbar/login';
 let esprima = require('esprima');
 let escodegen = require('escodegen');
 let estraverse = require('estraverse');
-// let regenerator = require('regenerator');
+let regenerator = require('regenerator');
+let recast = require('recast');
 
 class CodeInput extends React.Component {
   constructor(props) {
@@ -204,6 +205,11 @@ class CodeInput extends React.Component {
     // console.log(tempCode);
     // console.log(this.code);
 
+    let conversionAST = recast.parse(this.code);
+    let convertedCode = regenerator.transform(conversionAST);
+    let regenCode = recast.print(convertedCode);
+    console.log(regenCode);
+    
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
     // Generate abstract syntax tree from code snippet by using esprima module

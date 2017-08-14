@@ -59,6 +59,7 @@
     "webpack": "^3.4.1"
   },
   "devDependencies": {
+    "babel-plugin-transform-regenerator": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",

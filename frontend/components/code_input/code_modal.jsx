@@ -30,8 +30,12 @@ class CodeModal extends React.Component {
         <li className="code-modal-list-item"
           key={index}
           onClick={this.handleClick(el.code, el.filename)}>
-          <span className="filename">{el.filename}</span>
-          <button className="code-modal-delete-button"
+          <span className="filename">
+            {el.filename}
+          </span>
+
+          <button
+            className="code-modal-delete-button"
             onClick={this.handleDelete(el.filename)}>
             DELETE
           </button>
