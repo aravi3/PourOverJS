@@ -342,7 +342,7 @@ class CodeInput extends React.Component {
               currentScope.push(...parameters);
             }
 
-            if (node.type === 'VariableDeclarator' || parent.type === 'VariableDeclarator') {
+            if (node.type === 'VariableDeclarator') {
               if (node.id) {
                 currentScope.push(node.id.name);
               }
@@ -384,7 +384,7 @@ class CodeInput extends React.Component {
 
       // Convert the AST back into readable code
       let newCode = escodegen.generate(ast);
-      console.log(newCode);
+      // console.log(newCode);
 
       this.t0 = performance.now();
       frame.contentWindow.postMessage(newCode, '*');

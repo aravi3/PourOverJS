@@ -27,7 +27,7 @@ while (left.length > 0 && right.length > 0) {
 return sorted.concat(left, right);
 }
 
-mergeSort([1,9,2,3,0,5,6,6,43,24]);
+mergeSort([9,2,-5,7]);
 `;
 
 export const BFS_EXAMPLE = `// Breadth-First Search to find target "e"
@@ -165,10 +165,10 @@ function quickSort(arr) {
     return el > pivot;
   });
 
-  let leftCall = quickSort(left);
-  let rightCall = quickSort(right);
+  let leftSort = quickSort(left);
+  let rightSort = quickSort(right);
 
-  return leftCall.concat(pivot).concat(rightCall);
+  return leftSort.concat(pivot).concat(rightSort);
 }
 
-quickSort([9, 2, 5, 6, 4, 3, 7, 10, 1, 8])`;
+quickSort([9,2,-5,7])`;
