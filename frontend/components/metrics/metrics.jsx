@@ -68,8 +68,8 @@ class Metrics extends React.Component {
           </ul>
         </div>
         <div className="title-wrapper">
-          Variables Declared:
-          <ul className="inside-list">
+          Varible Declarations:
+          <ul className="inside-list vars-display">
             {variablesDisplay}
           </ul>
         </div>

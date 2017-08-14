@@ -164,17 +164,17 @@ class CodeInput extends React.Component {
 
     if (node.type === 'Program') {
       let newState = this.state.variablesDeclared;
-      newState.push(`Variables declared in the global scope: ${varsDisplay}`);
+      newState.push(`Global Scope: ${varsDisplay}`);
     }
     else {
       if (node.id && node.id.name) {
         let newState = this.state.variablesDeclared;
-        newState.push(`Variables declared in ${node.id.name}(): ${varsDisplay}`);
+        newState.push(`${node.id.name}(): ${varsDisplay}`);
       }
       else {
         // parentArray.unshift("anonymous");
         let newState = this.state.variablesDeclared;
-        newState.push(`Variables declared in anonymous function: ${varsDisplay}`);
+        newState.push(`Anonymous functions: ${varsDisplay}`);
       }
     }
   }
