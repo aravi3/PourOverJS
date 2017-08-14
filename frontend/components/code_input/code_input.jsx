@@ -529,11 +529,11 @@ class CodeInput extends React.Component {
           <div className="top-buttons">
 
             <button className="run-code-button"
-              onClick={this.runCode}>Run>>
+              onClick={this.runCode}>Compile
             </button>
 
             <button className="next-line-button"
-              onClick={this.handleNext}>Next Line
+              onClick={this.handleNext}>Next Step>>
             </button>
 
             <button
