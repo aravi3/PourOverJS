@@ -30,7 +30,12 @@ module.exports = {
   },
   plugins: plugins,
   resolve: {
-    extensions: ['.js', '.jsx', '*']
+    extensions: ['.js', '.jsx', '*', ".json"]
+  },
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    module: 'empty'
   },
   module: {
     loaders: [
@@ -39,6 +44,7 @@ module.exports = {
         exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
+          plugins: ["transform-regenerator"],
           presets: ['react', 'es2015']
         }
       }
