@@ -50824,6 +50824,7 @@ var CodeInput = function (_React$Component) {
     _this.t1 = 0;
 
     _this.nextLine = _this.nextLine.bind(_this);
+    _this.determineFunctionDeclaration = _this.determineFunctionDeclaration.bind(_this);
     _this.handleNext = _this.nextLine();
     _this.getReturnValue = _this.getReturnValue.bind(_this);
     _this.runCode = _this.runCode.bind(_this);
@@ -50963,6 +50964,18 @@ var CodeInput = function (_React$Component) {
       }
     }
   }, {
+    key: 'determineFunctionDeclaration',
+    value: function determineFunctionDeclaration(node, arr) {
+      if (node.type === "FunctionDeclaration" || node.type === "FunctionExpression" && node.id === null) {
+        // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+        if (node.id !== null) {
+          arr.push(esprima.parse('functionDeclarationsPourOver[\'' + node.id.name + '\'] = [' + node.loc.start.line + ', ' + node.loc.end.line + ']'));
+        } else {
+          arr.push(esprima.parse('functionDeclarationsPourOver[\'anonymous\'] = [' + node.loc.start.line + ', ' + node.loc.end.line + ']'));
+        }
+      }
+    }
+  }, {
     key: 'runCode',
     value: function runCode() {
       var _this3 = this;
@@ -50980,10 +50993,6 @@ var CodeInput = function (_React$Component) {
 
       var parentArray = [];
       var callStackHelper = [];
-      // let timerId;
-      // Initialize counter for number of function calls in code
-      // Initialize stack to empty array
-      // let stack = [];
       var scopeChain = [];
 
       // Get the code from the editor when "Run" is clicked
@@ -50997,8 +51006,6 @@ var CodeInput = function (_React$Component) {
       var frame = document.getElementById('sandboxed');
       // Generate abstract syntax tree from code snippet by using esprima module
       // console.log(ast);
-      // Console log the ast
-      // console.log(ast);
 
       // The estraverse module traverses the AST in order (line by line)
       if (this.runCounter === 2) {
@@ -51011,78 +51018,88 @@ var CodeInput = function (_React$Component) {
           // a parameter
 
           enter: function enter(node, parent) {
-            if (node.type === "FunctionDeclaration" || node.type === "FunctionExpression" && node.id === null) {
-              // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
-              if (node.id !== null) {
-                callStackHelper.push(esprima.parse('functionDeclarationsPourOver[\'' + node.id.name + '\'] = [' + node.loc.start.line + ', ' + node.loc.end.line + ']'));
-              } else {
-                callStackHelper.push(esprima.parse('functionDeclarationsPourOver[\'anonymous\'] = [' + node.loc.start.line + ', ' + node.loc.end.line + ']'));
+            var level = void 0;
+            var callArguments = void 0;
+
+            if (parent) {
+              if (parent.type !== "VariableDeclarator" && parent.type !== "AssignmentExpression") {
+                _this3.determineFunctionDeclaration(node, callStackHelper);
               }
             }
 
             if (node.type === "ExpressionStatement") {
               if (node.expression.type === "CallExpression" && node.expression.callee.name !== "retrieveStack") {
-                if (node.expression.callee.name === "setTimeout") {
-                  parent.body.push(esprima.parse('stackAsyncPourOver.push([\'setTimeout\', ' + node.expression.arguments[1].value + ', ' + node.loc.start.line + '])'));
-                }
-                var level = node.expression.callee;
-                while (level) {
-                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse('stackPourOver.push(\n                  [\'' + (level.name ? level.name : level.property ? level.property.name : level.property) + '\',\n                  ' + node.loc.start.line + '])'));
-
-                  if (level.callee) {
-                    level = level.callee;
-                  } else {
-                    level = 0;
-                  }
-                }
+                // if (node.expression.callee.name === "setTimeout") {
+                //   parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.expression.arguments[1].value}, ${node.loc.start.line}])`));
+                // }
+                level = node.expression.callee;
+                callArguments = node.expression.arguments;
               } else if (node.expression.type === "AssignmentExpression") {
                 if (node.expression.right.callee) {
-                  if (node.expression.right.callee.name === "setTimeout") {
-                    parent.body.push(esprima.parse('stackAsyncPourOver.push([\'setTimeout\', ' + node.expression.right.arguments[1].value + ', ' + node.loc.start.line + '])'));
-                  }
-                  var _level = node.expression.right.callee;
-                  while (_level) {
-                    parent.body.splice(parent.body.indexOf(node), 0, esprima.parse('stackPourOver.push(\n                    [\'' + (_level.name ? _level.name : _level.property ? _level.property.name : _level.property) + '\',\n                    ' + node.loc.start.line + '])'));
-
-                    if (_level.callee) {
-                      _level = _level.callee;
-                    } else {
-                      _level = 0;
-                    }
-                  }
+                  // if (node.expression.right.callee.name === "setTimeout") {
+                  //   parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.expression.right.arguments[1].value}, ${node.loc.start.line}])`));
+                  // }
+                  level = node.expression.right.callee;
+                  callArguments = node.expression.right.arguments;
                 }
+                // else if (node.expression.right.type === "FunctionDeclaration" || (node.expression.right.type === "FunctionExpression" && node.expression.right.id === null)) {
+                //   // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+                //   if (node.left.name !== null) {
+                //     callStackHelper.push(esprima.parse(`functionDeclarationsPourOver['${node.left.name}'] = [${node.expression.right.loc.start.line}, ${node.expression.right.loc.end.line}]`));
+                //   }
+                //   else {
+                //     callStackHelper.push(esprima.parse(`functionDeclarationsPourOver['anonymous'] = [${node.expression.right.loc.start.line}, ${node.expression.right.loc.end.line}]`));
+                //   }
+                // }
               }
             } else if (node.type === "ReturnStatement") {
               if (node.argument.type === "CallExpression") {
-                if (node.argument.callee.name === "setTimeout") {
-                  parent.body.push(esprima.parse('stackAsyncPourOver.push([\'setTimeout\', ' + node.argument.arguments[1].value + ', ' + node.loc.start.line + '])'));
-                }
-                var _level2 = node.argument.callee;
-                while (_level2) {
-                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse('stackPourOver.push(\n                  [\'' + (_level2.name ? _level2.name : _level2.property ? _level2.property.name : _level2.property) + '\',\n                  ' + node.loc.start.line + '])'));
-
-                  if (_level2.callee) {
-                    _level2 = _level2.callee;
-                  } else {
-                    _level2 = 0;
-                  }
-                }
+                // if (node.argument.callee.name === "setTimeout") {
+                //   parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.argument.arguments[1].value}, ${node.loc.start.line}])`));
+                // }
+                level = node.argument.callee;
+                callArguments = node.argument.arguments;
               }
             } else if (node.type === "VariableDeclaration") {
               if (node.declarations[0].init) {
                 if (node.declarations[0].init.type === "CallExpression") {
-                  if (node.declarations[0].init.callee.name === "setTimeout") {
-                    parent.body.push(esprima.parse('stackAsyncPourOver.push([\'setTimeout\', ' + node.declarations[0].init.arguments[1].value + ', ' + node.loc.start.line + '])'));
+                  // if (node.declarations[0].init.callee.name === "setTimeout") {
+                  //   parent.body.push(esprima.parse(`stackAsyncPourOver.push(['setTimeout', ${node.declarations[0].init.arguments[1].value}, ${node.loc.start.line}])`));
+                  // }
+                  level = node.declarations[0].init.callee;
+                  callArguments = node.declarations[0].init.arguments;
+                } else if (node.declarations[0].init.type === "FunctionDeclaration" || node.declarations[0].init.type === "FunctionExpression" && node.declarations[0].init.id === null) {
+                  // parent.body.push(esprima.parse(`functionDeclarations['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`));
+                  if (node.declarations[0].id.name !== null) {
+                    callStackHelper.push(esprima.parse('functionDeclarationsPourOver[\'' + node.declarations[0].id.name + '\'] = [' + node.declarations[0].init.loc.start.line + ', ' + node.declarations[0].init.loc.end.line + ']'));
+                  } else {
+                    callStackHelper.push(esprima.parse('functionDeclarationsPourOver[\'anonymous\'] = [' + node.declarations[0].init.loc.start.line + ', ' + node.declarations[0].init.loc.end.line + ']'));
                   }
-                  var _level3 = node.declarations[0].init.callee;
-                  while (_level3) {
-                    parent.body.splice(parent.body.indexOf(node), 0, esprima.parse('stackPourOver.push(\n                    [\'' + (_level3.name ? _level3.name : _level3.property ? _level3.property.name : _level3.property) + '\',\n                    ' + node.loc.start.line + '])'));
+                }
+              }
+            }
 
-                    if (_level3.callee) {
-                      _level3 = _level3.callee;
-                    } else {
-                      _level3 = 0;
-                    }
+            while (level) {
+              parent.body.splice(parent.body.indexOf(node), 0, esprima.parse('stackPourOver.push(\n              [\'' + (level.name ? level.name : level.property ? level.property.name : level.property) + '\',\n              ' + node.loc.start.line + '])'));
+
+              if (level.callee) {
+                level = level.callee;
+              } else {
+                level = 0;
+              }
+            }
+
+            if (callArguments && callArguments.length > 0) {
+              for (var i = 0; i < callArguments.length; i++) {
+                var argumentLevel = callArguments[i].callee;
+
+                while (argumentLevel) {
+                  parent.body.splice(parent.body.indexOf(node), 0, esprima.parse('stackPourOver.push(\n                  [\'' + (argumentLevel.name ? argumentLevel.name : argumentLevel.property ? argumentLevel.property.name : argumentLevel.property) + '\',\n                  ' + node.loc.start.line + '])'));
+
+                  if (argumentLevel.callee) {
+                    argumentLevel = argumentLevel.callee;
+                  } else {
+                    argumentLevel = 0;
                   }
                 }
               }
@@ -51098,8 +51115,8 @@ var CodeInput = function (_React$Component) {
               if (node.params) {
                 var parameters = [];
 
-                for (var i = 0; i < node.params.length; i++) {
-                  parameters.push(node.params[i].name);
+                for (var _i = 0; _i < node.params.length; _i++) {
+                  parameters.push(node.params[_i].name);
                 }
 
                 currentScope.push.apply(currentScope, parameters);
@@ -51145,18 +51162,9 @@ var CodeInput = function (_React$Component) {
 
         ast.body.push(esprima.parse('metricsPourOver.stack = stackPourOver; metricsPourOver.stackAsync = stackAsyncPourOver; metricsPourOver.functionDeclarations = functionDeclarationsPourOver; function retrieveMetricsPourOver() { return metricsPourOver; } retrieveMetricsPourOver();'));
 
-        // Console log the number of function calls
-        // console.log("Function calls count: " + functionCallsCount);
-
-        // Add onto the beginning of the code snippet variables to capture execution time
-        // ast.body.unshift(esprima.parse('t0 = performance.now();'));
-        // ast.body.unshift(esprima.parse('let metrics = {}; let t0, t1;'));
-        // Add onto the end of the code snippet the captured duration and return the metrics object
-        // ast.body.push(esprima.parse('t1 = performance.now(); metrics.duration = t1 - t0;'));
-        // ast.body.push(esprima.parse('function performanceMetrics() { return metrics; }; performanceMetrics();'));
-
         // Convert the AST back into readable code
         var newCode = escodegen.generate(ast);
+        console.log(newCode);
 
         this.t0 = performance.now();
         frame.contentWindow.postMessage(newCode, '*');
@@ -51164,30 +51172,7 @@ var CodeInput = function (_React$Component) {
         this.t0 = performance.now();
         frame.contentWindow.postMessage(this.code, '*');
       }
-      // Console log the new readable code
-      // console.log(newCode);
-
-      // Run the code snippet within sandbox
-
-      // Iterate through the stack of function invocations and display them
-      // to the console every second
-      // timerId = setInterval(() => {
-      //   if (stack.length === 1) {
-      //     clearInterval(timerId);
-      //   }
-      //
-      //   console.log(stack.pop());
-      // }, 1000);
     }
-
-    // nextLine() {
-    //   let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
-    //   let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
-    //   currentLineNumber += 1;
-    //   this.refs.ace.editor.gotoLine(currentLineNumber, 0);
-    //   console.log(currentLineText);
-    // }
-
   }, {
     key: 'handleOpenModal',
     value: function handleOpenModal(field) {
@@ -51221,10 +51206,6 @@ var CodeInput = function (_React$Component) {
     value: function nextLine() {
       var _this6 = this;
 
-      // let currentLineNumber = this.refs.ace.editor.getCursorPosition().row + 1;
-      // let currentLineText = this.refs.ace.editor.getValue().split("\n")[currentLineNumber];
-      // currentLineNumber += 1;
-      // this.refs.ace.editor.gotoLine(currentLineNumber, 0);
       var idx = 0;
       var stackFlag = false;
       var endFlag = false;
@@ -87925,15 +87906,17 @@ var _reduxThunk = __webpack_require__(357);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
+var _reduxLogger = __webpack_require__(428);
+
+var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+
 var _root_reducer = __webpack_require__(358);
 
 var _root_reducer2 = _interopRequireDefault(_root_reducer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var middlewares = [_reduxThunk2.default];
-// import logger from 'redux-logger';
-
+var middlewares = [_reduxThunk2.default, _reduxLogger2.default];
 
 var configureStore = function configureStore() {
   var preloadedState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -90268,6 +90251,14 @@ var userReducer = function userReducer() {
 };
 
 exports.default = userReducer;
+
+/***/ }),
+/* 428 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {!function(e,t){ true?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t(e.reduxLogger=e.reduxLogger||{})}(this,function(e){"use strict";function t(e,t){e.super_=t,e.prototype=Object.create(t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}})}function r(e,t){Object.defineProperty(this,"kind",{value:e,enumerable:!0}),t&&t.length&&Object.defineProperty(this,"path",{value:t,enumerable:!0})}function n(e,t,r){n.super_.call(this,"E",e),Object.defineProperty(this,"lhs",{value:t,enumerable:!0}),Object.defineProperty(this,"rhs",{value:r,enumerable:!0})}function o(e,t){o.super_.call(this,"N",e),Object.defineProperty(this,"rhs",{value:t,enumerable:!0})}function i(e,t){i.super_.call(this,"D",e),Object.defineProperty(this,"lhs",{value:t,enumerable:!0})}function a(e,t,r){a.super_.call(this,"A",e),Object.defineProperty(this,"index",{value:t,enumerable:!0}),Object.defineProperty(this,"item",{value:r,enumerable:!0})}function f(e,t,r){var n=e.slice((r||t)+1||e.length);return e.length=t<0?e.length+t:t,e.push.apply(e,n),e}function u(e){var t="undefined"==typeof e?"undefined":N(e);return"object"!==t?t:e===Math?"math":null===e?"null":Array.isArray(e)?"array":"[object Date]"===Object.prototype.toString.call(e)?"date":"function"==typeof e.toString&&/^\/.*\//.test(e.toString())?"regexp":"object"}function l(e,t,r,c,s,d,p){s=s||[],p=p||[];var g=s.slice(0);if("undefined"!=typeof d){if(c){if("function"==typeof c&&c(g,d))return;if("object"===("undefined"==typeof c?"undefined":N(c))){if(c.prefilter&&c.prefilter(g,d))return;if(c.normalize){var h=c.normalize(g,d,e,t);h&&(e=h[0],t=h[1])}}}g.push(d)}"regexp"===u(e)&&"regexp"===u(t)&&(e=e.toString(),t=t.toString());var y="undefined"==typeof e?"undefined":N(e),v="undefined"==typeof t?"undefined":N(t),b="undefined"!==y||p&&p[p.length-1].lhs&&p[p.length-1].lhs.hasOwnProperty(d),m="undefined"!==v||p&&p[p.length-1].rhs&&p[p.length-1].rhs.hasOwnProperty(d);if(!b&&m)r(new o(g,t));else if(!m&&b)r(new i(g,e));else if(u(e)!==u(t))r(new n(g,e,t));else if("date"===u(e)&&e-t!==0)r(new n(g,e,t));else if("object"===y&&null!==e&&null!==t)if(p.filter(function(t){return t.lhs===e}).length)e!==t&&r(new n(g,e,t));else{if(p.push({lhs:e,rhs:t}),Array.isArray(e)){var w;e.length;for(w=0;w<e.length;w++)w>=t.length?r(new a(g,w,new i(void 0,e[w]))):l(e[w],t[w],r,c,g,w,p);for(;w<t.length;)r(new a(g,w,new o(void 0,t[w++])))}else{var x=Object.keys(e),S=Object.keys(t);x.forEach(function(n,o){var i=S.indexOf(n);i>=0?(l(e[n],t[n],r,c,g,n,p),S=f(S,i)):l(e[n],void 0,r,c,g,n,p)}),S.forEach(function(e){l(void 0,t[e],r,c,g,e,p)})}p.length=p.length-1}else e!==t&&("number"===y&&isNaN(e)&&isNaN(t)||r(new n(g,e,t)))}function c(e,t,r,n){return n=n||[],l(e,t,function(e){e&&n.push(e)},r),n.length?n:void 0}function s(e,t,r){if(r.path&&r.path.length){var n,o=e[t],i=r.path.length-1;for(n=0;n<i;n++)o=o[r.path[n]];switch(r.kind){case"A":s(o[r.path[n]],r.index,r.item);break;case"D":delete o[r.path[n]];break;case"E":case"N":o[r.path[n]]=r.rhs}}else switch(r.kind){case"A":s(e[t],r.index,r.item);break;case"D":e=f(e,t);break;case"E":case"N":e[t]=r.rhs}return e}function d(e,t,r){if(e&&t&&r&&r.kind){for(var n=e,o=-1,i=r.path?r.path.length-1:0;++o<i;)"undefined"==typeof n[r.path[o]]&&(n[r.path[o]]="number"==typeof r.path[o]?[]:{}),n=n[r.path[o]];switch(r.kind){case"A":s(r.path?n[r.path[o]]:n,r.index,r.item);break;case"D":delete n[r.path[o]];break;case"E":case"N":n[r.path[o]]=r.rhs}}}function p(e,t,r){if(r.path&&r.path.length){var n,o=e[t],i=r.path.length-1;for(n=0;n<i;n++)o=o[r.path[n]];switch(r.kind){case"A":p(o[r.path[n]],r.index,r.item);break;case"D":o[r.path[n]]=r.lhs;break;case"E":o[r.path[n]]=r.lhs;break;case"N":delete o[r.path[n]]}}else switch(r.kind){case"A":p(e[t],r.index,r.item);break;case"D":e[t]=r.lhs;break;case"E":e[t]=r.lhs;break;case"N":e=f(e,t)}return e}function g(e,t,r){if(e&&t&&r&&r.kind){var n,o,i=e;for(o=r.path.length-1,n=0;n<o;n++)"undefined"==typeof i[r.path[n]]&&(i[r.path[n]]={}),i=i[r.path[n]];switch(r.kind){case"A":p(i[r.path[n]],r.index,r.item);break;case"D":i[r.path[n]]=r.lhs;break;case"E":i[r.path[n]]=r.lhs;break;case"N":delete i[r.path[n]]}}}function h(e,t,r){if(e&&t){var n=function(n){r&&!r(e,t,n)||d(e,t,n)};l(e,t,n)}}function y(e){return"color: "+F[e].color+"; font-weight: bold"}function v(e){var t=e.kind,r=e.path,n=e.lhs,o=e.rhs,i=e.index,a=e.item;switch(t){case"E":return[r.join("."),n,"→",o];case"N":return[r.join("."),o];case"D":return[r.join(".")];case"A":return[r.join(".")+"["+i+"]",a];default:return[]}}function b(e,t,r,n){var o=c(e,t);try{n?r.groupCollapsed("diff"):r.group("diff")}catch(e){r.log("diff")}o?o.forEach(function(e){var t=e.kind,n=v(e);r.log.apply(r,["%c "+F[t].text,y(t)].concat(P(n)))}):r.log("—— no diff ——");try{r.groupEnd()}catch(e){r.log("—— diff end —— ")}}function m(e,t,r,n){switch("undefined"==typeof e?"undefined":N(e)){case"object":return"function"==typeof e[n]?e[n].apply(e,P(r)):e[n];case"function":return e(t);default:return e}}function w(e){var t=e.timestamp,r=e.duration;return function(e,n,o){var i=["action"];return i.push("%c"+String(e.type)),t&&i.push("%c@ "+n),r&&i.push("%c(in "+o.toFixed(2)+" ms)"),i.join(" ")}}function x(e,t){var r=t.logger,n=t.actionTransformer,o=t.titleFormatter,i=void 0===o?w(t):o,a=t.collapsed,f=t.colors,u=t.level,l=t.diff,c="undefined"==typeof t.titleFormatter;e.forEach(function(o,s){var d=o.started,p=o.startedTime,g=o.action,h=o.prevState,y=o.error,v=o.took,w=o.nextState,x=e[s+1];x&&(w=x.prevState,v=x.started-d);var S=n(g),k="function"==typeof a?a(function(){return w},g,o):a,j=D(p),E=f.title?"color: "+f.title(S)+";":"",A=["color: gray; font-weight: lighter;"];A.push(E),t.timestamp&&A.push("color: gray; font-weight: lighter;"),t.duration&&A.push("color: gray; font-weight: lighter;");var O=i(S,j,v);try{k?f.title&&c?r.groupCollapsed.apply(r,["%c "+O].concat(A)):r.groupCollapsed(O):f.title&&c?r.group.apply(r,["%c "+O].concat(A)):r.group(O)}catch(e){r.log(O)}var N=m(u,S,[h],"prevState"),P=m(u,S,[S],"action"),C=m(u,S,[y,h],"error"),F=m(u,S,[w],"nextState");if(N)if(f.prevState){var L="color: "+f.prevState(h)+"; font-weight: bold";r[N]("%c prev state",L,h)}else r[N]("prev state",h);if(P)if(f.action){var T="color: "+f.action(S)+"; font-weight: bold";r[P]("%c action    ",T,S)}else r[P]("action    ",S);if(y&&C)if(f.error){var M="color: "+f.error(y,h)+"; font-weight: bold;";r[C]("%c error     ",M,y)}else r[C]("error     ",y);if(F)if(f.nextState){var _="color: "+f.nextState(w)+"; font-weight: bold";r[F]("%c next state",_,w)}else r[F]("next state",w);l&&b(h,w,r,k);try{r.groupEnd()}catch(e){r.log("—— log end ——")}})}function S(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=Object.assign({},L,e),r=t.logger,n=t.stateTransformer,o=t.errorTransformer,i=t.predicate,a=t.logErrors,f=t.diffPredicate;if("undefined"==typeof r)return function(){return function(e){return function(t){return e(t)}}};if(e.getState&&e.dispatch)return console.error("[redux-logger] redux-logger not installed. Make sure to pass logger instance as middleware:\n// Logger with default options\nimport { logger } from 'redux-logger'\nconst store = createStore(\n  reducer,\n  applyMiddleware(logger)\n)\n// Or you can create your own logger with custom options http://bit.ly/redux-logger-options\nimport createLogger from 'redux-logger'\nconst logger = createLogger({\n  // ...options\n});\nconst store = createStore(\n  reducer,\n  applyMiddleware(logger)\n)\n"),function(){return function(e){return function(t){return e(t)}}};var u=[];return function(e){var r=e.getState;return function(e){return function(l){if("function"==typeof i&&!i(r,l))return e(l);var c={};u.push(c),c.started=O.now(),c.startedTime=new Date,c.prevState=n(r()),c.action=l;var s=void 0;if(a)try{s=e(l)}catch(e){c.error=o(e)}else s=e(l);c.took=O.now()-c.started,c.nextState=n(r());var d=t.diff&&"function"==typeof f?f(r,l):t.diff;if(x(u,Object.assign({},t,{diff:d})),u.length=0,c.error)throw c.error;return s}}}}var k,j,E=function(e,t){return new Array(t+1).join(e)},A=function(e,t){return E("0",t-e.toString().length)+e},D=function(e){return A(e.getHours(),2)+":"+A(e.getMinutes(),2)+":"+A(e.getSeconds(),2)+"."+A(e.getMilliseconds(),3)},O="undefined"!=typeof performance&&null!==performance&&"function"==typeof performance.now?performance:Date,N="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},P=function(e){if(Array.isArray(e)){for(var t=0,r=Array(e.length);t<e.length;t++)r[t]=e[t];return r}return Array.from(e)},C=[];k="object"===("undefined"==typeof global?"undefined":N(global))&&global?global:"undefined"!=typeof window?window:{},j=k.DeepDiff,j&&C.push(function(){"undefined"!=typeof j&&k.DeepDiff===c&&(k.DeepDiff=j,j=void 0)}),t(n,r),t(o,r),t(i,r),t(a,r),Object.defineProperties(c,{diff:{value:c,enumerable:!0},observableDiff:{value:l,enumerable:!0},applyDiff:{value:h,enumerable:!0},applyChange:{value:d,enumerable:!0},revertChange:{value:g,enumerable:!0},isConflict:{value:function(){return"undefined"!=typeof j},enumerable:!0},noConflict:{value:function(){return C&&(C.forEach(function(e){e()}),C=null),c},enumerable:!0}});var F={E:{color:"#2196F3",text:"CHANGED:"},N:{color:"#4CAF50",text:"ADDED:"},D:{color:"#F44336",text:"DELETED:"},A:{color:"#2196F3",text:"ARRAY:"}},L={level:"log",logger:console,logErrors:!0,collapsed:void 0,predicate:void 0,duration:!1,timestamp:!0,stateTransformer:function(e){return e},actionTransformer:function(e){return e},errorTransformer:function(e){return e},colors:{title:function(){return"inherit"},prevState:function(){return"#9E9E9E"},action:function(){return"#03A9F4"},nextState:function(){return"#4CAF50"},error:function(){return"#F20404"}},diff:!1,diffPredicate:void 0,transformer:void 0},T=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=e.dispatch,r=e.getState;return"function"==typeof t||"function"==typeof r?S()({dispatch:t,getState:r}):void console.error("\n[redux-logger v3] BREAKING CHANGE\n[redux-logger v3] Since 3.0.0 redux-logger exports by default logger with default settings.\n[redux-logger v3] Change\n[redux-logger v3] import createLogger from 'redux-logger'\n[redux-logger v3] to\n[redux-logger v3] import { createLogger } from 'redux-logger'\n")};e.defaults=L,e.createLogger=S,e.logger=T,e.default=T,Object.defineProperty(e,"__esModule",{value:!0})});
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
 
 /***/ })
 /******/ ]);
