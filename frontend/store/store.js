@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import rootReducer from '../reducers/root_reducer';
 
-const middlewares = [thunk, logger];
+const middlewares = [thunk];
 
 const configureStore = (preloadedState = {}) => {
   return createStore(
