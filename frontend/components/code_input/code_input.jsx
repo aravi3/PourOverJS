@@ -67,6 +67,8 @@ class CodeInput extends React.Component {
         this.t1 = performance.now();
 
         if (this.runCounter === 1) {
+          let localExecutionTime = `${(this.t1 - this.t0).toFixed(2)} ms`;
+          this.setState({ executionTime: localExecutionTime });
           this.setState({ returnValue: e.data});
         }
 
@@ -77,9 +79,7 @@ class CodeInput extends React.Component {
             counter: 0
           };
           let linesToProcess = [];
-          let localExecutionTime = `${(this.t1 - this.t0).toFixed(2)} ms`;
 
-          this.setState({ executionTime: localExecutionTime });
           this.setState({ functionCalls: returnedStack.length });
 
           returnedStack.forEach( el => {
@@ -217,7 +217,7 @@ class CodeInput extends React.Component {
     let conversionAST = recast.parse(this.code);
     let convertedCode = regenerator.transform(conversionAST);
     let regenCode = recast.print(convertedCode);
-    console.log(regenCode);
+    // console.log(regenCode);
 
     // Capture the sandbox element
     let frame = document.getElementById('sandboxed');
