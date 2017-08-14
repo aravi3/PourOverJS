@@ -70,10 +70,15 @@ class Navbar extends React.Component {
 
         <button
           className="navbar-login-button"
-          onClick={ () => this.openModal('login') }>Log in</button>
+          onClick={ () => this.openModal('login') }>
+          Log in
+        </button>
+
         <button
           className="navbar-signup-button"
-          onClick={ () => this.openModal('signup') }>Sign up</button>
+          onClick={ () => this.openModal('signup') }>
+          Sign up
+        </button>
 
         <Modal
           isOpen={this.state.activeModal === 'login'}
@@ -138,5 +143,4 @@ class Navbar extends React.Component {
   }
 }
 
-// export default Navbar;
 export default Navbar;
