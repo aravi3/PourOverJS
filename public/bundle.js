@@ -68787,13 +68787,13 @@ var Stackframes = function (_React$Component) {
               key: index },
             _react2.default.createElement(
               "div",
-              { className: "function-call-item" + (stackframes.length - index === 1 ? "-bottom" : "") },
-              el
+              { className: "stack-frame-index" },
+              index === 0 ? "Top Stack Frame: " + (stackframes.length - index) : "Stack Frame: " + (stackframes.length - index)
             ),
             _react2.default.createElement(
               "div",
-              null,
-              index === 0 ? "Top Stack Frame: " + (stackframes.length - index) : "Stack Frame: " + (stackframes.length - index)
+              { className: "function-call-item" + (stackframes.length - index === 1 ? "-bottom" : "") },
+              el
             )
           );
         });

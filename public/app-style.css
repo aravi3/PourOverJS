@@ -564,6 +564,7 @@ li[class^="stack-frames-list-item-"] {
   margin: 10px 10px;
   padding: 10px;
   background: rgba(211, 238, 249, 0.59);
+  background: rgb(202, 255, 244);
   border-radius: 5px;
   /*transition: all 0.25s ease;*/
   font-family: dosis;
@@ -579,8 +580,12 @@ li[class^="stack-frames-list-item-"] {
   /*transition: all 0.25s ease !important;*/
 }
 
-.stack-frames-list-item-1 {
+/*.stack-frames-list-item-1 {
   background: rgba(211, 238, 249, 0.59) !important;
+}*/
+
+.stack-frames-list-item-1 {
+  background: rgb(244, 238, 160) !important;
 }
 
 .stack-frames-list-item-2 {
@@ -600,11 +605,47 @@ li[class^="stack-frames-list-item-"] {
 }
 
 .stack-frames-list-item-6 {
-  background: rgb(216, 250, 220) !important;
+  background: rgb(205, 253, 237) !important;
 }
 
 .stack-frames-list-item-7 {
-  background: rgb(216, 250, 220) !important;
+  background: rgb(202, 255, 244) !important;
+}
+
+.stack-frames-list-item-8 {
+  /*background: rgb(166, 255, 237) !important;*/
+  background: rgb(176, 255, 239) !important;
+}
+
+.stack-frames-list-item-9 {
+  /*background: rgb(121, 249, 223) !important;*/
+  background: rgb(142, 255, 232) !important;
+}
+
+.stack-frames-list-item-10 {
+  background: rgb(74, 255, 218) !important;
+}
+
+li[class^="stack-frames-list-item--bottom"] {
+  background: rgba(211, 238, 249, 0.59)
+}
+
+.stack-frame-index {
+  background: #ffffff;
+  border: solid white 1px;
+  border-radius: 5%;
+  color: black;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.function-call-item, .function-call-item-bottom {
+  color: black;
+  justify-content: center;
+  display: flex;
+  letter-spacing: .05em;
+  padding-top: 5px;
 }
 
 .title-wrapper {
