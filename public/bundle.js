@@ -51122,7 +51122,7 @@ var CodeInput = function (_React$Component) {
                 currentScope.push.apply(currentScope, parameters);
               }
 
-              if (node.type === 'VariableDeclarator' || parent.type === 'VariableDeclarator') {
+              if (node.type === 'VariableDeclarator') {
                 if (node.id) {
                   currentScope.push(node.id.name);
                 }
@@ -51164,7 +51164,7 @@ var CodeInput = function (_React$Component) {
 
         // Convert the AST back into readable code
         var newCode = escodegen.generate(ast);
-        console.log(newCode);
+        // console.log(newCode);
 
         this.t0 = performance.now();
         frame.contentWindow.postMessage(newCode, '*');
@@ -74459,11 +74459,11 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*!
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var MERGE_SORT_EXAMPLE = exports.MERGE_SORT_EXAMPLE = "// Demonstration of the merge sort algorithm\n\nfunction mergeSort(array) {\nif (array.length <= 1) {\n  return array;\n} else {\n  const mid = Math.floor(array.length / 2);\n\n  const left = mergeSort(array.slice(0, mid));\n  const right = mergeSort(array.slice(mid));\n\n  return merge(left, right);\n}\n}\n\nfunction merge(left, right) {\n\nconst sorted = [];\nwhile (left.length > 0 && right.length > 0) {\n\n  if (left[0] <= right[0]) {\n    sorted.push(left.shift());\n  } else if (right[0] < left[0]){\n    sorted.push(right.shift());\n  }\n}\nreturn sorted.concat(left, right);\n}\n\nmergeSort([1,9,2,3,0,5,6,6,43,24]);\n";
+var MERGE_SORT_EXAMPLE = exports.MERGE_SORT_EXAMPLE = "// Demonstration of the merge sort algorithm\n\nfunction mergeSort(array) {\nif (array.length <= 1) {\n  return array;\n} else {\n  const mid = Math.floor(array.length / 2);\n\n  const left = mergeSort(array.slice(0, mid));\n  const right = mergeSort(array.slice(mid));\n\n  return merge(left, right);\n}\n}\n\nfunction merge(left, right) {\n\nconst sorted = [];\nwhile (left.length > 0 && right.length > 0) {\n\n  if (left[0] <= right[0]) {\n    sorted.push(left.shift());\n  } else if (right[0] < left[0]){\n    sorted.push(right.shift());\n  }\n}\nreturn sorted.concat(left, right);\n}\n\nmergeSort([9,2,-5,7]);\n";
 
 var BFS_EXAMPLE = exports.BFS_EXAMPLE = "// Breadth-First Search to find target \"e\"\n// Feel free to change target position in the tree!\n\nconst tree = [\n  [\"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\"],\n  [\"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\"],\n  [\"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\"],\n  [\"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\"],\n  [\"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\"],\n  [\"x\", \"x\", \"x\", \"x\", \"e\", \"x\", \"x\"],\n  [\"x\", \"x\", \"x\", \"x\", \"x\", \"x\", \"x\"]\n];\n\nclass TreeNode {\n  constructor(pos, parent) {\n    this.pos = pos;\n    this.parent = parent;\n  }\n}\n\nfunction arraysEqual(arr1, arr2) {\n  if (arr1.length !== arr2.length) {\n    return false;\n  }\n\n  for (let i = 0; i < arr1.length; i++) {\n    if (arr1[i] !== arr2[i]) {\n      return false;\n    }\n  }\n\n  return true;\n}\n\nfunction includedIn(childArr, parentArr) {\n  for (let i = 0; i < parentArr.length; i++) {\n    if (arraysEqual(childArr, parentArr[i])) {\n      return true;\n    }\n  }\n\n  return false;\n}\n\nfunction upPos(pos) {\n  return [pos[0] - 1, pos[1]];\n}\n\nfunction rightPos(pos) {\n  return [pos[0], pos[1] + 1];\n}\n\nfunction downPos(pos) {\n  return [pos[0] + 1, pos[1]];\n}\n\nfunction leftPos(pos) {\n  return [pos[0], pos[1] - 1];\n}\n\nfunction occupiable(pos) {\n  if (tree[pos[0]][pos[1]] === \"x\" || tree[pos[0]][pos[1]] === \"e\") {\n    return true;\n  }\n\n  return false;\n}\n\nfunction bfs(startPos) {\n  let targetFound = false;\n  let neighborRow, neighborCol;\n  let topNode, neighbors;\n  let up, right, down, left;\n  let visitedNodes = [];\n  let nodeQueue = [];\n  let trail = [];\n\n  trail.push(new TreeNode(startPos, undefined));\n  nodeQueue.push(new TreeNode(startPos, undefined));\n  visitedNodes.push(startPos);\n\n  while (!targetFound && nodeQueue.length > 0) {\n    topNode = nodeQueue.shift();\n    neighbors = [];\n    up = upPos(topNode.pos);\n    right = rightPos(topNode.pos);\n    down = downPos(topNode.pos);\n    left = leftPos(topNode.pos);\n    neighbors.push(up, right, down, left);\n\n    for (let i = 0; i < neighbors.length; i++) {\n      neighborRow = neighbors[i][0];\n      neighborCol = neighbors[i][1];\n\n      if (neighborRow < 0 || neighborCol < 0 ||\n          neighborRow >= tree.length ||\n          neighborCol >= tree[0].length) {\n            continue;\n          }\n\n      if (occupiable(neighbors[i]) && !includedIn(neighbors[i], visitedNodes)) {\n        visitedNodes.push(neighbors[i]);\n        nodeQueue.push(new TreeNode(neighbors[i], topNode));\n        trail.push(new TreeNode(neighbors[i], topNode));\n\n        if (tree[neighborRow][neighborCol] === \"e\") {\n          targetFound = true;\n          return [neighborRow, neighborCol];\n        }\n      }\n    }\n  }\n}\n\nbfs([0, 0]);";
 
-var QUICK_SORT_EXAMPLE = exports.QUICK_SORT_EXAMPLE = "// Demonstration of the quick sort algorithm\n\nfunction quickSort(arr) {\n  if (arr.length <= 1) {\n    return arr;\n  }\n\n  let pivot = [arr[0]];\n\n  let arrToSort = arr.splice(1);\n\n  let left = arrToSort.filter(el => {\n    return el <= pivot;\n  });\n\n  let right = arrToSort.filter(el => {\n    return el > pivot;\n  });\n\n  let leftCall = quickSort(left);\n  let rightCall = quickSort(right);\n\n  return leftCall.concat(pivot).concat(rightCall);\n}\n\nquickSort([9, 2, 5, 6, 4, 3, 7, 10, 1, 8])";
+var QUICK_SORT_EXAMPLE = exports.QUICK_SORT_EXAMPLE = "// Demonstration of the quick sort algorithm\n\nfunction quickSort(arr) {\n  if (arr.length <= 1) {\n    return arr;\n  }\n\n  let pivot = [arr[0]];\n\n  let arrToSort = arr.splice(1);\n\n  let left = arrToSort.filter(el => {\n    return el <= pivot;\n  });\n\n  let right = arrToSort.filter(el => {\n    return el > pivot;\n  });\n\n  let leftSort = quickSort(left);\n  let rightSort = quickSort(right);\n\n  return leftSort.concat(pivot).concat(rightSort);\n}\n\nquickSort([9,2,-5,7])";
 
 /***/ }),
 /* 330 */
