@@ -1,9 +1,13 @@
 # PourOverJS
-  [heroku]: http://pouroverjs.herokuapp.com
 
-  [PourOverJS][heroku] is a `JavaScript` profiler and code editor which allows users to analyze a block of code. It will output performance metrics of the submitted code and display stack frames. As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will also be able to login and save code snippets to the database.
+[heroku]: http://pouroverjs.herokuapp.com
+
+[PourOverJS][heroku] is a `JavaScript` profiler and code editor which allows users to analyze a block of code. It will output performance metrics of the submitted code and display stack frames. As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will also be able to login and save code snippets to the database.
+
+![Image](./Docs/PourOverJS-main-page.jpg)
 
 ## Overview of Features
+
 PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. The following features are implemented
 
   - [x] Authentication
@@ -17,9 +21,6 @@ PourOverJS is a web application built using the MERN (MongoDB, Express.js, React
         - Function chain (demonstration of closure)
         - Variables declared in each scope
   - [x] Users can step through code and visualize call stack
-
-## Screen Shots -- Add photos once Atom's merge request get resolved
-  ![Image](./Docs/PourOverJS-main-page.jpg)
 
 ## Technologies
 
@@ -49,7 +50,8 @@ PourOverJS is a web application built using the MERN (MongoDB, Express.js, React
 
 ### Authentication
 
- - ADD STUFF
+Users can create an account and log into our site. They can save any code snippets
+and associated analyses to our database for later perusal.
 
 ### Call Stack Visualization
 
@@ -92,14 +94,6 @@ will stay at the bottom and not pop off until it is exited.
  in the sandbox.
  - The rest of the metrics are collected by analyzing and injecting code into the
  Abstract Syntax Tree.
-
-### Code CRUD (not too important)
-
- - ADD STUFF
-
-### Maybe talk about technologies we used and why we chose them??
-
- - ADD STUFF
 
 ## Future Directions for the Project
 

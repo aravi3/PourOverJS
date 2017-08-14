@@ -36,7 +36,7 @@ class Metrics extends React.Component {
     const closureDisplay = closureChain ? closureChain.map((el, index) => {
       return (
         <div key={index}>
-          {el.join("-->")}
+          {el.join("  ➜  ")}
         </div>
       );
     }): null;
