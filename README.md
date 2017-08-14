@@ -1,22 +1,27 @@
 # PourOverJS
+  [heroku]: http://pouroverjs.herokuapp.com
 
-  PourOverJS will be a `JavaScript` profiler and stack visualizer which allows users to test a block of code. It will analyze the individual components of the submitted code and display stack frames and metrics for each function.
+  [PourOverJS][heroku] a `JavaScript` profiler and stack visualizer which allows users to test a block of code. It will analyze the individual components of the submitted code and display stack frames and metrics for each function.
   As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will be able to save code snippets to the database and keep track of their functions.
 
 ## Minimum Viable Product
-PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. Within 7 days, this app will, at a minimum, satisfy the following criteria with smooth, bug-free navigation and sufficient CSS styling:
+PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. The following features are implemented
 
-  - [ ] Heroku Hosting
-  - [ ] Authentication
-  - [ ] Code input
-  - [ ] JS Stackframes
-  - [ ] Performance metrics
-  - [ ] Code examples
-  - [ ] Code CRUD
-  - [ ] Production README
+  - [x] Login/signup and logout authentication
+  - [x] Users are able to enter code snippets into the text editor
+  - [x] Syntax highlighting and auto-indentation
+  - [x] Users can save code snippets to the database
+  - [x] Users can retrieve code snippets from as well as delete code in the database
+  - [x] Three example code snippets are available on the page
+  - [x] Five performance metrics are displayed after users click the "Run>>" button:
+        - Execution Time
+        - Total function calls
+        - Function chain/Closure chain
+        - Variables declared in each scope
+        - Return value
+  - [x] Users are able to step through the code and visualize the main stack
 
-
-## Wireframe
+## Screen Shots -- Add photos once Atom's merge request get resolved
   ![Image](./Docs/PourOverJS-main-page.jpg)
 
 ## Technologies
@@ -30,71 +35,42 @@ PourOverJS is a web application built using the MERN (MongoDB, Express.js, React
 	- MongoDB
 
 - NPM PACKAGES/OTHER LIBRARIES:
-  - Webpack
-  - Nodemon
-  - BodyParser
-  - EJS
-  - BCrypt/SCrypt
+  - Webpack(bundle)
+  - Nodemon(server refresh)
+  - BodyParser(mongodb response parser)
+  - BCrypt/SCrypt(password encryption)
+  - Babel(ES6 to ES5 syntax transformation)
+  - Esprima(Abstract Syntax Tree transformation)
+  - Etraverse(Abstract Syntax Tree injection)
+  - Local-storage(session storage)
+  - Mongoose(MongoDB connection)
+  - Passport(User authtication)
+  - Regenerator(ES6 to ES5 syntax transformation)
+  - React-Ace(Browser code editor)
 
-## Weekend Accomplishments
+## Features and Implementation
 
-  Completion of a prototype application using the MERN stack following the CRUD principles of software development. Users have the ability to post, edit, and delete comments which render in real time using the React virtual DOM.
+### Authentication
 
-  [Live][crud_proto]
+ - ADD STUFF
 
-## API Endpoints
+### Stackframes Visualization
 
-### Root
+ - ADD STUFF
 
-- `Get /` - loads React web app
+### Performance Metrics
 
-## JSON API
+ - ADD STUFF
 
-### Users
+### Code CRUD (not too important)
 
-- `POST /api/users`
+ - ADD STUFF
 
-### Session
+### Maybe talk about technologies we used and why we chose them??
 
-- `POST /api/session`
-- `DELETE /api/session`
+ - ADD STUFF
 
-### Code
-
-- `GET /api/users/:name/code`
-- `POST /api/users/:name/code`
-- `PATCH /api/users/:name/code/:name`
-- `DELETE /api/users/:name/code/:name`
-
-## Schema
-
-``` Javascript
-
-{
-	username: {
-  	session_token: "klsj24dflk45gewj45gkalsn",
-    password_digest: "aghb24skdnk435sdf",
-    code: {
-    	filename: "Some-code"
-    }
-  }
-}
-```
-
-## Sample State
-
-``` Javascript
-
-{
-	username: {
-    code: {
-    	filename: "Some-code"
-    }
-  }
-}
-```
-
-## Implementation Timeline
+## Implementation Timeline (should we delete this?)
 We are using the `Scrum framework` of `Agile Development`. By design, we will not plan our second `Sprint` until completion of the first `Sprint`.
 
 ### Sprint 1:  (4 days)
@@ -152,10 +128,13 @@ SEE ABOVE, TBD
   * **Arvind:** Stack Frames
   * **Atom:** Production ReadME, Final Style
 
-### Bonus Features (TBD)
-- [ ] Use D3.js to display performance metrics
-- [ ] Allow sign in through GitHub account
+### Features To Be Implemented
+- [ ] Performance metrics visualization with D3.js
+- [ ] O'auth sign in with Github and Google
 - [ ] Optimized Implementation for each example and efficiency comparisons
-
+- [ ] Asynchronous event loop visualization
+- [ ] Variable type/scope display as users step through the code
+- [ ] Optimized closure chain display as users step through the code
+- [ ] Console output display
 
 [crud_proto]: https://github.com/aravi3/MERN_CRUD_Application
