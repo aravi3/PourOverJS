@@ -1,7 +1,7 @@
 # PourOverJS
   [heroku]: http://pouroverjs.herokuapp.com
 
-  [PourOverJS][heroku] is a `JavaScript` profiler and stack visualizer which allows users to analyze a block of code. It will output performance metrics of the submitted code and display stack frames. As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will also be able to login and save code snippets to the database.
+  [PourOverJS][heroku] is a `JavaScript` profiler and code editor which allows users to analyze a block of code. It will output performance metrics of the submitted code and display stack frames. As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will also be able to login and save code snippets to the database.
 
 ## Overview of Features
 PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. The following features are implemented
@@ -54,14 +54,31 @@ PourOverJS is a web application built using the MERN (MongoDB, Express.js, React
 ### Call Stack Visualization
 
 When the user clicks "Compile", the code in the editor, taken as a String, is converted
-into an Abstract Syntax Tree using Esprima, which is a popular JavaScript parser.
+into an Abstract Syntax Tree using Esprima, which is a popular JavaScript parser:
+
+```js
+let ast = esprima.parse(this.code, {loc: true})
+```
+
 Then, the AST is traversed to using Estraverse to identify expression statements and
-push them into a stack for later. These push statements are injected throughout the snippet.
+push them into a stack for later. These push statements are injected throughout the snippet:
+
+```js
+parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.push(
+  ['${level.name ? level.name : (level.property ? level.property.name : level.property)}',
+  ${node.loc.start.line}])`))
+```
+
 Information about the starting and ending line numbers of function declarations are also
-collected to determine which stack frames each expression statement belongs to, if any.
+collected to determine which stack frames each expression statement belongs to, if any:
+
+```js
+arr.push(esprima.parse(`functionDeclarationsPourOver['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`))
+```
 
 Afterwards, the user may click "Next Step" to walk through the stack information we have
-collected and see a visualization on the right.
+collected and see a visualization on the right. When inside a certain stack frame, that frame
+will stay at the bottom and not pop off until it is exited.
 
 ### Performance Metrics
 
