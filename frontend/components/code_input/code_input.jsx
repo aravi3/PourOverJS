@@ -449,6 +449,11 @@ class CodeInput extends React.Component {
           this.props.addToCurrentStack(this.props.stack[idx][0]);
           stackFlag = true;
         }
+        else {
+          this.props.removeFromCurrentStack();
+          stackFlag = false;
+          return;
+        }
 
         endFlag = true;
         stackFlag = true;
