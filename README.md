@@ -2,9 +2,9 @@
 
 [heroku]: http://pouroverjs.herokuapp.com
 
-[PourOverJS][heroku] is a `JavaScript` profiler and code editor which allows users to analyze a block of code. It will output performance metrics of the submitted code and display stack frames. As a result, users will be able to identify inefficiencies, chokepoints, and debug their code more intuitively. Users will also be able to login and save code snippets to the database.
+[PourOverJS][heroku] is a `JavaScript` profiler and code editor. It outputs performance metrics for the submitted code and displays a step-by-step stack frame visualization. Users can also save code snippets to the database.
 
-![Image](./Docs/PourOverJS-main-page.jpg)
+![Image](http://res.cloudinary.com/dnj5rmvun/image/upload/v1503292077/pourover_main_qjegdw.png)
 
 ## Overview of Features
 
@@ -56,7 +56,7 @@ and associated analyses to our database for later perusal.
 ### Call Stack Visualization
 
 When the user clicks "Compile", the code in the editor, taken as a String, is converted
-into an Abstract Syntax Tree using Esprima, which is a popular JavaScript parser:
+into an abstract syntax tree using Esprima, which is a popular JavaScript parser:
 
 ```js
 let ast = esprima.parse(this.code, {loc: true})
