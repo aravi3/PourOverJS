@@ -12,7 +12,7 @@
         } catch (e) {
           result = e.toString();
         }
-        mainWindow.postMessage(result, event.origin);
+        mainWindow.postMessage(result, e.origin);
       });
     </script>
   </head>
