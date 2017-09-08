@@ -1,8 +1,11 @@
 # PourOverJS
 
 [heroku]: http://pouroverjs.herokuapp.com
+[pourover]: pouroverjs.com
 
 [PourOverJS][heroku] is a `JavaScript` profiler and code editor. It outputs performance metrics for the submitted code and displays a step-by-step stack frame visualization. Users can also save code snippets to the database.
+
+[Live link][pourover]
 
 ![Image](http://res.cloudinary.com/dnj5rmvun/image/upload/v1503292077/pourover_main_qjegdw.png)
 
