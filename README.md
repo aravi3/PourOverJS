@@ -11,7 +11,7 @@
 
 ## Overview of Features
 
-PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. The following features are implemented
+PourOverJS is a web application built using the MERN (MongoDB, Express.js, React.js-Redux, Node.js) stack. The following features have already been implemented:
 
   - [x] Authentication
   - [x] Online code editor - snippets can be saved to database
@@ -42,7 +42,7 @@ PourOverJS is a web application built using the MERN (MongoDB, Express.js, React
   - BCrypt/SCrypt(password encryption)
   - Babel(ES6 to ES5 syntax transformation)
   - Esprima(Abstract Syntax Tree transformation)
-  - Etraverse(Abstract Syntax Tree injection)
+  - Estraverse(Abstract Syntax Tree injection)
   - Local-storage(session storage)
   - Mongoose(MongoDB connection)
   - Passport(User authtication)
@@ -53,19 +53,19 @@ PourOverJS is a web application built using the MERN (MongoDB, Express.js, React
 
 ### Authentication
 
-Users can create an account and log into our site. They can save any code snippets
-and associated analyses to our database for later perusal.
+Users can create an account to log in to PourOverJS. They can save any code snippets
+and associated analyses to the database for later perusal.
 
 ### Call Stack Visualization
 
-When the user clicks "Compile", the code in the editor, taken as a String, is converted
-into an abstract syntax tree using Esprima, which is a popular JavaScript parser:
+When the user clicks "Compile" the code in the editor — taken as a String — is converted
+into an Abstract Syntax Tree using Esprima, a popular JavaScript parser:
 
 ```js
 let ast = esprima.parse(this.code, {loc: true})
 ```
 
-Then, the AST is traversed to using Estraverse to identify expression statements and
+The AST is then traversed with Estraverse to identify expression statements and
 push them into a stack for later. These push statements are injected throughout the snippet:
 
 ```js
@@ -74,16 +74,15 @@ parent.body.splice(parent.body.indexOf(node), 0, esprima.parse(`stackPourOver.pu
   ${node.loc.start.line}])`))
 ```
 
-Information about the starting and ending line numbers of function declarations are also
+Information about the starting and ending line numbers of function declarations is also
 collected to determine which stack frames each expression statement belongs to, if any:
 
 ```js
 arr.push(esprima.parse(`functionDeclarationsPourOver['${node.id.name}'] = [${node.loc.start.line}, ${node.loc.end.line}]`))
 ```
 
-Afterwards, the user may click "Next Step" to walk through the stack information we have
-collected and see a visualization on the right. When inside a certain stack frame, that frame
-will stay at the bottom and not pop off until it is exited.
+Clicking "Next Step" allows the user to walk through the stack information we have
+collected and view a visualization of the data. When inside a certain stack frame, that frame will remain in view and not pop off until it is exited.
 
 ### Performance Metrics
 
@@ -100,8 +99,7 @@ will stay at the bottom and not pop off until it is exited.
 
 ## Future Directions for the Project
 
-In addition to the features that have been implemented, we plan to add
-more features in the future. The following are next steps for PourOverJS:
+In addition to the features that have been implemented, several additional features are planned for the future. The following are the next steps for PourOverJS:
 
 - Add more types of expression statements to call stack
 - Performance metrics visualization with D3.js
