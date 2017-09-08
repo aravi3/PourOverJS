@@ -64,7 +64,7 @@ width: 100vw;
 }
 
 .main-wrapper {
-  position: fixed;
+  /*position: fixed;*/
   margin: 0px;
   height: 80%;
   width: 100%;
